@@ -8,19 +8,6 @@ from .models import Utilisateur, ProfilUtilisateur
 from django.contrib import messages
 from .forms import UtilisateurUpdateForm
 
-import africastalking
-from django.conf import settings
-
-africastalking.initialize(
-    settings.AFRICASTALKING_USERNAME,
-    settings.AFRICASTALKING_API_KEY
-)
-
-sms = africastalking.SMS
-
-def send_sms(phone, message):
-    sms.send(message, [phone])
-
 
 
 @require_http_methods(["GET", "POST"])
