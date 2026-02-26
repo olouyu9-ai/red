@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenu %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Genius Africa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .container {
+            text-align: center;
+
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 40px 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a2a6c 0%, #2b5876 100%);
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .faq-container {
+            padding: 20px;
+        }
+
+        .accordion {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: 0.4s;
+            margin: 8px 0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .active::after {
+            transform: rotate(180deg);
+        }
+
+        .accordion:hover {
+            background: linear-gradient(135deg, #3a5ca0 0%, #121f3d 100%);
+        }
+
+        .panel {
+            padding: 0 18px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-left: 3px solid #4b6cb7;
+            margin: 0 0 10px 0;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .panel p {
+            padding: 20px 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .contact {
+            background: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            border-top: 1px solid #eaeaea;
+        }
+
+        .contact h3 {
+            margin-bottom: 15px;
+            color: #2b5876;
+        }
+
+        .contact p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #1a2a6c 0%, #2b5876 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @media screen and (max-width: 600px) {
+            .accordion {
+                font-size: 1rem;
+                padding: 14px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class='faq'>
+    <div class="container">
+        <div class="header">
+            <h1>FAQ - Genius Africa</h1>
+            <p>Retrouvez les réponses aux questions les plus fréquentes</p>
+        </div>
+
+        <div class="faq-container">
+            <button class="accordion">1. Qu'est-ce que Genius Africa ?</button>
+            <div class="panel">
+                <p>Genius Africa est une plateforme innovante qui met en relation des investisseurs et des traders professionnels. Notre mission est de permettre à chacun d'investir facilement et de bénéficier du savoir-faire de traders expérimentés.</p>
+            </div>
+
+            <button class="accordion">2. Comment fonctionne la plateforme ?</button>
+            <div class="panel">
+                <p>L'investisseur choisit un trader partenaire sur la plateforme, le trader utilise le capital pour effectuer des opérations de trading et les gains sont partagés selon un pourcentage défini à l'avance.</p>
+            </div>
+
+            <button class="accordion">3. Quel est le minimum et le maximum d'investissement ?</button>
+            <div class="panel">
+                <p>Le montant minimum d'investissement est de 25000 CDF. Le plafond maximum dépend du trader sélectionné et de son portefeuille de gestion.</p>
+            </div>
+
+            <button class="accordion">4. Combien de temps dure un investissement ?</button>
+            <div class="panel">
+                <p>La durée standard est de 1 ans. À la fin, l'investisseur peut retirer son capital + gains ou renouveler son contrat.</p>
+            </div>
+
+            <button class="accordion">5. Quels sont les pourcentages de gain ?</button>
+            <div class="panel">
+                <p>Les pourcentages varient selon le trader et sa performance : généralement de 5% à 15% par mois. Chaque trader a son propre profil de rendement affiché sur la plateforme.</p>
+            </div>
+
+            <button class="accordion">6. Comment puis-je suivre mes investissements ?</button>
+            <div class="panel">
+                <p>Vous avez accès à un tableau de bord sécurisé où vous pouvez consulter en temps réel votre capital, les performances du trader et vos gains accumulés.</p>
+            </div>
+
+            <button class="accordion">7. Puis-je retirer mon argent avant la fin du contrat ?</button>
+            <div class="panel">
+                <p>En principe, les fonds restent bloqués pendant la durée du contrat. Un retrait anticipé peut être envisagé selon les conditions prévues par le trader.</p>
+            </div>
+
+            <button class="accordion">8. Quels sont les risques liés au trading ?</button>
+            <div class="panel">
+                <p>Le trading comporte des risques de perte. Genius Africa travaille uniquement avec des traders expérimentés pour réduire ces risques, mais aucun investissement n'est garanti à 100%.</p>
+            </div>
+
+            <button class="accordion">9. Comment Genius Africa gagne de l'argent ?</button>
+            <div class="panel">
+                <p>Notre plateforme perçoit une commission sur les performances des traders et certaines opérations de gestion, garantissant transparence et durabilité.</p>
+            </div>
+
+            <button class="accordion">10. Comment puis-je commencer à investir ?</button>
+            <div class="panel">
+                <p>Créez un compte sur Genius Africa, déposez vos fonds, sélectionnez un trader et suivez vos gains depuis votre espace personnel.</p>
+            </div>
+        </div>
+
+        <div class="contact">
+            <h3>Vous avez d'autres questions ?</h3>
+            <p>Notre équipe de support est là pour vous aider</p>
+            <a href="{% url 'creer_requete' %}" class="btn">Contactez-nous</a>
+        </div>
+    </div>
+
+    <script>
+        const acc = document.getElementsByClassName("accordion");
+
+        for (let i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                const panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+
+        // Ouvrir le premier élément par défaut
+        window.onload = function() {
+            acc[0].click();
+        }
+    </script>
+</body>
+</html>
+
+{% endblock %}

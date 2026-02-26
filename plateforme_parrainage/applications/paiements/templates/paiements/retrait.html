@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block contenu %}
+<div class="withdraw-page">
+    <div class="withdraw-container animate-in">
+        
+        <div class="withdraw-header">
+            <div class="bank-icon-circle">
+                <i class="fas fa-university"></i>
+            </div>
+            <h1>Demande de Retrait</h1>
+            <p class="text-muted">Vos fonds seront transférés vers votre compte Mobile Money</p>
+        </div>
+
+        <div class="withdraw-form-card">
+            <form method="post" id="withdrawForm">
+                {% csrf_token %}
+                
+                <div class="bank-form-group">
+                    <label for="montant">Montant à retirer (FC)</label>
+                    <div class="bank-input-wrapper">
+                        <span class="currency-prefix">FC</span>
+                        <input type="number" id="montant" name="montant" step="100" min="5000" placeholder="Min. 5 000" required>
+                    </div>
+                    <div class="balance-helper">
+                        <i class="fas fa-wallet"></i> Solde disponible: <strong>{{ solde }} FC</strong>
+                    </div>
+                </div>
+
+                <div class="bank-form-group">
+                    <label for="methode">Opérateur de paiement</label>
+                    <div class="operator-grid">
+                        <label class="operator-item">
+                            <input type="radio" name="methode" value="Orange_money" required>
+                            <div class="operator-box">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/1024px-Orange_logo.svg.png" alt="Orange">
+                                <span>Orange</span>
+                            </div>
+                        </label>
+                        <label class="operator-item">
+                            <input type="radio" name="methode" value="M_pesa">
+                            <div class="operator-box">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/M-Pesa_Logo.png/1200px-M-Pesa_Logo.png" alt="M-Pesa">
+                                <span>M-Pesa</span>
+                            </div>
+                        </label>
+                        <label class="operator-item">
+                            <input type="radio" name="methode" value="Airtel_money">
+                            <div class="operator-box">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Airtel_Logo.svg/1200px-Airtel_Logo.svg.png" alt="Airtel">
+                                <span>Airtel</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="bank-form-group">
+                    <label for="destination">Numéro de téléphone bénéficiaire</label>
+                    <div class="bank-input-wrapper">
+                        <i class="fas fa-phone-alt input-icon"></i>
+                        <input type="text" id="destination" name="destination" placeholder="0XXXXXXXXX" maxlength="10" required>
+                    </div>
+                    <small class="input-hint">Format: 10 chiffres (ex: 0812345678)</small>
+                </div>
+
+                <button type="submit" class="btn-bank-action">
+                    <span>Confirmer le retrait</span>
+                    <i class="fas fa-shield-alt"></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="security-info">
+            <div class="info-title">
+                <i class="fas fa-lock"></i> Transaction Sécurisée
+            </div>
+            <div class="info-details">
+                <div class="detail-line">
+                    <span>Délai de traitement</span>
+                    <strong>24h - 48h</strong>
+                </div>
+                <div class="detail-line">
+                    <span>Frais de service</span>
+                    <strong>12.5%</strong>
+                </div>
+                <div class="detail-line">
+                    <span>Montant min.</span>
+                    <strong>5 000 FC</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --bank-blue: #0f172a;
+        --bank-sky: #0ea5e9;
+        --bank-bg: #f8fafc;
+        --bank-border: #e2e8f0;
+        --bank-text: #1e293b;
+        --bank-muted: #64748b;
+        --bank-error: #ef4444;
+    }
+
+    .withdraw-page { background: var(--bank-bg); min-height: 100vh; padding: 40px 20px; font-family: 'Inter', sans-serif; }
+    .withdraw-container { max-width: 480px; margin: 0 auto; }
+
+    /* HEADER */
+    .withdraw-header { text-align: center; margin-bottom: 30px; }
+    .bank-icon-circle { width: 64px; height: 64px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 24px; color: var(--bank-sky); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .withdraw-header h1 { font-size: 24px; font-weight: 800; color: var(--bank-blue); margin-bottom: 8px; }
+    .text-muted { font-size: 14px; color: var(--bank-muted); }
+
+    /* FORM CARD */
+    .withdraw-form-card { background: white; border-radius: 24px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.02); border: 1px solid var(--bank-border); margin-bottom: 20px; }
+    .bank-form-group { margin-bottom: 25px; }
+    .bank-form-group label { display: block; font-size: 14px; font-weight: 700; color: var(--bank-blue); margin-bottom: 10px; }
+
+    /* INPUTS */
+    .bank-input-wrapper { position: relative; display: flex; align-items: center; }
+    .bank-input-wrapper input { width: 100%; padding: 14px 16px; border: 2px solid var(--bank-border); border-radius: 12px; font-size: 16px; font-weight: 600; transition: all 0.3s; }
+    .bank-input-wrapper input:focus { border-color: var(--bank-sky); outline: none; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); }
+
+    .currency-prefix { position: absolute; right: 16px; font-weight: 800; color: var(--bank-muted); }
+    .input-icon { position: absolute; left: 16px; color: var(--bank-muted); }
+    .bank-input-wrapper .input-icon + input { padding-left: 45px; }
+
+    .balance-helper { margin-top: 8px; font-size: 12px; color: var(--bank-muted); }
+    .balance-helper strong { color: var(--bank-sky); }
+
+    /* OPERATOR GRID */
+    .operator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .operator-item input { display: none; }
+    .operator-box { border: 2px solid var(--bank-border); border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; transition: 0.3s; }
+    .operator-box img { width: 24px; height: 24px; object-fit: contain; margin-bottom: 5px; filter: grayscale(1); opacity: 0.6; }
+    .operator-box span { display: block; font-size: 11px; font-weight: 700; color: var(--bank-muted); }
+    
+    .operator-item input:checked + .operator-box { border-color: var(--bank-sky); background: #f0f9ff; }
+    .operator-item input:checked + .operator-box img { filter: grayscale(0); opacity: 1; }
+    .operator-item input:checked + .operator-box span { color: var(--bank-sky); }
+
+    /* BUTTON */
+    .btn-bank-action { width: 100%; padding: 16px; background: var(--bank-blue); color: white; border: none; border-radius: 14px; font-weight: 700; font-size: 16px; display: flex; justify-content: center; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; }
+    .btn-bank-action:hover { background: #1e293b; transform: translateY(-2px); }
+
+    /* SECURITY INFO */
+    .security-info { background: #f1f5f9; border-radius: 20px; padding: 20px; }
+    .info-title { font-size: 13px; font-weight: 800; color: var(--bank-blue); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+    .detail-line { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .detail-line:last-child { border: none; margin: 0; padding: 0; }
+    .detail-line span { color: var(--bank-muted); }
+    .detail-line strong { color: var(--bank-blue); }
+
+    /* MODAL D'ERREUR */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 9999; }
+    .modal-backdrop.show { display: flex; }
+    .modal-card { background: white; border-radius: 24px; padding: 30px; max-width: 360px; width: 90%; text-align: center; }
+    .error-icon { width: 60px; height: 60px; background: #fee2e2; color: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--bank-blue); margin-bottom: 10px; }
+    .btn-close { width: 100%; padding: 12px; background: #f1f5f9; border: none; border-radius: 10px; font-weight: 700; color: var(--bank-blue); cursor: pointer; margin-top: 20px; }
+
+    .animate-in { animation: fadeInUp 0.5s ease-out forwards; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<div id="errorModal" class="modal-backdrop">
+    <div class="modal-card">
+        <div class="error-icon"><i class="fas fa-times"></i></div>
+        <div class="modal-title">Action Impossible</div>
+        <div id="errorMessage" style="color: var(--bank-muted); font-size: 14px;"></div>
+        <button class="btn-close">D'accord</button>
+    </div>
+</div>
+
+{% if messages %}
+<script>
+    let messages = [
+        {% for message in messages %}
+            { level: "{{ message.tags }}", text: "{{ message|escapejs }}" },
+        {% endfor %}
+    ];
+    let errorMsg = messages.find(m => m.level.includes("error"));
+    if (errorMsg) {
+        window.onload = function() {
+            let modal = document.getElementById("errorModal");
+            let msgBox = document.getElementById("errorMessage");
+            msgBox.textContent = errorMsg.text;
+            modal.classList.add("show");
+            modal.querySelector(".btn-close").onclick = () => modal.classList.remove("show");
+        };
+    }
+</script>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+
+{% block contenu %}
+<style>
+    .deposits-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .deposits-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    .deposits-title {
+        color: #1e293b;
+        font-size: 2.2rem;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    
+    .deposits-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%);
+        border-radius: 2px;
+    }
+    
+    .new-deposit-btn {
+        background: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%);
+        color: white;
+        text-decoration: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .new-deposit-btn:hover {
+        background: linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 100%);
+        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .deposits-table-container {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        margin-bottom: 30px;
+        overflow-x: auto;
+    }
+    
+    .deposits-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+    }
+    
+    .deposits-table th {
+        background-color: #f8fafc;
+        padding: 16px;
+        text-align: left;
+        font-weight: 600;
+        color: #374151;
+        border-bottom: 2px solid #e5e7eb;
+    }
+    
+    .deposits-table td {
+        padding: 16px;
+        border-bottom: 1px solid #e5e7eb;
+        color: #4b5563;
+    }
+    
+    .deposits-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .deposits-table tr:hover {
+        background-color: #f9fafb;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    .status-pending {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .status-approved {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+    
+    .status-rejected {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .no-deposits {
+        text-align: center;
+        padding: 50px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+    
+    .no-deposits-icon {
+        font-size: 3.5rem;
+        color: #d1d5db;
+        margin-bottom: 20px;
+    }
+    
+    .no-deposits p {
+        font-size: 1.2rem;
+        color: #6b7280;
+        margin-bottom: 30px;
+    }
+    
+    /* Media Queries pour le responsive */
+    @media screen and (max-width: 768px) {
+        .deposits-container {
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+        
+        .deposits-title {
+            font-size: 1.8rem;
+        }
+        
+        .deposits-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .deposits-table th,
+        .deposits-table td {
+            padding: 12px 10px;
+        }
+    }
+    
+    @media screen and (max-width: 576px) {
+        .deposits-title {
+            font-size: 1.6rem;
+        }
+        
+        .new-deposit-btn {
+            padding: 10px 20px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .deposits-table {
+            font-size: 0.9rem;
+        }
+        
+        .deposits-table th,
+        .deposits-table td {
+            padding: 10px 8px;
+        }
+        
+        .no-deposits {
+            padding: 40px 15px;
+        }
+        
+        .no-deposits-icon {
+            font-size: 2.8rem;
+        }
+        
+        .no-deposits p {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+
+<div class="deposits-container">
+    <div class="deposits-header">
+        <h1 class="deposits-title">Mes Dépôts</h1>
+        <a href="{% url 'create_order' %}" class="new-deposit-btn">
+            <i class="fas fa-plus-circle"></i> Faire un nouveau dépôt
+        </a>
+    </div>
+    
+    {% if depots %}
+    <div class="deposits-table-container">
+        <table class="deposits-table">
+            <thead>
+                <tr>
+                    <th>Montant</th>
+                    <th>Méthode</th>
+                    <th>Statut</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for depot in depots %}
+                <tr>
+                    <td>{{ depot.montant }} FC</td>
+                    <td>
+                        {% if depot.methode == "mobile_money" %}
+                        <i class="fas fa-mobile-alt"></i> Mobile Money
+                        {% elif depot.methode == "virement_bancaire" %}
+                        <i class="fas fa-university"></i> Virement Bancaire
+                        {% else %}
+                        {{ depot.methode }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if depot.statut == "en_attente" %}
+                        <span class="status-badge status-pending">{{ depot.get_statut_display }}</span>
+                        {% elif depot.statut == "approuve" %}
+                        <span class="status-badge status-approved">{{ depot.get_statut_display }}</span>
+                        {% elif depot.statut == "rejete" %}
+                        <span class="status-badge status-rejected">{{ depot.get_statut_display }}</span>
+                        {% else %}
+                        <span class="status-badge">{{ depot.get_statut_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ depot.cree_le|date:"d/m/Y H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="no-deposits">
+        <div class="no-deposits-icon">
+            <i class="fas fa-wallet"></i>
+        </div>
+        <p>Vous n'avez pas encore effectué de dépôts.</p>
+        <a href="{% url 'create_order' %}" class="new-deposit-btn">
+            <i class="fas fa-plus-circle"></i> Faire un premier dépôt
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

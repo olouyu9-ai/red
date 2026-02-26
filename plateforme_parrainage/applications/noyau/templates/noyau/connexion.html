@@ -1,0 +1,361 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenu %}
+<div class="login-container">
+    <div class="login-card">
+        <h1 class="login-title">Connexion</h1>
+        
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="alert alert-error">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="username">Nom d'utilisateur :</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-input"
+                    required
+                    autofocus
+                    {% if form.username.value %}value="{{ form.username.value }}"{% endif %}
+                >
+                {% if form.username.errors %}
+                <div class="error-text">
+                    {% for error in form.username.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-input"
+                    required
+                >
+                {% if form.password.errors %}
+                <div class="error-text">
+                    {% for error in form.password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="remember_me"> Se souvenir de moi
+                </label>
+                <a href="" class="forgot-password">Mot de passe oublié ?</a>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+        </form>
+        
+        <div class="login-footer">
+            <p>Pas encore de compte ? 
+                <a href="{% url 'inscription' %}" class="link-primary">S'inscrire</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Modal d'erreur ===== -->
+<div id="errorModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Erreur</h3>
+            <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="errorMessage"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary btn-close">OK</button>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let messages = [
+            {% for message in messages %}
+                { 
+                    level: "{{ message.tags }}", 
+                    text: "{{ message|escapejs }}",
+                    {% if 'error' in message.tags %}isError: true{% else %}isError: false{% endif %}
+                },
+            {% endfor %}
+        ];
+        
+        // Afficher les erreurs dans la modal
+        let errorMsg = messages.find(m => m.isError);
+        if (errorMsg) {
+            showErrorModal(errorMsg.text);
+        }
+        
+        // Afficher les autres messages (succès, info, warning)
+        messages.forEach(msg => {
+            if (!msg.isError) {
+                showToast(msg.text, msg.level);
+            }
+        });
+        
+        function showErrorModal(message) {
+            let modal = document.getElementById('errorModal');
+            let msgBox = document.getElementById('errorMessage');
+            msgBox.textContent = message;
+            
+            modal.classList.add('active');
+            
+            // Fermer la modal
+            let closeBtns = modal.querySelectorAll('.modal-close, .btn-close');
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    modal.classList.remove('active');
+                });
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    modal.classList.remove('active');
+                }
+            });
+        }
+        
+        function showToast(message, type) {
+            // Implémentation d'un toast notification si nécessaire
+            console.log(`${type}: ${message}`);
+        }
+    });
+</script>
+{% endif %}
+
+<style>
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+        padding: 20px;
+    }
+    
+    .login-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 420px;
+    }
+    
+    .login-title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+        font-size: 28px;
+    }
+    
+    .login-form {
+        margin-bottom: 25px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #555;
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+    
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+    
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+    
+    .forgot-password {
+        color: #007bff;
+        text-decoration: none;
+    }
+    
+    .forgot-password:hover {
+        text-decoration: underline;
+    }
+    
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+    
+    .btn-block {
+        width: 100%;
+    }
+    
+    .login-footer {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        color: #666;
+    }
+    
+    .link-primary {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .link-primary:hover {
+        text-decoration: underline;
+    }
+    
+    .alert {
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    
+    .alert-error {
+        background-color: #fee;
+        border: 1px solid #fcc;
+        color: #c00;
+    }
+    
+    .error-text {
+        color: #c00;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    
+    /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal.active {
+        display: flex;
+    }
+    
+    .modal-content {
+        background: white;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        overflow: hidden;
+    }
+    
+    .modal-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .modal-title {
+        margin: 0;
+        color: #333;
+    }
+    
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+        line-height: 1;
+    }
+    
+    .modal-body {
+        padding: 20px;
+        color: #666;
+    }
+    
+    .modal-footer {
+        padding: 15px 20px;
+        border-top: 1px solid #eee;
+        text-align: right;
+    }
+    
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #545b62;
+    }
+</style>
+{% endblock %}

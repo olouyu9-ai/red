@@ -1,0 +1,77 @@
+/* 📱 Style général (mobile-first) */
+body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(160deg, #0072ff, #00c6ff);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    color: white;
+
+  
+}
+.pho{
+    width: 150px;
+    height: 150px;
+    position: relative;
+    background: orange;
+    
+}
+/* Logo */
+.logo {
+    display: block;
+    margin: 0 auto 10px auto;
+    max-width: 200px;
+    width: 60%;
+    height: auto;
+}
+
+/* 📝 Titre */
+h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+/* 📌 Sous-texte */
+p {
+    font-size: 15px;
+    margin-bottom: 25px;
+    margin-left: 12px;
+    
+}
+
+/* 🔘 Boutons */
+.bouton {
+    display: inline-block;
+    padding: 14px 24px;
+    margin: 8px;
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 114, 255, 0.3);
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.bouton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 191, 255, 0.4);
+}
+
+/* 💻 Version Desktop */
+@media (min-width: 768px) {
+    h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+
+    .bouton {
+        font-size: 18px;
+        padding: 16px 28px;
+        margin: 12px;
+    }
+}

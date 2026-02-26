@@ -1,0 +1,143 @@
+/* Design Mobile (par défaut : mobile-first) */
+body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(160deg, #0072ff, #00c6ff);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+
+    /*  Centre verticalement et horizontalement */
+    /* display: flex;*/
+    /* flex-direction: column; /* titre au-dessus */
+    /* justify-content: center;*/
+    /* align-items: center;*/
+}
+
+/* Logo */
+.logo {
+    display: block;
+    margin: 0 auto 20px auto;
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+}
+
+
+/*  Titre */
+h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 20px;
+}
+
+/*  Carte formulaire */
+form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+
+      /* mais pas plus large que 480px */
+    margin: 0 auto;
+}
+
+/*  Labels */
+label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: block;
+    color: #333;
+}
+
+/* Champs */
+input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+    border-color: #0072ff;
+    box-shadow: 0 0 6px rgba(0, 114, 255, 0.3);
+}
+
+/*  Bouton */
+button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 191, 255, 0.4);
+}
+
+/*  Lien */
+p {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14px;
+    color: #444;
+}
+
+p a {
+    color: #0072ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+/*  Design Desktop (optimisé pour PC) */
+@media (min-width: 768px) {
+    body {
+        background: linear-gradient(to right, #0072ff, #00c6ff);
+    }
+
+    form {
+        width: 100%;       /* prend toute la largeur dispo */
+        max-width: 480px;  /* mais limité à 480px */
+        padding: 35px 40px;
+        border-radius: 20px;
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+
+    input {
+        font-size: 16px;
+        padding: 16px;
+    }
+
+    button {
+        font-size: 17px;
+        padding: 16px;
+    }
+
+    p {
+        font-size: 15px;
+    }
+}
+
+
+

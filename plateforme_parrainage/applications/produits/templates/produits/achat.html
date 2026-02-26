@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titre %}Initialiser l'Actif | Inverted Pyramid{% endblock %}
+
+{% block contenu %}
+<div class="terminal-wrapper">
+    <div class="container mobile-padding">
+        
+        <div class="protocol-grid">
+            <div class="protocol-card asset-display animate-in">
+                <div class="card-glow"></div>
+                
+                <div class="visual-container">
+                    {% if produit.image %}
+                        <img src="{{ produit.image.url }}" alt="{{ produit.nom }}">
+                    {% else %}
+                        <div class="schematic-icon">
+                            <i class="fas fa-layer-group"></i>
+                            <span class="scan-line"></span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="asset-info-block">
+                    <h3 class="block-label">Spécifications Techniques</h3>
+                    <p class="asset-description">{{ produit.description }}</p>
+                    
+                    <div class="data-table">
+                        <div class="data-row">
+                            <span class="d-key">NOM_DE_L_ACTIF</span>
+                            <span class="d-value">{{ produit.nom|upper }}</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="d-key">SEUIL_D_ENGAGEMENT</span>
+                            <span class="d-value">$ {{ produit.prix }}</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="d-key">ROI_QUOTIDIEN</span>
+                            <span class="d-value text-cyan">+{{ produit.taux_quotidien }}%</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="d-key">DURÉE_DU_CYCLE</span>
+                            <span class="d-value">{{ produit.duree_jours }} JOURS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="protocol-card control-unit animate-in delay-1">
+                <div class="card-glow"></div>
+                <h3 class="unit-title">Panneau_d_Initialisation</h3>
+                
+                <form method="post" class="acquisition-form">
+                    {% csrf_token %}
+                    
+                    <div class="ledger-box">
+                        <div class="ledger-item">
+                            <span>Engagement Unitaire</span>
+                            <span class="white-text">$ {{ produit.prix }}</span>
+                        </div>
+                        <div class="ledger-item">
+                            <span>Allocation Système</span>
+                            <span class="white-text">1 Unité</span>
+                        </div>
+                        <div class="ledger-separator"></div>
+                        <div class="ledger-item total">
+                            <span>Total Requis</span>
+                            <span class="text-cyan">$ {{ produit.prix }}</span>
+                        </div>
+                    </div>
+
+                    <div class="projection-grid">
+                        <div class="proj-item">
+                            <span class="p-label">Sortie Quotidienne Estimée</span>
+                            <span class="p-value">+$ {{ gain }}</span>
+                        </div>
+                        <div class="proj-item">
+                            <span class="p-label">Récompense Accumulée</span>
+                            <span class="p-value">+$ {{ gain_total }}</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-execute">
+                        <i class="fas fa-bolt"></i> LANCER_LE_DEPLOIEMENT
+                    </button>
+                    
+                    <div class="security-notice">
+                        <i class="fas fa-fingerprint"></i>
+                        <span>Protocole sécurisé par matériel. Cycle de maturité complet en {{ produit.duree_jours }} jours.</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="errorModal" class="terminal-modal">
+    <div class="modal-content">
+        <div class="modal-header"><i class="fas fa-exclamation-triangle"></i> PROTOCOLE_INTERROMPU</div>
+        <div id="errorMessage" class="modal-body"></div>
+        <button class="btn-modal-close">ACCUSER_RECEPTION_ERREUR</button>
+    </div>
+</div>
+
+<style>
+    /* Les styles CSS restent les mêmes (couleurs et structure) */
+    :root {
+        --term-bg: #07090d;
+        --term-card: #0f131a;
+        --cyan: #00f2ff;
+        --text-dim: #64748b;
+        --white: #f8fafc;
+    }
+
+    .terminal-wrapper { 
+        background: var(--term-bg); 
+        min-height: 100vh; 
+        padding: 40px 0 80px; 
+        color: var(--white); 
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+    }
+
+    .mobile-padding { padding: 0 20px; }
+
+    .protocol-grid { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 24px; 
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 992px) {
+        .protocol-grid { grid-template-columns: 1fr; }
+        .terminal-wrapper { padding: 20px 0; }
+    }
+
+    .protocol-card { 
+        background: var(--term-card); 
+        border: 1px solid rgba(255,255,255,0.06); 
+        border-radius: 12px; 
+        padding: clamp(25px, 5vw, 40px); 
+        position: relative; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .card-glow { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); opacity: 0.6; }
+
+    .visual-container { 
+        height: 200px; 
+        background: #000; 
+        border-radius: 8px; 
+        margin-bottom: 30px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        position: relative; 
+        overflow: hidden; 
+        border: 1px solid rgba(255,255,255,0.03);
+    }
+    .visual-container img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; filter: grayscale(1); }
+    .schematic-icon { font-size: 60px; color: var(--cyan); opacity: 0.3; }
+    .scan-line { position: absolute; width: 100%; height: 2px; background: rgba(0, 242, 255, 0.15); animation: scan 4s linear infinite; }
+
+    .block-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 2px; font-weight: 800; }
+    .asset-description { font-size: 14px; line-height: 1.6; color: #94a3b8; margin-bottom: 25px; }
+
+    .data-table { border-top: 1px solid rgba(255,255,255,0.05); }
+    .data-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
+    .d-key { color: var(--text-dim); }
+    .d-value { font-weight: 700; color: var(--white); }
+
+    .unit-title { font-size: 14px; margin-bottom: 25px; color: var(--cyan); text-transform: uppercase; letter-spacing: 2px; font-weight: 800; }
+    .ledger-box { background: rgba(0,0,0,0.4); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.02); }
+    .ledger-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: var(--text-dim); }
+    .white-text { color: var(--white); font-weight: 600; }
+    .ledger-separator { height: 1px; background: rgba(255,255,255,0.06); margin: 15px 0; }
+    .total { font-weight: 800; font-size: 16px; color: var(--white); }
+
+    .projection-grid { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 12px; 
+        margin: 25px 0; 
+    }
+    .proj-item { background: rgba(255, 255, 255, 0.02); padding: 15px; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; }
+    .p-label { display: block; font-size: 9px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 1px; }
+    .p-value { font-size: 14px; font-weight: 800; color: var(--cyan); }
+
+    .btn-execute { 
+        width: 100%; 
+        padding: 22px; 
+        background: var(--cyan); 
+        color: #000; 
+        border: none; 
+        font-weight: 900; 
+        font-size: 14px; 
+        cursor: pointer; 
+        transition: 0.3s; 
+        border-radius: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .btn-execute:hover { background: #fff; box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); transform: translateY(-2px); }
+
+    .security-notice { margin-top: 20px; display: flex; gap: 10px; font-size: 11px; color: var(--text-dim); line-height: 1.5; align-items: center; justify-content: center; }
+
+    .terminal-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; backdrop-filter: blur(10px); }
+    .terminal-modal.show { display: flex; }
+    .modal-content { background: var(--term-card); border: 1px solid rgba(255,255,255,0.1); padding: 40px; width: 100%; max-width: 450px; text-align: center; border-radius: 16px; }
+    .modal-header { color: #f87171; font-weight: 800; margin-bottom: 20px; font-size: 14px; letter-spacing: 2px; }
+    .modal-body { font-size: 15px; color: #cbd5e1; line-height: 1.6; }
+    .btn-modal-close { margin-top: 30px; background: #f87171; color: white; border: none; padding: 14px 20px; cursor: pointer; font-size: 13px; width: 100%; border-radius: 8px; font-weight: 700; }
+
+    @keyframes scan { 0% { top: -10%; } 100% { top: 110%; } }
+    .animate-in { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .delay-1 { animation-delay: 0.15s; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if messages %}
+            let modal = document.getElementById("errorModal");
+            let msgBox = document.getElementById("errorMessage");
+            {% for message in messages %}
+                {% if "error" in message.tags %}
+                    msgBox.textContent = "{{ message|escapejs }}";
+                    modal.classList.add("show");
+                {% endif %}
+            {% endfor %}
+            document.querySelector(".btn-modal-close").onclick = () => modal.classList.remove("show");
+        {% endif %}
+    });
+</script>
+{% endblock %}

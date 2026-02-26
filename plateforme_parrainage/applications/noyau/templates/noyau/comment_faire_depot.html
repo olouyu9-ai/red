@@ -1,0 +1,622 @@
+{% extends 'base.html' %}
+{% block contenu %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide de retrait - Services mobiles (RDC)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f1f5f9;
+            padding: 0 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-tab {
+            padding: 16px 24px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab.active {
+            border-bottom: 3px solid #1976D2;
+            color: #1976D2;
+            background: white;
+        }
+
+        .nav-tab:hover {
+            background: #e8f0fe;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .operator-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .operator-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .orange { background: linear-gradient(135deg, #FF9800, #F57C00); }
+        .vodacom { background: linear-gradient(135deg, #2196F3, #1976D2); }
+        .airtel { background: linear-gradient(135deg, #E53935, #D32F2F); }
+
+        .operator-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .operator-subtitle {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .steps {
+            margin-bottom: 30px;
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: #e8f0fe;
+            color: #1976D2;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: 600;
+            color: #0D47A1;
+            border: 1px solid #e2e8f0;
+        }
+
+        .example-box {
+            background: #f8f9fa;
+            border-left: 4px solid #1976D2;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1976D2;
+        }
+
+        .security-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 40px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .security-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #1976D2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .security-list {
+            list-style: none;
+        }
+
+        .security-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .security-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #1976D2;
+            font-weight: bold;
+        }
+
+        .agent-input-section {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 16px;
+            min-width: 250px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            background: #1976D2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: #1565C0;
+        }
+
+        .saved-message {
+            color: #0D47A1;
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 15px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .nav-tab {
+                flex: 1;
+                text-align: center;
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .operator-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .agent-input-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            input[type="text"] {
+                min-width: auto;
+            }
+        }
+        .lien_depot{
+            font-size: 20px;
+
+            padding: 16px 24px;
+            font-weight: 500;
+            cursor: pointer;
+
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="orange">Orange Money</div>
+            <div class="nav-tab" data-tab="vodacom">Vodacom M-Pesa</div>
+            <div class="nav-tab" data-tab="airtel">Airtel Money</div>
+            <div data-tab="security"> <a class='lien_depot' href="{% url 'create_order' %}"><strong> Dépôt</strong> </a></div>
+
+        </div>
+
+        <div class="content">
+            <!-- Orange Money -->
+            <div class="tab-content active" id="orange-content">
+                <div class="operator-header">
+                    <div class="operator-icon orange">
+                          <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div>
+                        <h2 class="operator-title">Orange Money</h2>
+                        <p class="operator-subtitle">Procédure USSD et étapes détaillées</p>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            Tapez <code>*144#</code> sur votre téléphone puis validez (OK / YES).
+                        </div>
+                    </div>
+
+                   <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            Choisissez la devise <strong>2 - CDF</strong> OK .
+                        </div>
+                    </div>
+
+                     <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            Sélectionnez l'option : <strong>3 </strong> OK.
+                        </div>
+                    </div>
+
+                      <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            Sélectionnez l'option Retrait agent : <strong>1 </strong> OK.
+                        </div>
+                    </div>
+
+
+
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            Entrez le numéro de l'agent : <code>0858009376</code>.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            Indiquez le montant  dépôt (ex : <code>50 000</code>  CDF).
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            Confirmez en saisissant votre code secret Orange Money.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            Recevez la confirmation SMS.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                  <div class="example-title">INFO :</div>
+                    <p>Après avoir effectué votre transaction via l’opérateur de votre choix, cliquez sur le bouton « Dépôt ».
+Un formulaire s’affichera et vous sera demandé de : <br>
+
+Choisir la méthode de paiement que vous avez utilisés: <strong> -. Orange Money, M-Pesa ou Airtel Money. </strong> <br>
+
+ <strong> - Saisir le montant déposé. </strong>
+
+Une fois validé, vous serez redirigé vers un champ où vous devrez renseigner la référence de transaction. Cette référence vous est envoyée par SMS après votre opération.
+
+<strong>👉 Exemple de référence ( ref: CO250918.0009.A39300 ) </strong>
+
+Veuillez copier et coller ce code exactement tel qu’indiqué dans votre SMS afin que votre dépôt soit correctement validé et pris en compte.</p>
+                </div>
+            </div>
+
+            <!-- Vodacom M-Pesa -->
+            <div class="tab-content" id="vodacom-content">
+                <div class="operator-header">
+                    <div class="operator-icon vodacom">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div>
+                        <h2 class="operator-title">Vodacom — M-Pesa</h2>
+                        <p class="operator-subtitle">Procédure USSD et confirmation</p>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            Tapez <code>*1122#</code> puis validez.
+                        </div>
+                    </div>
+
+
+
+                   <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            Choisissez la devise <strong>2 - FC</strong> OK .
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            Sélectionnez l'option : <strong>3 </strong> OK.
+                        </div>
+                    </div>
+
+
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            Sélectionnez l'option : <strong>1 - Agent</strong> OK.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            Entrez le numéro de l'agent M-Pesa : <code>pas disponible</code>.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            Indiquez le montant que vous souhaitez deposer.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            Confirmez la transaction avec votre code PIN M-Pesa.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            Vous recevrez un SMS de confirmation .
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">INFO :</div>
+                    <p>Après avoir effectué votre transaction via l’opérateur de votre choix, cliquez sur le bouton « Dépôt ».
+Un formulaire s’affichera et vous sera demandé de : <br>
+
+Choisir la méthode de paiement que vous avez utilisés: <strong> -. Orange Money, M-Pesa ou Airtel Money. </strong> <br>
+
+ <strong> - Saisir le montant déposé. </strong>
+
+Une fois validé, vous serez redirigé vers un champ où vous devrez renseigner la référence de transaction. Cette référence vous est envoyée par SMS après votre opération.
+
+<strong>👉 Exemple de référence ( ref: PP542.7257628.78 ) </strong>
+
+Veuillez copier et coller ce code exactement tel qu’indiqué dans votre SMS afin que votre dépôt soit correctement validé et pris en compte.</p>
+                </div>
+            </div>
+
+            <!-- Airtel Money -->
+            <div class="tab-content" id="airtel-content">
+                <div class="operator-header">
+                    <div class="operator-icon airtel">
+                          <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div>
+                        <h2 class="operator-title">Airtel Money</h2>
+                        <p class="operator-subtitle">Code USSD & étapes</p>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            Tapez <code>*501#</code> et validez.
+                        </div>
+                    </div>
+
+
+                        <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            Choisissez la devise <strong>2 - CDF</strong> OK .
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            Sélectionnez option: <strong>1 </strong> OK.
+                        </div>
+                    </div>
+
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            Sélectionnez option (Vers Aitel Money): <strong>1 </strong> OK.
+                        </div>
+                    </div>
+
+
+                        <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            Sélectionnez option (avec frais): <strong>2 </strong> OK.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            Indiquez le numéro de l'agent : <code>pas disponible</code>.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            Saisissez le montant.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            Confirmez avec votre code PIN Airtel Money.
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">8</div>
+                        <div class="step-content">
+                            Montrez le SMS de confirmation à l'agent .
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                <div class="example-title">INFO :</div>
+                    <p>Après avoir effectué votre transaction via l’opérateur de votre choix, cliquez sur le bouton « Dépôt ».
+Un formulaire s’affichera et vous sera demandé de : <br>
+
+Choisir la méthode de paiement que vous avez utilisés: <strong> -. Orange Money, M-Pesa ou Airtel Money. </strong> <br>
+
+ <strong> - Saisir le montant déposé. </strong>
+
+Une fois validé, vous serez redirigé vers un champ où vous devrez renseigner la référence de transaction. Cette référence vous est envoyée par SMS après votre opération.
+
+<strong>👉 Exemple de référence ( ref: PP542.7257628.78 ) </strong>
+
+Veuillez copier et coller ce code exactement tel qu’indiqué dans votre SMS afin que votre dépôt soit correctement validé et pris en compte.</p>
+                </div>
+            </div>
+
+            <!-- Security Tips -->
+
+        </div>
+
+        <footer>
+            <p>Ce guide est destiné aux utilisateurs en <strong>République Démocratique du Congo</strong>. Les codes et menus peuvent évoluer selon les opérateurs.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+                // Add active class to clicked tab
+                tab.classList.add('active');
+
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                // Show the selected tab content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+
+        // Save agent number
+        document.getElementById('saveAgent').addEventListener('click', () => {
+            const agentNumber = document.getElementById('agentInput').value.trim();
+            const messageElement = document.getElementById('savedMsg');
+
+            if (agentNumber) {
+                localStorage.setItem('agent_number', agentNumber);
+                messageElement.textContent = 'Numéro enregistré avec succès!';
+
+                // Clear message after 3 seconds
+                setTimeout(() => {
+                    messageElement.textContent = '';
+                }, 3000);
+            } else {
+                messageElement.textContent = 'Veuillez entrer un numéro valide';
+
+                // Clear message after 3 seconds
+                setTimeout(() => {
+                    messageElement.textContent = '';
+                }, 3000);
+            }
+        });
+
+        // Load saved agent number on page load
+        window.addEventListener('load', () => {
+            const savedAgent = localStorage.getItem('agent_number');
+            if (savedAgent) {
+                document.getElementById('agentInput').value = savedAgent;
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

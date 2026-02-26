@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+
+{% block contenu %}
+<div class="order-validation-container">
+    <div class="card">
+        <div class="card-header">
+            <h2>Validation de votre Dépôt</h2>
+        </div>
+        
+        <div class="card-body">
+            {% if error %}
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            <div class="order-info">
+                <h3><i class="fas fa-shopping-cart"></i> Depôt en attente</h3>
+                <div class="order-reference">{{ order }}</div>
+                <p class="instruction-text">Dépôt déjà effectué avec cette  référence  .</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Reset des marges pour mobile */
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .order-validation-container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .card {
+        background: #fff;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 100vh;
+    }
+    
+    .card-header {
+        background: #4a6cf7;
+        color: white;
+        padding: 1.2rem 1rem;
+        text-align: center;
+    }
+    
+    .card-header h2 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.3rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem 1rem;
+    }
+    
+    .alert-danger {
+        background-color: #fef2f2;
+        color: #dc2626;
+        padding: 12px;
+        border-radius: 6px;
+        border-left: 4px solid #dc2626;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+    }
+    
+    .alert-danger i {
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+    
+    .order-info {
+        margin-bottom: 2rem;
+        text-align: center;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .order-info h3 {
+        color: #374151;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .order-reference {
+        background: #f3f4f6;
+        padding: 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        color: #4a6cf7;
+        font-size: 1rem;
+        margin: 1rem 0;
+        word-break: break-all;
+    }
+    
+    .instruction-text {
+        color: #6b7280;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.95rem;
+    }
+    
+    .input-with-icon {
+        position: relative;
+    }
+    
+    .input-with-icon i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        font-size: 0.9rem;
+    }
+    
+    .input-with-icon input {
+        width: 100%;
+        padding: 12px 12px 12px 40px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: all 0.3s;
+        box-sizing: border-box;
+    }
+    
+    .input-with-icon input:focus {
+        outline: none;
+        border-color: #4a6cf7;
+        box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+    }
+    
+    .btn-primary {
+        background: #4a6cf7;
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .btn-primary:hover {
+        background: #3a5ae0;
+    }
+    
+    /* Styles pour les écrans plus larges */
+    @media (min-width: 768px) {
+        .order-validation-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 15px;
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            min-height: auto;
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+    }
+    
+    @media (max-width: 360px) {
+        .card-header h2 {
+            font-size: 1.2rem;
+        }
+        
+        .order-info h3 {
+            font-size: 1rem;
+        }
+        
+        .order-reference {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<!-- Font Awesome pour les icônes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- ===== Modal d'erreur ===== -->
+<div id="errorModal" class="modal-backdrop">
+    <div class="modal-card">
+        <div class="modal-title">Message</div>
+        <div id="errorMessage"></div>
+        <button class="btn-close">OK</button>
+    </div>
+</div>
+
+<style>
+    .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 0 1rem;
+    }
+    .modal-backdrop.show { display: flex; }
+
+    .modal-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        text-align: center;
+        animation: fadeIn .25s ease;
+    }
+    @keyframes fadeIn {
+        from {opacity:0; transform:translateY(15px);}
+        to   {opacity:1; transform:translateY(0);}
+    }
+    .modal-title {
+        font-size: 1.2rem;
+        color: #b00020;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+    .btn-close {
+        margin-top: 15px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        background: #b00020;
+        color: white;
+        cursor: pointer;
+        font-weight: 500;
+    }
+    .btn-close:hover { opacity: 0.9; }
+</style>
+
+{% if messages %}
+<script>
+    let messages = [
+        {% for message in messages %}
+            { level: "{{ message.tags }}", text: "{{ message|escapejs }}" },
+        {% endfor %}
+    ];
+    let errorMsg = messages.find(m => m.level.includes("error"));
+    if (errorMsg) {
+        window.onload = function() {
+            let modal = document.getElementById("errorModal");
+            let msgBox = document.getElementById("errorMessage");
+            msgBox.textContent = errorMsg.text;
+            modal.classList.add("show");
+
+            let closeBtns = modal.querySelectorAll(".btn-close");
+            closeBtns.forEach(btn => btn.onclick = () => modal.classList.remove("show"));
+
+            // Fermer en cliquant en dehors du cadre
+            modal.onclick = (e) => { if(e.target === modal) modal.classList.remove("show"); };
+
+            // Fermer avec la touche Échap
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") modal.classList.remove("show");
+            });
+        };
+    }
+</script>
+{% endif %}
+{% endblock %}

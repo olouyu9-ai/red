@@ -1,0 +1,138 @@
+{% extends "admin/change_list.html" %}
+{% load humanize %}
+
+{% block content_title %}
+    <h1> Gestion des Transactions </h1>
+{% endblock %}
+
+{% block result_list %}
+    {{ block.super }}
+    
+    <div class="results" style="margin-top: 30px; padding: 20px; background: #f8f8f8; border-radius: 5px;">
+        <h2 style="color: #417690; border-bottom: 2px solid #417690; padding-bottom: 10px;"> 📊 Totaux des Transactions </h2>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr style="background: #417690; color: white;">
+                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Type de Transaction</th>
+                    <th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Montant (FC)</th>
+                    <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Entrées -->
+                <tr style="background: #e7f1ff;">
+                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">💰 Total Entrées</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; font-weight: bold; color: #28a745;">
+                        {{ totaux.total_entrees|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold;">-</td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">⬆️ Dépôts</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #28a745;">
+                        {{ totaux.total_depot|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">-</td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">🎯 Gains Quotidiens</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #28a745;">
+                        {{ totaux.total_gain_quotidien|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">-</td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">👥 Bonus Parrainage</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #28a745;">
+                        {{ totaux.total_bonus_parrainage|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">-</td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">🎁 Bonus Inscription</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #28a745;">
+                        {{ totaux.total_bonus_inscription|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">-</td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">💼 Capital</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #28a745;">
+                        {{ totaux.total_capital|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">-</td>
+                </tr>
+                
+                <!-- Sorties -->
+                <tr style="background: #ffe7e7;">
+                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">💸 Total Sorties</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; font-weight: bold; color: #dc3545;">
+                        {{ totaux.total_sorties|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold;">-</td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">⬇️ Retraits</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #dc3545;">
+                        {{ totaux.total_retrait|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">-</td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">📝 Signature Contrat</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #dc3545;">
+                        {{ totaux.total_achat|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">-</td>
+                </tr>
+                
+                <!-- Solde Net -->
+                <tr style="background: #f0f8ff; border-top: 2px solid #417690;">
+                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">🏦 Solde Net</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; font-weight: bold; color: {% if totaux.solde_net >= 0 %}#28a745{% else %}#dc3545{% endif %};">
+                        {{ totaux.solde_net|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold;">
+                        {{ totaux.total_transactions|default:0 }} transactions
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Résumé rapide -->
+        <div style="display: flex; justify-content: space-between; margin-top: 20px; padding: 15px; background: white; border-radius: 5px; border: 1px solid #ddd;">
+            <div style="text-align: center; flex: 1;">
+                <div style="font-size: 24px; font-weight: bold; color: #28a745;">⬆️</div>
+                <div style="font-weight: bold; color: #28a745;">{{ totaux.total_entrees|default:0|floatformat:2 }} FC</div>
+                <div style="font-size: 12px; color: #666;">Total Entrées</div>
+            </div>
+            <div style="text-align: center; flex: 1;">
+                <div style="font-size: 24px; font-weight: bold; color: #dc3545;">⬇️</div>
+                <div style="font-weight: bold; color: #dc3545;">{{ totaux.total_sorties|default:0|floatformat:2 }} FC</div>
+                <div style="font-size: 12px; color: #666;">Total Sorties</div>
+            </div>
+            <div style="text-align: center; flex: 1;">
+                <div style="font-size: 24px; font-weight: bold; color: {% if totaux.solde_net >= 0 %}#28a745{% else %}#dc3545{% endif %};">💼</div>
+                <div style="font-weight: bold; color: {% if totaux.solde_net >= 0 %}#28a745{% else %}#dc3545{% endif %};">
+                    {{ totaux.solde_net|default:0|floatformat:2 }} FC
+                </div>
+                <div style="font-size: 12px; color: #666;">Solde Net</div>
+            </div>
+            <div style="text-align: center; flex: 1;">
+                <div style="font-size: 24px; font-weight: bold; color: #417690;">📊</div>
+                <div style="font-weight: bold; color: #417690;">{{ totaux.total_transactions|default:0 }}</div>
+                <div style="font-size: 12px; color: #666;">Transactions</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block pagination %}{% endblock %}

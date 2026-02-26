@@ -1,0 +1,65 @@
+{% extends "admin/change_list.html" %}
+{% load humanize %}
+
+{% block content_title %}
+    <h1> Gestion des Achats </h1>
+{% endblock %}
+
+{% block result_list %}
+    {{ block.super }}
+    
+    <div class="results" style="margin-top: 30px; padding: 20px; background: #f8f8f8; border-radius: 5px;">
+        <h2 style="color: #417690; border-bottom: 2px solid #417690; padding-bottom: 10px;"> 📊 Statistiques des Achats </h2>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr style="background: #417690; color: white;">
+                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Type</th>
+                    <th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Montant (FC)</th>
+                    <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background: #e7f1ff;">
+                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">💰 Total Investissement</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; font-weight: bold; color: #2c5aa0;">
+                        {{ totaux.total_investissement|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold; color: #2c5aa0;">
+                        {{ totaux.total_achats|default:0 }}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">✅ Achats Actifs</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #28a745;">
+                        {{ totaux.investissement_actif|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #28a745;">
+                        {{ totaux.achats_actifs|default:0 }}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">⏳ Achats Expirés</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #ffc107;">
+                        {{ totaux.investissement_expire|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #ffc107;">
+                        {{ totaux.achats_expires|default:0 }}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">❌ Achats Annulés</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #dc3545;">
+                        {{ totaux.investissement_annule|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #dc3545;">
+                        {{ totaux.achats_annules|default:0 }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,297 @@
+{% extends 'base.html' %}
+
+{% block contenu %}
+<div class="retrait-container">
+  <h1>Mes Retraits</h1>
+  
+  <div class="summary-cards">
+    <div class="card total">
+      <h3>Total Retiré</h3>
+      <p>{{ total_retire|default:"0" }} FC</p>
+    </div>
+    <div class="card pending">
+      <h3>En Attente</h3>
+      <p>{{ en_attente|default:"0" }}</p>
+    </div>
+    <div class="card completed">
+      <h3>Complétés</h3>
+      <p>{{ completes|default:"0" }}</p>
+    </div>
+  </div>
+  
+  {% if retraits %}
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">Tous</button>
+    <button class="filter-btn" data-filter="demande">Demandés</button>
+    <button class="filter-btn" data-filter="en_traitement">En traitement</button>
+    <button class="filter-btn" data-filter="paye">Payés</button>
+    <button class="filter-btn" data-filter="rejete">Rejetés</button>
+  </div>
+  
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Montant</th>
+          <th>Méthode</th>
+          <th>Destination</th>
+          <th>Statut</th>
+          <th>Date</th>
+          <th>Frais</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for retrait in retraits %}
+        <tr data-status="{{ retrait.statut }}">
+          <td>{{ retrait.montant }} FC</td>
+          <td>{{ retrait.methode }}</td>
+          <td>{{ retrait.destination }}</td>
+          <td>
+            <span class="status-badge status-{{ retrait.statut }}">
+              {{ retrait.get_statut_display }}
+            </span>
+          </td>
+          <td>{{ retrait.cree_le|date:"d/m/Y H:i" }}</td>
+          <td>{{ retrait.frais }} FC</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">💸</div>
+    <h3>Aucun retrait effectué</h3>
+    <p>Vous n'avez pas encore effectué de retraits.</p>
+  </div>
+  {% endif %}
+  
+  <div class="actions">
+    <a href="{% url 'retrait' %}" class="btn-primary" id="new-withdrawal-btn">
+      <span class="btn-icon">+</span>
+      Demander un nouveau retrait
+    </a>
+  </div>
+</div>
+
+<script>
+  // Confirmation pour nouveau retrait
+  document.getElementById('new-withdrawal-btn').addEventListener('click', function(event) {
+    if (!confirm('Voulez-vous vraiment demander un nouveau retrait ?')) {
+      event.preventDefault();
+    }
+  });
+
+  // Filtrage des retraits par statut
+  document.querySelectorAll('.filter-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const filter = this.getAttribute('data-filter');
+      
+      // Mettre à jour les boutons actifs
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      this.classList.add('active');
+      
+      // Filtrer les lignes du tableau
+      document.querySelectorAll('tbody tr').forEach(row => {
+        if (filter === 'all') {
+          row.style.display = '';
+        } else {
+          if (row.getAttribute('data-status') === filter) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .retrait-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  .summary-cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    flex: 1;
+    min-width: 200px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  
+  .card h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #7f8c8d;
+  }
+  
+  .card p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  
+  .total { border-top: 4px solid #3498db; }
+  .pending { border-top: 4px solid #f39c12; }
+  .completed { border-top: 4px solid #2ecc71; }
+  
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .filter-btn {
+    padding: 8px 16px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .filter-btn:hover, .filter-btn.active {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+  }
+  
+  .table-container {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+  }
+  
+  tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .status-demande { background: #fff3cd; color: #856404; }
+  .status-en_traitement { background: #d1ecf1; color: #0c5460; }
+  .status-paye { background: #d4edda; color: #155724; }
+  .status-rejete { background: #f8d7da; color: #721c24; }
+  
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  
+  .empty-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+  }
+  
+  .empty-state h3 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+  }
+  
+  .empty-state p {
+    color: #7f8c8d;
+    margin: 0;
+  }
+  
+  .actions {
+    text-align: center;
+  }
+  
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+  }
+  
+  .btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+    color: white;
+  }
+  
+  .btn-icon {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+  
+  @media (max-width: 768px) {
+    .summary-cards {
+      flex-direction: column;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+    }
+    
+    table {
+      min-width: 600px;
+    }
+    
+    th, td {
+      padding: 12px 8px;
+    }
+  }
+</style>
+{% endblock %}

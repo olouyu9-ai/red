@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenu %}
+<div class="confirmation-wrapper">
+    <div class="receipt-card animate-pop">
+        
+        <div class="success-checkmark">
+            <div class="check-icon">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+
+        <div class="header-content text-center">
+            <h2>Demande Enregistrée</h2>
+            <p class="status-badge">En attente de validation</p>
+        </div>
+
+        <div class="receipt-body">
+            <div class="receipt-row">
+                <span>Référence Order</span>
+                <strong class="text-navy">{{ order }}</strong>
+            </div>
+            <div class="receipt-divider"></div>
+            
+            <div class="instruction-box">
+                <div class="box-title">
+                    <i class="fas fa-info-circle"></i> Étape finale requise
+                </div>
+                <p>
+                    Pour valider votre dépôt, vous devez impérativement saisir le **code de transaction** reçu par SMS après votre transfert.
+                </p>
+            </div>
+        </div>
+
+        <div class="action-footer">
+            <a href="{% url 'submit_reference' %}" class="btn-primary-glow">
+                Saisir la référence SMS
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            
+            <a href="{% url 'home' %}" class="btn-secondary-link">
+                Retour au tableau de bord
+            </a>
+        </div>
+
+        <div class="support-footer">
+            <p>Un problème ? <a href="#">Contactez l'assistance</a></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --c-navy: #1e293b;
+        --c-blue: #3b82f6;
+        --c-green: #10b981;
+        --c-bg: #f8fafc;
+        --c-border: #e2e8f0;
+    }
+
+    .confirmation-wrapper {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--c-bg);
+        padding: 20px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .receipt-card {
+        background: white;
+        width: 100%;
+        max-width: 420px;
+        border-radius: 30px;
+        padding: 40px 30px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        position: relative;
+        border: 1px solid var(--c-border);
+    }
+
+    /* Animation Success */
+    .success-checkmark {
+        width: 80px; height: 80px;
+        background: #dcfce7;
+        color: var(--c-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 30px;
+        animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes scaleIn {
+        from { transform: scale(0); }
+        to { transform: scale(1); }
+    }
+
+    .header-content h2 { font-weight: 800; color: var(--c-navy); font-size: 24px; margin-bottom: 10px; }
+    .status-badge {
+        display: inline-block;
+        background: #fef3c7;
+        color: #b45309;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 5px 15px;
+        border-radius: 50px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Receipt Body */
+    .receipt-body { margin: 35px 0; }
+    .receipt-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .receipt-row span { color: #64748b; font-size: 14px; }
+    .receipt-row strong { font-family: 'Mono', monospace; font-size: 16px; color: var(--c-navy); }
+    
+    .receipt-divider {
+        height: 1px;
+        border-top: 2px dashed var(--c-border);
+        margin: 20px 0;
+        position: relative;
+    }
+
+    .instruction-box {
+        background: #f1f5f9;
+        border-radius: 16px;
+        padding: 20px;
+        text-align: left;
+    }
+    .box-title {
+        font-weight: 800;
+        font-size: 13px;
+        color: var(--c-navy);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .instruction-box p { font-size: 13px; color: #475569; line-height: 1.6; margin: 0; }
+
+    /* Buttons */
+    .action-footer { display: flex; flex-direction: column; gap: 15px; }
+    
+    .btn-primary-glow {
+        background: var(--c-navy);
+        color: white;
+        text-decoration: none;
+        padding: 18px;
+        border-radius: 16px;
+        font-weight: 700;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(30, 41, 59, 0.15);
+    }
+    .btn-primary-glow:hover {
+        background: var(--c-blue);
+        color: white;
+        transform: translateY(-3px);
+    }
+
+    .btn-secondary-link {
+        color: #64748b;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+    }
+    .btn-secondary-link:hover { color: var(--c-navy); }
+
+    .support-footer { margin-top: 30px; text-align: center; border-top: 1px solid var(--c-border); padding-top: 20px; }
+    .support-footer p { font-size: 12px; color: #94a3b8; }
+    .support-footer a { color: var(--c-blue); text-decoration: none; font-weight: 600; }
+
+    /* Animations */
+    .animate-pop { animation: popUp 0.6s ease-out; }
+    @keyframes popUp {
+        from { opacity: 0; transform: translateY(40px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+</style>
+{% endblock %}

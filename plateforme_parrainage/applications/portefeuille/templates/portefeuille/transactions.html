@@ -1,0 +1,30 @@
+{% extends 'noyau/base.html' %}
+
+{% block contenu %}
+<h1>Mes Transactions</h1>
+{% if transactions %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Montant</th>
+            <th>Référence</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.get_type_display }}</td>
+            <td>{{ transaction.montant }} FC</td>
+            <td>{{ transaction.reference|default:"-" }}</td>
+            <td>{{ transaction.cree_le|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Aucune transaction trouvée.</p>
+{% endif %}
+<a href="{% url 'tableau_de_bord' %}" class="bouton">Retour au tableau de bord</a>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'noyau/base.html' %}
+
+{% block contenu %}
+<h1>Gestion des utilisateurs</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Date d'inscription</th>
+            <th>Parrain</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for utilisateur in utilisateurs %}
+        <tr>
+            <td>{{ utilisateur.email }}</td>
+            <td>{{ utilisateur.telephone }}</td>
+            <td>{{ utilisateur.date_joined|date:"d/m/Y H:i" }}</td>
+            <td>{{ utilisateur.profil.parrain.email if utilisateur.profil.parrain else "Aucun" }}</td>
+            <td>
+                <a href="#">Voir</a>
+                <a href="#">Modifier</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

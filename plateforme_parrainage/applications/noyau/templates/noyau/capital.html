@@ -1,0 +1,502 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenu %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tableau de Bord</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #38bdf8;
+      --primary-dark: #0ea5e9;
+      --secondary: #6366f1;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --dark: #1e293b;
+      --darker: #0f172a;
+      --light: #f1f5f9;
+      --card-bg: rgba(30, 41, 59, 0.8);
+      --card-border: rgba(56, 189, 248, 0.2);
+    }
+ 
+    
+    body {
+      background: linear-gradient(135deg, var(--darker), var(--dark));
+      color: var(--light);
+  
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .dashboard-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .date-filter {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.6rem 1rem;
+      color: var(--light);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+    
+    .stat-card:nth-child(2)::before {
+      background: linear-gradient(90deg, var(--warning), var(--danger));
+    }
+    
+    .stat-card:nth-child(3)::before {
+      background: linear-gradient(90deg, var(--danger), #ec4899);
+    }
+    
+    .stat-card:nth-child(4)::before {
+      background: linear-gradient(90deg, var(--success), var(--primary));
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.2);
+    }
+    
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .stat-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #94a3b8;
+    }
+    
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--primary);
+    }
+    
+    .stat-card:nth-child(2) .stat-icon {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+    
+    .stat-card:nth-child(3) .stat-icon {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+    
+    .stat-card:nth-child(4) .stat-icon {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+    
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card:nth-child(2) .stat-value {
+      background: linear-gradient(90deg, var(--warning), var(--danger));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card:nth-child(3) .stat-value {
+      background: linear-gradient(90deg, var(--danger), #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-card:nth-child(4) .stat-value {
+      background: linear-gradient(90deg, var(--success), var(--primary-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-description {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    
+    .charts-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    
+    @media (max-width: 992px) {
+      .charts-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .chart-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--card-border);
+    }
+    
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .chart-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--light);
+    }
+    
+    .chart-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .chart-btn {
+      background: rgba(56, 189, 248, 0.1);
+      border: none;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .chart-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+    }
+    
+    .chart-wrapper {
+      position: relative;
+      height: 300px;
+    }
+    
+    .summary-section {
+      margin-top: 2rem;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--card-border);
+    }
+    
+    .summary-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--light);
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .summary-label {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 0.3rem;
+    }
+    
+    .summary-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--light);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-header">
+    <h1 class="dashboard-title"><i class="fas fa-chart-line"></i> Finances</h1>
+    <select class="date-filter">
+      <option>Cette semaine</option>
+      <option>Ce mois</option>
+      <option>Ce trimestre</option>
+      <option selected>Cette année</option>
+    </select>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-header">
+        <h3 class="stat-title">Trading Actifs</h3>
+        <div class="stat-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+      </div>
+      <div class="stat-value">{{ capital_actifs }} FC</div>
+      <div class="stat-description">
+        <i class="fas fa-arrow-up"></i>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-header">
+        <h3 class="stat-title">Trading Expirés</h3>
+        <div class="stat-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+      </div>
+      <div class="stat-value">{{ capital_expires }} FC</div>
+      <div class="stat-description">
+        <i class="fas fa-arrow-down"></i>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-header">
+        <h3 class="stat-title">Trading Annulés</h3>
+        <div class="stat-icon">
+          <i class="fas fa-times-circle"></i>
+        </div>
+      </div>
+      <div class="stat-value">{{ capital_annules }} FC</div>
+      <div class="stat-description">
+        <i class="fas fa-minus"></i>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-header">
+        <h3 class="stat-title">Capital Total</h3>
+        <div class="stat-icon">
+          <i class="fas fa-wallet"></i>
+        </div>
+      </div>
+      <div class="stat-value">{{ capital_total }} FC</div>
+      <div class="stat-description">
+        <i class="fas fa-arrow-up"></i>
+       
+      </div>
+    </div>
+  </div>
+<div class="stat-card">
+  <div  class="charts-container">
+     <div class="stat-card">
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3 class="chart-title">Répartition des Capitaux</h3>
+        <div class="chart-actions">
+
+
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="capitalChart"></canvas>
+      </div>
+      </div>
+    </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3 class="chart-title">Évolution Mensuelle</h3>
+        <div class="chart-actions">
+          <button class="chart-btn"><i class="fas fa-download"></i></button>
+          <button class="chart-btn"><i class="fas fa-expand"></i></button>
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  
+  <script>
+    // Chart for capital distribution
+    const capitalCtx = document.getElementById('capitalChart').getContext('2d');
+    const capitalChart = new Chart(capitalCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Actifs', 'Expirés', 'Annulés'],
+        datasets: [{
+          label: 'Répartition des Capitaux',
+          data: [
+            {{ capital_actifs }},
+            {{ capital_expires }},
+            {{ capital_annules }}
+          ],
+          backgroundColor: [
+            'rgba(56, 189, 248, 0.8)',
+            'rgba(245, 158, 11, 0.8)',
+            'rgba(239, 68, 68, 0.8)'
+          ],
+          borderColor: [
+            'rgba(56, 189, 248, 1)',
+            'rgba(245, 158, 11, 1)',
+            'rgba(239, 68, 68, 1)'
+          ],
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#f1f5f9',
+              font: { size: 12 },
+              padding: 20
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.label}: ${context.raw} FC`;
+              }
+            }
+          }
+        },
+        cutout: '70%'
+      }
+    });
+    
+    // Chart for monthly trend (example data)
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    const trendChart = new Chart(trendCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+        datasets: [
+          {
+            label: 'Trading Actifs',
+            data: [12000, 19000, 15000, 25000, 22000, 30000, 28000, 33000, 36000, 42000, 45000, 48000],
+            borderColor: 'rgba(56, 189, 248, 1)',
+            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+            tension: 0.3,
+            fill: true
+          },
+          {
+            label: 'Capital Total',
+            data: [15000, 21000, 18000, 28000, 25000, 35000, 32000, 38000, 42000, 48000, 52000, {{ capital_total }}],
+            borderColor: 'rgba(16, 185, 129, 1)',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#f1f5f9',
+              font: { size: 12 },
+              padding: 20
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#f1f5f9'
+            }
+          },
+          x: {
+            grid: {
+              color: 'rgba(255, 255, 255, 0.1)'
+            },
+            ticks: {
+              color: '#f1f5f9'
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
+
+{% endblock %}

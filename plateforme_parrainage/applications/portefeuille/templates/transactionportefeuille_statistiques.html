@@ -1,0 +1,167 @@
+{% extends "admin/base_site.html" %}
+{% load humanize %}
+
+{% block content %}
+<h1>Statistiques des transactions</h1>
+
+<div>
+    <h2>Résumé général</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tr style="background-color: #f8f9fa;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #dee2e6;">Total des transactions</th>
+            <td style="padding: 10px; border: 1px solid #dee2e6;">{{ stats.total_transactions|default:0 }}</td>
+        </tr>
+        <tr>
+            <th style="padding: 10px; text-align: left; border: 1px solid #dee2e6;">Montant total</th>
+            <td style="padding: 10px; border: 1px solid #dee2e6;">{{ stats.total_montant|default:0|floatformat:2 }} FC</td>
+        </tr>
+        <tr style="background-color: #f8f9fa;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #dee2e6;">Total des entrées</th>
+            <td style="padding: 10px; border: 1px solid #dee2e6; color: green;">{{ stats.total_entrees|default:0|floatformat:2 }} FC</td>
+        </tr>
+        <tr>
+            <th style="padding: 10px; text-align: left; border: 1px solid #dee2e6;">Total des sorties</th>
+            <td style="padding: 10px; border: 1px solid #dee2e6; color: red;">{{ stats.total_sorties|default:0|floatformat:2 }} FC</td>
+        </tr>
+        <tr style="background-color: #f8f9fa;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #dee2e6;">Solde net</th>
+            <td style="padding: 10px; border: 1px solid #dee2e6; font-weight: bold; color: {% if stats.solde_net >= 0 %}green{% else %}red{% endif %};">
+                {{ stats.solde_net|default:0|floatformat:2 }} FC
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div style="display: flex; gap: 20px; margin-bottom: 30px;">
+    <div style="flex: 1;">
+        <h3>Détail des entrées</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background-color: #f8f9fa;">
+                <th style="padding: 8px; text-align: left; border: 1px solid #dee2e6;">Dépôts</th>
+                <td style="padding: 8px; border: 1px solid #dee2e6;">{{ stats.total_depot|default:0|floatformat:2 }} FC</td>
+            </tr>
+            <tr>
+                <th style="padding: 8px; text-align: left; border: 1px solid #dee2e6;">Gains quotidiens</th>
+                <td style="padding: 8px; border: 1px solid #dee2e6;">{{ stats.total_gain_quotidien|default:0|floatformat:2 }} FC</td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+                <th style="padding: 8px; text-align: left; border: 1px solid #dee2e6;">Bonus parrainage</th>
+                <td style="padding: 8px; border: 1px solid #dee2e6;">{{ stats.total_bonus_parrainage|default:0|floatformat:2 }} FC</td>
+            </tr>
+            <tr>
+                <th style="padding: 8px; text-align: left; border: 1px solid #dee2e6;">Bonus inscription</th>
+                <td style="padding: 8px; border: 1px solid #dee2e6;">{{ stats.total_bonus_inscription|default:0|floatformat:2 }} FC</td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+                <th style="padding: 8px; text-align: left; border: 1px solid #dee2e6;">Capital</th>
+                <td style="padding: 8px; border: 1px solid #dee2e6;">{{ stats.total_capital|default:0|floatformat:2 }} FC</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div style="flex: 1;">
+        <h3>Détail des sorties</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr style="background-color: #f8f9fa;">
+                <th style="padding: 8px; text-align: left; border: 1px solid #dee2e6;">Retraits</th>
+                <td style="padding: 8px; border: 1px solid #dee2e6;">{{ stats.total_retrait|default:0|floatformat:2 }} FC</td>
+            </tr>
+            <tr>
+                <th style="padding: 8px; text-align: left; border: 1px solid #dee2e6;">Achats (Contrats)</th>
+                <td style="padding: 8px; border: 1px solid #dee2e6;">{{ stats.total_achat|default:0|floatformat:2 }} FC</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div style="margin-top: 20px;">
+    <h2>Par utilisateur</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #343a40; color: white;">
+                <th style="padding: 12px; text-align: left; border: 1px solid #dee2e6;">Utilisateur</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #dee2e6;">Montant total</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #dee2e6;">Nombre de transactions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in par_utilisateur %}
+            <tr style="background-color: {% cycle '#ffffff' '#f8f9fa' %};">
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ user.utilisateur__email }}</td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ user.total|floatformat:2 }} FC</td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ user.count }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="padding: 10px; text-align: center; border: 1px solid #dee2e6;">Aucune donnée disponible</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-top: 20px;">
+    <h2>Par type de transaction</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #343a40; color: white;">
+                <th style="padding: 12px; text-align: left; border: 1px solid #dee2e6;">Type</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #dee2e6;">Montant total</th>
+                <th style="padding: 12px; text-align: left; border: 1px solid #dee2e6;">Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for type in par_type %}
+            <tr style="background-color: {% cycle '#ffffff' '#f8f9fa' %};">
+                <td style="padding: 10px; border: 1px solid #dee2e6;">
+                    {% if type.type == 'depot' %}Dépôt
+                    {% elif type.type == 'retrait' %}Retrait
+                    {% elif type.type == 'gain_quotidien' %}Gain quotidien
+                    {% elif type.type == 'bonus_parrainage' %}Bonus parrainage
+                    {% elif type.type == 'achat' %}Achat (Contrat)
+                    {% elif type.type == 'bonus_inscription' %}Bonus inscription
+                    {% elif type.type == 'capital' %}Capital
+                    {% else %}{{ type.type }}{% endif %}
+                </td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ type.total|floatformat:2 }} FC</td>
+                <td style="padding: 10px; border: 1px solid #dee2e6;">{{ type.count }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="padding: 10px; text-align: center; border: 1px solid #dee2e6;">Aucune donnée disponible</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #dee2e6;
+    }
+    th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+    tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+    h2 {
+        color: #343a40;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+    }
+    h3 {
+        color: #495057;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}

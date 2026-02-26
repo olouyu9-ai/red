@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block contenu %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditions d'Utilisation - Genius Africa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+           
+        }
+        
+        .container {
+            
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            color: #1a2a6c;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            color: #1a2a6c;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #2b5876;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        h2 {
+            color: #1a2a6c;
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eaeaea;
+            display: flex;
+            align-items: center;
+        }
+        
+        h2 i {
+            margin-right: 10px;
+            color: #2b5876;
+        }
+        
+        p {
+            margin: 15px 0;
+            text-align: justify;
+        }
+        
+        ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        li::before {
+            content: "•";
+            color: #2b5876;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e6eef9 100%);
+            border-left: 4px solid #2b5876;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eaeaea;
+            color: #2b5876;
+            font-weight: 500;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #1a2a6c 0%, #2b5876 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 20px auto;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            h2 {
+                font-size: 1.2rem;
+            }
+            
+            ul {
+                padding-left: 20px;
+            }
+        }
+        
+        .last-updated {
+            text-align: right;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+        </div>
+        <h1>Conditions d'Utilisation</h1>
+        <p class="subtitle">Genius Africa - Plateforme d'Investissement et de Trading</p>
+    </div>
+
+    <div class="highlight">
+        <p>Bienvenue sur Genius Africa. En accédant à notre plateforme, vous acceptez de respecter les présentes Conditions d'Utilisation. Merci de les lire attentivement.</p>
+    </div>
+
+    <h2><i class="fas fa-bullseye"></i> 1. Objet</h2>
+    <p>Genius Africa met à disposition une plateforme permettant aux utilisateurs d'investir auprès de traders partenaires. Ces Conditions d'Utilisation régissent l'accès et l'utilisation de nos services.</p>
+
+    <h2><i class="fas fa-check-circle"></i> 2. Acceptation des conditions</h2>
+    <p>En créant un compte ou en utilisant notre plateforme, vous confirmez avoir lu, compris et accepté ces Conditions d'Utilisation.</p>
+
+    <h2><i class="fas fa-user-circle"></i> 3. Inscription et compte utilisateur</h2>
+    <ul>
+        <li>Vous devez être majeur et capable juridiquement pour investir.</li>
+        <li>Vous êtes responsable de la confidentialité de vos identifiants.</li>
+        <li>Tout usage frauduleux ou abusif de votre compte peut entraîner sa suspension.</li>
+    </ul>
+
+    <h2><i class="fas fa-cogs"></i> 4. Fonctionnement de la plateforme</h2>
+    <ul>
+        <li>Vous choisissez un trader parmi ceux disponibles sur la plateforme.</li>
+        <li>Le trader utilise vos fonds pour effectuer des opérations de trading selon ses compétences.</li>
+        <li>Les gains sont directement liés à la performance du trader.</li>
+    </ul>
+
+    
+    <h2><i class="fas fa-money-bill-wave"></i> 5. Paiements et retraits</h2>
+    <ul>
+        <li>Les investissements sont effectués via les moyens de paiement disponibles sur la plateforme.</li>
+        <li>Les fonds sont généralement bloqués pendant la durée du contrat (6 à 7 mois).</li>
+        <li>Le retrait anticipé est possible uniquement selon les conditions prévues par le trader.</li>
+    </ul>
+
+    <h2><i class="fas fa-balance-scale"></i> 6. Responsabilités</h2>
+    <p>Genius Africa n'est pas responsable des pertes financières résultant du trading. Nous ne garantissons pas la performance des traders et ne pouvons être tenus responsables des décisions d'investissement des utilisateurs.</p>
+
+    <h2><i class="fas fa-copyright"></i> 7. Propriété intellectuelle</h2>
+    <p>Le contenu de la plateforme (textes, logos, images, logiciels) est protégé par le droit d'auteur et appartient à Genius Africa. Toute reproduction ou utilisation non autorisée est interdite.</p>
+
+    <h2><i class="fas fa-shield-alt"></i> 8. Confidentialité et données personnelles</h2>
+    <p>Nous collectons et traitons vos données conformément à notre Politique de Confidentialité. En utilisant notre plateforme, vous acceptez ce traitement.</p>
+
+    <h2><i class="fas fa-pencil-alt"></i> 9. Modifications des Conditions</h2>
+    <p>Genius Africa se réserve le droit de modifier ces Conditions à tout moment. Les utilisateurs seront informés des changements et la poursuite de l'utilisation vaut acceptation des nouvelles conditions.</p>
+
+    <h2><i class="fas fa-gavel"></i> 10. Loi applicable et juridiction</h2>
+    <p>Ces Conditions sont régies par les lois en vigueur dans le pays où Genius Africa est enregistrée. Tout litige sera soumis à la juridiction compétente de ce pays.</p>
+
+    <div class="highlight">
+        <p>Merci de faire confiance à Genius Africa. Investissez en toute responsabilité et avec discernement.</p>
+    </div>
+    
+    <p class="last-updated">Dernière mise à jour: 01 Janvier 2024</p>
+
+    
+</div>
+
+</body>
+</html>
+
+{% endblock %}

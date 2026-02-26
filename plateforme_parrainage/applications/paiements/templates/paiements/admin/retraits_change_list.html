@@ -1,0 +1,115 @@
+{% extends "admin/change_list.html" %}
+
+{% block content_title %}
+    <h1>Gestion des Retraits</h1>
+{% endblock %}
+
+{% block result_list %}
+    <!-- Affichage des totaux -->
+    <div class="results">
+        <h2>Totaux</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th><div class="text"><span>Type</span></div></th>
+                    <th><div class="text"><span>Montant total</span></div></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row-total">
+                    <td> Total des retraits </td>
+                    <td> {{ total_retraits|default:"0" }} CDF </td>
+                </tr>
+                <tr class="row-paid">
+                    <td> Retraits payés </td>
+                    <td> {{ total_paye|default:"0" }} CDF </td>
+                </tr>
+                <tr class="row-pending">
+                    <td> Retraits en attente </td>
+                    <td> {{ total_en_attente|default:"0" }} CDF </td>
+                </tr>
+                <tr class="row-rejected">
+                    <td> Retraits rejetés </td>
+                    <td> {{ total_rejete|default:"0" }} CDF </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        {% if methodes_stats %}
+        <h2 style="margin-top: 20px;">Statistiques par méthode de retrait</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th><div class="text"><span>Méthode</span></div></th>
+                    <th><div class="text"><span>Montant total</span></div></th>
+                    <th><div class="text"><span>Nombre</span></div></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in methodes_stats %}
+                <tr>
+                    <td> {{ stat.methode }} </td>
+                    <td> {{ stat.total|default:"0" }} CDF </td>
+                    <td> {{ stat.count }} </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
+    <!-- Liste normale des retraits -->
+    {{ block.super }}
+{% endblock %}
+
+{% block pagination %}{{ block.super }}{% endblock %}
+
+<style>
+.results {
+    overflow-x: auto;
+    margin-bottom: 30px;
+    background: #f8f8f8;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.results table {
+    width: auto;
+    border-collapse: collapse;
+}
+
+.results th, .results td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.results th {
+    background-color: #79aec8;
+    color: white;
+    font-weight: bold;
+}
+
+.row-total {
+    background-color: #ffc;
+    font-weight: bold;
+}
+
+.row-paid {
+    background-color: #dfd;
+}
+
+.row-pending {
+    background-color: #ffe6cc;
+}
+
+.row-rejected {
+    background-color: #ffcccc;
+}
+
+.results h2 {
+    margin-top: 0;
+    color: #666;
+}
+</style>

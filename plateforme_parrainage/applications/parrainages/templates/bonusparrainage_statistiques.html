@@ -1,0 +1,78 @@
+{% extends "admin/base_site.html" %}
+{% load humanize %}
+
+{% block content %}
+<h1>Statistiques détaillées des bonus de parrainage</h1>
+
+<div>
+    <h2>Résumé général</h2>
+    <table>
+        <tr>
+            <th>Total des bonus distribués</th>
+            <td>{{ stats.total_bonus|default:0 }}</td>
+        </tr>
+        <tr>
+            <th>Montant total distribué</th>
+            <td>{{ stats.total_montant|default:0|floatformat:2 }} FC</td>
+        </tr>
+        <tr>
+            <th>Nombre de parrains</th>
+            <td>{{ stats.bonus_par_parrain|default:0 }}</td>
+        </tr>
+        <tr>
+            <th>Nombre de filleuls</th>
+            <td>{{ stats.bonus_par_filleul|default:0 }}</td>
+        </tr>
+        <tr>
+            <th>Bonus moyen</th>
+            <td>{{ stats.montant_moyen|default:0|floatformat:2 }} FC</td>
+        </tr>
+    </table>
+</div>
+
+<div style="margin-top: 20px;">
+    <h2>Top parrains</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Parrain</th>
+                <th>Montant total</th>
+                <th>Nombre de filleuls</th>
+                <th>Filleuls uniques</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for parrain in par_parrain|slice:":10" %}
+            <tr>
+                <td>{{ parrain.parrain__email }}</td>
+                <td>{{ parrain.total|floatformat:2 }} FC</td>
+                <td>{{ parrain.count }}</td>
+                <td>{{ parrain.filleuls_uniques }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-top: 20px;">
+    <h2>Évolution mensuelle</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Mois</th>
+                <th>Montant total</th>
+                <th>Nombre de bonus</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mois in par_mois %}
+            <tr>
+                <td>{{ mois.mois|date:"F Y" }}</td>
+                <td>{{ mois.total|floatformat:2 }} FC</td>
+                <td>{{ mois.count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

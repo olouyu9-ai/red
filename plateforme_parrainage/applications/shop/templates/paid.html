@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+
+{% block contenu %}
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="cyber-success-container">
+    <div class="glow-overlay"></div>
+    
+    <div class="success-frame animate-entrance">
+        <div class="frame-edge top-left"></div>
+        <div class="frame-edge bottom-right"></div>
+
+        <div class="success-visual">
+            <div class="outer-ring"></div>
+            <div class="inner-hex">
+                <i class="fas fa-check-double"></i>
+            </div>
+            <div class="sparkles"><span></span><span></span><span></span></div>
+        </div>
+
+        <div class="content-header">
+            <h1 class="glitch-title" data-text="TRANSFERT_VALIDE">TRANSFERT_VALIDE</h1>
+            <div class="auth-status">
+                <span class="secure-tag"><i class="fas fa-lock"></i> SÉCURISÉ</span>
+                <span class="status-text">CRÉDIT_INJECTÉ_AVEC_SUCCÈS</span>
+            </div>
+        </div>
+
+        <div class="data-receipt">
+            <div class="receipt-row">
+                <span class="label">ID_SERVER</span>
+                <span class="value mono-text" id="ref-text">ID_SERVER</span>
+                <button class="mini-copy" onclick="copyRef()"><i class="fas fa-clone"></i></button>
+            </div>
+            
+            <div class="receipt-row success-highlight">
+                <span class="label">ÉTAT_PORTAL</span>
+                <span class="value">SYNCHRONISÉ</span>
+            </div>
+        </div>
+
+        <div class="action-grid">
+            <a href="{% url 'tableau_de_bord' %}" class="action-btn primary-cyber">
+                <span class="btn-glitch">DASHBOARD_MAIN</span>
+                <i class="fas fa-home"></i>
+            </a>
+            
+        </div>
+
+        <div class="footer-status">
+            <p>SYSTÈME OPÉRATIONNEL : <span class="green-glow">NOMINAL</span></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --neon-green: #00ff9d;
+        --deep-void: #050505;
+        --cyber-panel: #11111a;
+        --text-dim: #a0a0b8;
+    }
+
+    .cyber-success-container {
+        min-height: 100vh;
+        background: var(--deep-void);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        font-family: 'JetBrains Mono', monospace;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Animation de fond */
+    .glow-overlay {
+        position: absolute;
+        width: 150%; height: 150%;
+        background: radial-gradient(circle, rgba(0, 255, 157, 0.05) 0%, transparent 70%);
+        animation: rotateGlow 20s linear infinite;
+    }
+
+    @keyframes rotateGlow { 100% { transform: rotate(360deg); } }
+
+    .success-frame {
+        background: var(--cyber-panel);
+        width: 100%;
+        max-width: 450px;
+        padding: 50px 30px;
+        border: 1px solid #222;
+        position: relative;
+        text-align: center;
+        box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    }
+
+    /* Bords décoratifs */
+    .frame-edge {
+        position: absolute; width: 30px; height: 30px;
+        border: 3px solid var(--neon-green);
+    }
+    .top-left { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+    .bottom-right { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+
+    /* Visual Center */
+    .success-visual {
+        position: relative; width: 100px; height: 100px;
+        margin: 0 auto 30px;
+    }
+    .outer-ring {
+        position: absolute; inset: 0;
+        border: 2px solid var(--neon-green);
+        border-radius: 50%;
+        border-right-color: transparent;
+        animation: spin 2s linear infinite;
+    }
+    .inner-hex {
+        position: absolute; inset: 10px;
+        background: rgba(0, 255, 157, 0.1);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 35px; color: var(--neon-green);
+        clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* Titles */
+    .glitch-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 24px; font-weight: 900;
+        letter-spacing: 4px; color: var(--neon-green);
+        margin-bottom: 15px;
+        text-shadow: 2px 2px #ff005533;
+    }
+
+    .auth-status {
+        display: flex; flex-direction: column; gap: 8px; margin-bottom: 40px;
+    }
+    .secure-tag { font-size: 10px; color: #666; letter-spacing: 2px; }
+    .status-text { font-size: 12px; color: var(--neon-green); font-weight: bold; }
+
+    /* Data Receipt */
+    .data-receipt {
+        background: #000; border: 1px solid #222;
+        margin-bottom: 35px;
+    }
+    .receipt-row {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 15px; border-bottom: 1px solid #111;
+        font-size: 12px;
+    }
+    .success-highlight { color: var(--neon-green); background: rgba(0, 255, 157, 0.05); }
+    .label { color: #555; }
+    .mono-text { color: #eee; font-weight: bold; }
+
+    .mini-copy {
+        background: transparent; border: none; color: #444;
+        cursor: pointer; transition: 0.3s;
+    }
+    .mini-copy:hover { color: var(--neon-green); }
+
+    /* Buttons */
+    .action-grid { display: flex; flex-direction: column; gap: 15px; }
+    
+    .action-btn {
+        padding: 18px; font-family: 'Orbitron', sans-serif;
+        font-weight: bold; font-size: 13px; text-decoration: none;
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        transition: 0.3s; cursor: pointer;
+    }
+
+    .primary-cyber {
+        background: var(--neon-green); color: black;
+        clip-path: polygon(0 0, 100% 0, 100% 70%, 92% 100%, 0 100%);
+    }
+    .primary-cyber:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 255, 157, 0.3); }
+
+    .secondary-cyber {
+        background: transparent; color: var(--neon-green);
+        border: 1px solid var(--neon-green);
+        clip-path: polygon(0 30%, 8% 0, 100% 0, 100% 100%, 0 100%);
+    }
+    .secondary-cyber:hover { background: rgba(0, 255, 157, 0.1); }
+
+    .footer-status { margin-top: 30px; font-size: 9px; color: #444; letter-spacing: 1px; }
+    .green-glow { color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); }
+
+    .animate-entrance {
+        animation: cyberSlide 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    @keyframes cyberSlide {
+        from { opacity: 0; transform: translateY(30px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+</style>
+
+<script>
+    function copyRef() {
+        const text = document.getElementById('ref-text').innerText;
+        navigator.clipboard.writeText(text);
+        // On change l'icône temporairement
+        const icon = document.querySelector('.mini-copy i');
+        icon.className = 'fas fa-check';
+        setTimeout(() => { icon.className = 'fas fa-clone'; }, 2000);
+    }
+</script>
+{% endblock %}

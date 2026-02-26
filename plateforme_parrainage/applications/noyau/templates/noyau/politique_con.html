@@ -1,0 +1,489 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenu %}
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politique de Confidentialité – Genius Africa</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0f172a;          /* slate-900 */
+      --card: #1e293b;        /* slate-800 */
+      --text: #e2e8f0;        /* slate-200 */
+      --muted: #94a3b8;       /* slate-400 */
+      --brand: #22c55e;       /* emerald-500 */
+      --accent: #38bdf8;      /* sky-400 */
+      --border: #334155;      /* slate-700 */
+      --success: #4ade80;     /* emerald-400 */
+    }
+    
+  
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, sans-serif;
+    
+     
+    }
+    
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+      color: #7dd3fc;
+    }
+    
+    /* Header fixe */
+    .header-container {
+     
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      padding: 16px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-content {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+   
+    
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      width: fit-content;
+    }
+    
+    h1 {
+      font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+      line-height: 1.2;
+      margin: 0;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    
+    .meta i {
+      color: var(--brand);
+    }
+    
+    .hint {
+      color: var(--muted);
+      font-size: 0.95rem;
+      padding: 12px 16px;
+      background: rgba(30, 41, 59, 0.6);
+      border-left: 3px solid var(--brand);
+      border-radius: 4px;
+    }
+    
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px 0 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .toc::before {
+      content: '';
+      
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--accent), var(--brand));
+    }
+    
+    .toc strong {
+      display: block;
+      margin-bottom: 16px;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+    
+    .toc ol {
+      margin: 0;
+      padding-left: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 8px;
+    }
+    
+    .toc li {
+      margin-bottom: 8px;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+    
+    .toc li:hover {
+      transform: translateX(4px);
+    }
+    
+    .toc a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      color: var(--text);
+    }
+    
+    .toc a::before {
+      content: '•';
+      color: var(--accent);
+      font-weight: bold;
+      display: inline-block;
+    }
+    
+    .toc a:hover {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin: 24px 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    
+    h2 {
+      font-size: 1.3rem;
+      margin: 0 0 16px 0;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    h2::before {
+      content: '';
+      width: 24px;
+      height: 24px;
+      background-color: var(--accent);
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm2-1.5V9h-2v4.5h2z' fill='rgba(56,189,248,1)'/%3E%3C/svg%3E");
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm2-1.5V9h-2v4.5h2z' fill='rgba(56,189,248,1)'/%3E%3C/svg%3E");
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+    }
+    
+    p, li {
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    
+    ul {
+      margin: 0 0 16px 0;
+      padding-left: 24px;
+    }
+    
+    li {
+      margin-bottom: 8px;
+      position: relative;
+    }
+    
+    li::marker {
+      color: var(--accent);
+    }
+    
+    strong {
+      color: #fff;
+      font-weight: 600;
+    }
+    
+ 
+    
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--brand);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+      }
+    }
+    
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .back-to-top:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header-content {
+        padding: 0 16px;
+      }
+      
+      .wrap {
+        padding: 0 16px;
+        margin: 200px auto 60px;
+      }
+      
+      .toc ol {
+        grid-template-columns: 1fr;
+      }
+      
+      section {
+        padding: 20px;
+      }
+      
+      h2 {
+        font-size: 1.2rem;
+      }
+    }
+    
+    @media print {
+      :root {
+        --bg: #fff;
+        --card: #fff;
+        --text: #000;
+        --muted: #333;
+        --border: #ddd;
+      }
+      
+      .header-container {
+        position: relative;
+      }
+      
+      .wrap {
+        margin: 0 auto;
+      }
+      
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      
+      .badge, .dot, .back-to-top {
+        display: none;
+      }
+      
+      body {
+        background: #fff;
+        font-size: 12pt;
+      }
+      
+      section {
+        break-inside: avoid;
+        border: 1px solid #ddd;
+      }
+      
+      .toc {
+        border: 1px solid #ddd;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header fixe -->
+  <div class="header-container">
+    <div class="header-content">
+      <span class="badge"><i class="fas fa-file-contract"></i> Document juridique – Politique de confidentialité</span>
+      <h1>Politique de Confidentialité – Genius Africa</h1>
+      <p class="meta"><i class="fas fa-sync-alt"></i> Dernière mise à jour : <strong>04 septembre 2025</strong></p>
+    </div>
+  </div>
+
+  <!-- Contenu scrollable -->
+ 
+
+    <nav class="toc" aria-label="Sommaire">
+      <strong><i class="fas fa-list"></i> Sommaire</strong>
+      <ol>
+        <li><a href="#collecte"><i class="fas fa-database"></i> Collecte des informations</a></li>
+        <li><a href="#utilisation"><i class="fas fa-cogs"></i> Utilisation des données</a></li>
+        <li><a href="#partage"><i class="fas fa-share-alt"></i> Partage des données</a></li>
+        <li><a href="#securite"><i class="fas fa-shield-alt"></i> Sécurité des données</a></li>
+        <li><a href="#conservation"><i class="fas fa-history"></i> Conservation des données</a></li>
+        <li><a href="#droits"><i class="fas fa-user-check"></i> Vos droits</a></li>
+        <li><a href="#cookies"><i class="fas fa-cookie-bite"></i> Cookies et technologies similaires</a></li>
+        <li><a href="#modifications"><i class="fas fa-pen"></i> Modifications de la Politique</a></li>
+        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ol>
+    </nav>
+
+    <section id="collecte">
+      <h2>Collecte des informations</h2>
+      <p>Nous pouvons collecter les catégories de données suivantes :</p>
+      <ul>
+        <li><strong>Informations personnelles</strong> : nom, prénom, e‑mail, numéro de téléphone, adresse postale, informations de paiement.</li>
+        <li><strong>Données d'utilisation</strong> : logs de connexion, adresse IP, type d'appareil et de navigateur, pages consultées, durée de session, préférences d'investissement.</li>
+        <li><strong>Informations financières</strong> nécessaires au fonctionnement de la plateforme (opérations, dépôts/retraits, historiques).</li>
+      </ul>
+      <p class="hint">Certaines données peuvent être collectées automatiquement via cookies et technologies similaires (voir section 7).</p>
+    </section>
+
+    <section id="utilisation">
+      <h2>Utilisation des données</h2>
+      <ul>
+        <li>Fournir, exploiter et améliorer nos services d'investissement.</li>
+        <li>Gérer les comptes, authentifier les utilisateurs et assurer le support.</li>
+        <li>Traiter les transactions, prévenir la fraude et garantir la sécurité.</li>
+        <li>Personnaliser l'expérience et communiquer des mises à jour importantes.</li>
+        <li>Respecter nos obligations légales et réglementaires.</li>
+      </ul>
+    </section>
+
+    <section id="partage">
+      <h2>Partage des données</h2>
+      <p>Nous ne vendons ni ne louons vos données personnelles. Elles peuvent être partagées uniquement avec :</p>
+      <ul>
+        <li><strong>Prestataires</strong> techniques/financiers (hébergement, paiement, cybersécurité) agissant pour notre compte et soumis à des obligations de confidentialité.</li>
+        <li><strong>Autorités compétentes</strong> si la loi l'exige ou pour protéger nos droits et ceux des utilisateurs.</li>
+      </ul>
+    </section>
+
+    <section id="securite">
+      <h2>Sécurité des données</h2>
+      <p>Nous appliquons des mesures techniques et organisationnelles proportionnées aux risques (chiffrement en transit, contrôle d'accès, journalisation, tests de sécurité) pour protéger vos informations contre l'accès non autorisé, la perte, l'altération ou la divulgation.</p>
+    </section>
+
+    <section id="conservation">
+      <h2>Conservation des données</h2>
+      <p>Les données sont conservées uniquement le temps nécessaire aux finalités décrites ci‑dessus et/ou pour respecter nos obligations légales. Au‑delà, elles sont supprimées ou anonymisées.</p>
+    </section>
+
+    <section id="droits">
+      <h2>Vos droits</h2>
+      <p>Selon les lois applicables, vous pouvez :</p>
+      <ul>
+        <li><strong>Accéder</strong> à vos données et en obtenir une copie.</li>
+        <li><strong>Rectifier</strong> des informations inexactes ou incomplètes.</li>
+        <li><strong>Demander l'effacement</strong> de vos données (dans les limites légales).</li>
+        <li><strong>Vous opposer</strong> à certains traitements ou en <strong>demander la limitation</strong>.</li>
+        <li><strong>Demander la portabilité</strong> de vos données dans un format structuré.</li>
+      </ul>
+      <p>Pour exercer vos droits, contactez‑nous à <a href="mailto:contact@geniusafrica.com">contact@geniusafrica.com</a>. Nous pourrons vous demander une preuve d'identité.</p>
+      <p class="hint">Si vous résidez dans l'Espace économique européen, vous disposez également du droit d'introduire une réclamation auprès de votre autorité de contrôle locale.</p>
+    </section>
+
+    <section id="cookies">
+      <h2>Cookies et technologies similaires</h2>
+      <p>Nous utilisons des cookies pour assurer le fonctionnement du site, analyser l'audience et personnaliser l'expérience. Vous pouvez configurer votre navigateur pour refuser tout ou partie des cookies. Le refus de certains cookies fonctionnels peut dégrader l'expérience.</p>
+    </section>
+
+    <section id="modifications">
+      <h2>Modifications de la Politique</h2>
+      <p>Nous pouvons mettre à jour cette Politique à tout moment. La version publiée ici indique la date de la dernière mise à jour. En cas de changement majeur, nous pourrons vous en informer par e‑mail ou via la plateforme.</p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Pour toute question relative à cette Politique ou à vos données personnelles :</p>
+      <ul>
+        <li>📧 E‑mail : <a href="mailto:contact@geniusafrica.com">contact@geniusafrica.com</a></li>
+        <li>🌍 Site : <a href="https://www.geniusafrica.com" target="_blank" rel="noopener">www.geniusafrica.com</a></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <a href="#" class="back-to-top" aria-label="Retour en haut">
+    <i class="fas fa-arrow-up"></i>
+  </a>
+
+  <script>
+    // Met à jour automatiquement l'année du pied de page
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // Bouton retour en haut
+    const backToTopButton = document.querySelector('.back-to-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.classList.add('visible');
+      } else {
+        backToTopButton.classList.remove('visible');
+      }
+    });
+    
+    backToTopButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
+
+{% endblock %}

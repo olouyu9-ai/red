@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenu %}
+
+<style>
+    /* ---- Styles généraux ---- */
+    body {
+        font-family: "Segoe UI", Roboto, sans-serif;
+        background: #f4f7fb;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #2a7de1;
+        margin-bottom: 30px;
+    }
+
+    /* ---- Tableau ---- */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    thead {
+        background: #2a7de1;
+        color: #fff;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    tr:hover {
+        background: #f0f8ff;
+        transition: 0.3s;
+    }
+
+    /* ---- Message vide ---- */
+    .empty-message {
+        text-align: center;
+        background: #eaf4ff;
+        padding: 15px;
+        border-radius: 8px;
+        color: #2a7de1;
+        font-weight: 500;
+    }
+
+    /* ---- Bouton ---- */
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background: #2ecc71;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: 0.3s;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+        background: #27ae60;
+        transform: translateY(-2px);
+    }
+
+    .btn:active {
+        transform: translateY(1px);
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 600px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
+            width: 100%;
+        }
+        thead {
+            display: none;
+        }
+        tr {
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        td {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+        }
+        td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            color: #2a7de1;
+        }
+    }
+</style>
+
+<div class="container">
+    <h1>👥 Mes Filleuls</h1>
+
+    {% if filleuls_bonus %}
+    <table>
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Date d'inscription</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for filleul in filleuls_bonus %}
+            <tr style ="padding: 4px;">
+                <td data-label="Nom">{{ filleul.filleul.email|truncatechars:10 }}</td>
+                <td data-label="Téléphone">{{ filleul.filleul.telephone }}</td>
+                <td data-label="Date">{{ filleul.filleul.date_joined|date:"d/m/Y H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-message">
+        🚫 Vous n'avez pas encore de filleuls.
+    </div>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'mon_code_parrainage' %}" class="btn">
+            🎟️ Voir mon code de parrainage
+        </a>
+    </div>
+</div>
+
+<!-- Petit JS pour effet d'apparition -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const container = document.querySelector(".container");
+        container.style.opacity = 0;
+        container.style.transform = "translateY(30px)";
+        setTimeout(() => {
+            container.style.transition = "all 0.6s ease";
+            container.style.opacity = 1;
+            container.style.transform = "translateY(0)";
+        }, 100);
+    });
+</script>
+
+{% endblock %}

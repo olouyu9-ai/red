@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% block contenu %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    :root {
+        --primary: #4ca1af;
+        --dark: #2c3e50;
+        --light-bg: #f3f4f6;
+        --success: #10b981;
+    }
+
+    .deposit-flow-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: radial-gradient(circle at top left, #f8fafc, #e2e8f0);
+    }
+
+    .glass-card {
+        background: white;
+        width: 100%;
+        max-width: 480px;
+        border-radius: 28px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .flow-header { text-align: center; margin-bottom: 30px; }
+    .icon-box {
+        width: 60px; height: 60px; background: var(--light-bg);
+        border-radius: 18px; display: flex; align-items: center;
+        justify-content: center; margin: 0 auto 15px;
+        color: var(--primary); font-size: 24px;
+    }
+    .flow-header h1 { font-size: 24px; font-weight: 800; color: var(--dark); margin: 0; }
+    .flow-header p { font-size: 14px; color: #64748b; margin-top: 5px; }
+
+    .instruction-alert {
+        background: #f8fafc;
+        border: 1px dashed #cbd5e1;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    .alert-label {
+        font-size: 10px; font-weight: 800; text-transform: uppercase;
+        color: #ef4444; letter-spacing: 1px; margin-bottom: 10px;
+    }
+    .instruction-alert p { font-size: 13px; color: var(--dark); line-height: 1.5; margin: 0; }
+    
+    .number-display {
+        display: flex; align-items: center; justify-content: space-between;
+        background: white; padding: 12px 15px; border-radius: 12px;
+        margin: 15px 0; border: 1px solid #e2e8f0;
+    }
+    .number-display span { font-family: 'Courier New', monospace; font-weight: 800; font-size: 18px; color: var(--primary); }
+    .copy-btn { border: none; background: #f1f5f9; padding: 8px; border-radius: 8px; cursor: pointer; color: var(--dark); transition: 0.2s; }
+    .copy-btn:hover { background: var(--primary); color: white; }
+
+    .field-group { margin-bottom: 20px; }
+    .field-group label { display: block; font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 8px; }
+    
+    .input-wrapper {
+        position: relative; display: flex; align-items: center;
+        transition: transform 0.3s;
+    }
+    .input-wrapper i {
+        position: absolute; left: 15px; color: #94a3b8; font-size: 14px; z-index: 10;
+    }
+    
+    /* Style unifié pour input et select */
+    .modern-form input, .modern-form select {
+        width: 100%; padding: 14px 15px 14px 45px;
+        border: 1px solid #e2e8f0; border-radius: 12px;
+        font-size: 15px; font-weight: 600; background: #fff;
+        transition: 0.3s; appearance: none; /* Enlever le style par défaut du select */
+    }
+    
+    .modern-form input:focus, .modern-form select:focus { 
+        border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(76, 161, 175, 0.1); 
+    }
+
+    .submit-flow-btn {
+        width: 100%; padding: 18px; background: var(--dark);
+        color: white; border: none; border-radius: 16px;
+        font-size: 16px; font-weight: 700; display: flex;
+        justify-content: center; align-items: center; gap: 12px;
+        cursor: pointer; transition: 0.3s; margin-top: 10px;
+    }
+    .submit-flow-btn:hover { background: var(--primary); transform: translateY(-2px); }
+
+    /* MODAL */
+    .modal-backdrop {
+        position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(4px); display: none; align-items: center;
+        justify-content: center; z-index: 1000;
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal-card { background: white; padding: 30px; border-radius: 24px; text-align: center; max-width: 340px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+    .modal-title { font-weight: 800; color: #ef4444; font-size: 18px; margin-bottom: 10px; }
+    .btn-close { width: 100%; padding: 12px; border: none; background: #f1f5f9; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 15px; }
+
+    .animate-in { animation: fadeInUp 0.5s ease-out; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<div class="deposit-flow-container">
+    <div class="glass-card animate-in">
+        <div class="flow-header">
+            <div class="icon-box"><i class="fas fa-wallet"></i></div>
+            <h1>Déposer des fonds</h1>
+            <p>Créditez votre compte instantanément</p>
+        </div>
+
+        <div class="instruction-alert">
+            <div class="alert-label">Instructions</div>
+            <p>Envoyez le montant sur le numéro ci-dessous, puis remplissez le formulaire.</p>
+            <div class="number-display">
+                <span id="depositNumber">0820000000</span>
+                <button class="copy-btn" title="Copier" onclick="copyNumber()"><i class="fas fa-copy"></i></button>
+            </div>
+        </div>
+
+        <form method="POST" action="{% url 'create_order' %}" class="modern-form">
+            {% csrf_token %}
+            
+            <div class="field-group">
+                <label>Opérateur utilisé</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-mobile-alt"></i>
+                    <select id="methode" name="name" required>
+                        <option value="" disabled selected>Choisir l'opérateur</option>
+                        <option value="Orange_money">Orange Money</option>
+                    </select>
+                </div>
+            </div>
+
+           
+
+            <div class="field-group">
+                <label>Montant envoyé (CDF)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <input type="number" name="amount" step="0.01" placeholder="Ex: 5000" required>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>ID Transaction (Référence)</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-receipt"></i>
+                    <input type="text" name="reference_code" placeholder="Ex: PP240102..." required>
+                </div>
+                <p style="font-size: 11px; color: #94a3b8; margin-top: 5px;">Copiez la référence reçue par SMS.</p>
+            </div>
+
+            <button type="submit" class="submit-flow-btn">
+                <span>Confirmer le dépôt</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<div id="errorModal" class="modal-backdrop">
+    <div class="modal-card">
+        <div class="modal-title">error</div>
+        <div id="errorMessage" style="font-size: 14px; color: #64748b;"></div>
+        <button class="btn-close" onclick="document.getElementById('errorModal').classList.remove('show')">Compris</button>
+    </div>
+</div>
+
+<script>
+    function copyNumber() {
+        const num = document.getElementById('depositNumber').innerText;
+        navigator.clipboard.writeText(num).then(() => {
+            alert("Numéro copié !");
+        });
+    }
+
+    document.querySelectorAll('input, select').forEach(el => {
+        el.onfocus = () => el.parentElement.style.transform = 'scale(1.02)';
+        el.onblur = () => el.parentElement.style.transform = 'scale(1)';
+    });
+
+    {% if messages %}
+        let messages = [
+            {% for message in messages %}
+                { level: "{{ message.tags }}", text: "{{ message|escapejs }}" },
+            {% endfor %}
+        ];
+        let errorMsg = messages.find(m => m.level.includes("error"));
+        if (errorMsg) {
+            document.getElementById("errorMessage").textContent = errorMsg.text;
+            document.getElementById("errorModal").classList.add("show");
+        }
+    {% endif %}
+</script>
+{% endblock %}

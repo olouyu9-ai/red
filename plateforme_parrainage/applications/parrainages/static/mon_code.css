@@ -1,0 +1,98 @@
+/*  Style général */
+
+
+/* Titre principal */
+h1 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #222;
+}
+
+/* Carte code parrainage */
+.code-parrainage {
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.code-parrainage p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.code-parrainage strong {
+    color: #0072ff; 
+    font-size: 18px;
+}
+
+/* Lien de parrainage */
+.lien-parrainage {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.lien-parrainage input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    background: #f9f9f9;
+    text-align: center;
+}
+
+.lien-parrainage input:focus {
+    border-color: #0072ff;
+    box-shadow: 0 0 6px rgba(0, 114, 255, 0.3);
+}
+
+/* Bouton copier */
+.lien-parrainage button {
+    padding: 12px;
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.lien-parrainage button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 191, 255, 0.4);
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    .code-parrainage {
+        padding: 35px 40px;
+    }
+
+    .code-parrainage p {
+        font-size: 18px;
+    }
+
+    .lien-parrainage input {
+        font-size: 16px;
+    }
+
+    .lien-parrainage button {
+        font-size: 16px;
+        padding: 14px;
+    }
+}

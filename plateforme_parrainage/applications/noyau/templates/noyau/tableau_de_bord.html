@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block titre %}Tableau de bord | Inverted Pyramid Bank{% endblock %}
+
+{% block contenu %}
+<div class="bank-container">
+    
+   
+
+    <div class="bank-card-main animate-in delay-1">
+        <div class="card-inner">
+            <div class="card-brand">
+                <span class="brand-name">INVERTED PYRAMID</span>
+                <i class="fas fa-wifi-slash rotate-90" style="opacity: 0.5;"></i>
+            </div>
+            
+            <div class="balance-display">
+                <span class="balance-label">Solde Total Disponible</span>
+                <div class="balance-value">{{ solde }} <span class="currency">CDF</span></div>
+            </div>
+
+            <div class="card-footer-info">
+                <div class="info-block">
+                    <span class="info-label">Gains (24h)</span>
+                    <span class="info-data positive">+ {{ gains_aujourdhui }} CDF</span>
+                </div>
+                <div class="info-block" style="text-align: right;">
+                    <span class="info-label">Statut du compte</span>
+                    <span class="info-data"><i class="fas fa-check-circle"></i> Certifié</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bank-quick-actions">
+            <a href="{% url 'create_order' %}" class="action-item">
+                <div class="icon-circle"><i class="fas fa-plus"></i></div>
+                <span>Déposer</span>
+            </a>
+            <a href="{% url 'retrait' %}" class="action-item">
+                <div class="icon-circle"><i class="fas fa-paper-plane"></i></div>
+                <span>Transférer</span>
+            </a>
+            <a href="{% url 'comment_faire_un_depot' %}" class="action-item">
+                <div class="icon-circle"><i class="fas fa-university"></i></div>
+                <span>Aide</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="bank-stats-row grid-3 animate-in delay-2">
+        <div class="stat-tile">
+            <span class="stat-title">Total des Dépôts</span>
+            <span class="stat-num">{{ total_depots }} CDF</span>
+        </div>
+        <div class="stat-tile">
+            <span class="stat-title">Portefeuille Filleuls</span>
+            <span class="stat-num">{{ user.profil.filleuls.count }} <small>Actifs</small></span>
+        </div>
+        <div class="stat-tile">
+            <span class="stat-title">Dernier Gain</span>
+            <span class="stat-num positive">+{{ gains_aujourdhui }}</span>
+        </div>
+    </div>
+
+    <div class="bank-section animate-in delay-3">
+        <div class="section-title">
+            <h3>Historique des opérations</h3>
+            <a href="{% url 'liste_depots' %}" class="link-all">Tout voir</a>
+        </div>
+        
+        <div class="bank-table">
+            {% for transaction in transactions %}
+            <div class="table-row {% if forloop.counter > 5 %}hidden-row{% endif %}">
+                <div class="row-left">
+                    <div class="status-indicator {{ transaction.type }}"></div>
+                    <div class="row-details">
+                        <span class="row-type">{{ transaction.get_type_display }}</span>
+                        <span class="row-date">{{ transaction.cree_le|date:"d M Y • H:i" }}</span>
+                    </div>
+                </div>
+                <div class="row-right">
+                    <span class="row-amount {% if transaction.type == 'depot' or transaction.type == 'gain' %}text-pos{% else %}text-neg{% endif %}">
+                        {% if transaction.type == 'depot' %}+{% elif transaction.type == 'retrait' %}-{% endif %}{{ transaction.montant }}
+                    </span>
+                    <i class="fas fa-chevron-right text-muted" style="font-size: 10px;"></i>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-msg">Aucun mouvement récent sur votre compte.</div>
+            {% endfor %}
+            
+            {% if transactions|length > 5 %}
+            <button class="view-more-bank" onclick="toggleRows(this)">
+                Afficher les transactions précédentes
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="bank-shortcuts animate-in delay-4">
+        <p class="section-label">SERVICES BANCAIRES</p>
+        <div class="shortcuts-grid">
+            <a href="{% url 'liste_produits' %}" class="shortcut-btn">
+                <i class="fas fa-chart-line"></i> Investir
+            </a>
+            <a href="{% url 'mon_code_parrainage' %}" class="shortcut-btn">
+                <i class="fas fa-user-plus"></i> Parrainer
+            </a>
+            <a href="{% url 'mes_investissements' %}" class="shortcut-btn">
+                <i class="fas fa-file-invoice-dollar"></i> Contrats
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* VARIABLES BANQUE LUXE */
+    :root {
+        --bank-navy: #0f172a;
+        --bank-sky: #0ea5e9;
+        --bank-bg: #f8fafc;
+        --bank-white: #ffffff;
+        --text-main: #1e293b;
+        --text-light: #64748b;
+        --success: #10b981;
+        --danger: #ef4444;
+    }
+
+    .bank-container { max-width: 800px; margin: 0 auto; padding-bottom: 120px; }
+
+    /* HEADER */
+    .utility-bar { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; padding: 0 5px;}
+    .bank-h1 { font-size: 22px; font-weight: 800; color: var(--bank-navy); margin-top: 5px;}
+    .bank-app-btn { 
+        background: white; border: 1px solid #e2e8f0; padding: 8px 14px; 
+        border-radius: 10px; font-size: 12px; font-weight: 700; 
+        text-decoration: none; color: var(--bank-sky); box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+
+    /* MAIN CARD */
+    .bank-card-main { 
+        background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+        border-radius: 24px; padding: 30px; color: white;
+        box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2);
+        position: relative; margin-bottom: 30px;
+    }
+    .card-brand { display: flex; justify-content: space-between; margin-bottom: 40px; font-weight: 800; letter-spacing: 1px; font-size: 12px;}
+    .balance-label { font-size: 12px; opacity: 0.8; font-weight: 500;}
+    .balance-value { font-size: 32px; font-weight: 800; margin-top: 5px;}
+    .currency { font-size: 16px; opacity: 0.7;}
+    .card-footer-info { display: flex; justify-content: space-between; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;}
+    .info-label { display: block; font-size: 10px; text-transform: uppercase; opacity: 0.7; margin-bottom: 4px;}
+    .info-data { font-weight: 700; font-size: 14px;}
+
+    /* QUICK ACTIONS */
+    .bank-quick-actions { 
+        background: white; border-radius: 18px; padding: 20px;
+        display: flex; justify-content: space-around; margin-top: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+    .action-item { text-decoration: none; color: var(--bank-navy); display: flex; flex-direction: column; align-items: center; gap: 8px;}
+    .icon-circle { width: 45px; height: 45px; background: #f0f9ff; color: var(--bank-sky); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: 0.3s;}
+    .action-item span { font-size: 12px; font-weight: 700;}
+    .action-item:hover .icon-circle { background: var(--bank-sky); color: white;}
+
+    /* STATS TILE */
+    .bank-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px;}
+    .stat-tile { background: white; padding: 20px; border-radius: 18px; border: 1px solid #f1f5f9;}
+    .stat-title { display: block; font-size: 11px; color: var(--text-light); font-weight: 600; margin-bottom: 8px;}
+    .stat-num { font-size: 15px; font-weight: 800; color: var(--bank-navy);}
+
+    /* TABLE */
+    .bank-section { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;}
+    .section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
+    .link-all { color: var(--bank-sky); text-decoration: none; font-size: 13px; font-weight: 700;}
+    .table-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f8fafc;}
+    .row-left { display: flex; align-items: center; gap: 15px;}
+    .status-indicator { width: 8px; height: 8px; border-radius: 50%; background: #e2e8f0;}
+    .status-indicator.depot { background: var(--success); box-shadow: 0 0 8px var(--success);}
+    .status-indicator.retrait { background: var(--danger);}
+    .row-type { display: block; font-size: 14px; font-weight: 700; color: var(--text-main);}
+    .row-date { font-size: 11px; color: var(--text-light);}
+    .row-amount { font-weight: 800; font-size: 14px;}
+    .text-pos { color: var(--success);}
+    .text-neg { color: var(--danger);}
+    .hidden-row { display: none; }
+    .view-more-bank { width: 100%; padding: 15px; background: none; border: none; color: var(--text-light); font-weight: 600; font-size: 12px; cursor: pointer;}
+
+    /* SHORTCUTS */
+    .shortcuts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px;}
+    .shortcut-btn { background: #f1f5f9; padding: 15px; border-radius: 15px; text-decoration: none; color: var(--bank-navy); font-size: 12px; font-weight: 700; text-align: center; transition: 0.2s;}
+    .shortcut-btn i { display: block; font-size: 20px; margin-bottom: 8px; color: var(--bank-sky);}
+    .shortcut-btn:hover { background: #e2e8f0; }
+    .section-label { font-size: 11px; font-weight: 800; color: var(--text-light); letter-spacing: 1px; margin-top: 30px;}
+
+    /* UTILS */
+    .positive { color: #00ff88 !important; }
+    .text-muted { color: #cbd5e1; }
+    .rotate-90 { transform: rotate(90deg); }
+
+    /* ANIMATIONS */
+    .animate-in { animation: slideIn 0.5s ease-out forwards; opacity: 0; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 600px) {
+        .bank-stats-row { grid-template-columns: 1fr 1fr; }
+        .grid-3 :last-child { grid-column: span 2; }
+    }
+</style>
+
+<script>
+    function toggleRows(btn) {
+        const rows = document.querySelectorAll('.hidden-row');
+        rows.forEach(r => r.style.display = 'flex');
+        btn.style.display = 'none';
+    }
+</script>
+{% endblock %}

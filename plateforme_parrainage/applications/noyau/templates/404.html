@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Page introuvable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f4f4f9;
+            padding: 50px;
+        }
+        h1 {
+            font-size: 50px;
+            color: #e74c3c;
+        }
+        p {
+            font-size: 20px;
+            color: #555;
+        }
+        a {
+            text-decoration: none;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1>404</h1>
+    <p>Oups 😢 La page que vous cherchez n’existe pas.</p>
+    <p><a href="{% url 'accueil' %}">Retourner à l’accueil</a></p>
+</body>
+</html>

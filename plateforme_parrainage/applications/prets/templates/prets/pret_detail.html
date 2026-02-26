@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titre %}Détail Contrat #{{ pret.pk }}{% endblock %}
+
+{% block contenu %}
+<div class="pro-dashboard detail-view">
+
+    <nav class="breadcrumb">
+            <a href="{% url 'prets:list' %}"><i class="fas fa-arrow-left"></i> Retour au portefeuille</a>
+        </nav>
+
+        <div class="detail-header">
+            <div class="title-stack">
+                <div class="pro-badge"> Actif</div>
+                <h1 class="pro-title">Détails du <span>Prêt</span></h1>
+                <p class="pro-subtitle">Référence interne : REF-{{ pret.pk|stringformat:"04d" }}</p>
+            </div>
+            <div class="status-pill {{ pret.get_statut_display|lower }}">
+                {{ pret.get_statut_display }}
+            </div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card highlight">
+                <span class="kpi-label">Montant Total</span>
+                <span class="kpi-value">${{ pret.montant }}</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Principal Restant</span>
+                <span class="kpi-value text-blue">${{ pret.principal_restant }}</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Date de Début</span>
+                <span class="kpi-value">{{ pret.date_debut|date:"d M Y" }}</span>
+            </div>
+            <div class="kpi-card">
+                <span class="kpi-label">Échéance</span>
+                <span class="kpi-value">{{ pret.date_echeance|date:"d M Y" }}</span>
+            </div>
+        </div>
+
+    <div class="container">
+        
+        
+
+        <div class="table-section">
+            <div class="section-header">
+                <h2><i class="fas fa-history"></i> Historique des Remboursements</h2>
+            </div>
+            
+            <div class="table-container">
+                <table class="pro-table">
+                    <thead>
+                        <tr>
+                            <th>Date du paiement</th>
+                            <th>Montant versé</th>
+                            <th>Méthode / Réf</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in pret.remboursements.all %}
+                        <tr>
+                            <td class="font-medium">{{ r.date|date:"d/m/Y" }}</td>
+                            <td class="font-bold text-green">+ ${{ r.montant }}</td>
+                            <td class="text-muted">Transaction Standard</td>
+                            <td><span class="badge-success">Confirmé</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="empty-row">Aucun remboursement enregistré pour le moment.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+
+
+/* Navigation */
+.breadcrumb { margin-bottom: 1.5rem; }
+.breadcrumb a { 
+    color: var(--text-muted); 
+    text-decoration: none; 
+    font-size: 0.9rem; 
+    transition: color 0.2s;
+}
+.breadcrumb a:hover { color: var(--primary-color); }
+
+/* Header spécifique */
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.status-pill {
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    background: #f1f5f9;
+}
+.status-pill.actif, .status-pill.approuvé { background: #dcfce7; color: #166534; }
+
+/* KPI Grid */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.kpi-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--shadow-sm);
+}
+
+.kpi-card.highlight {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.kpi-card.highlight .kpi-label { color: rgba(255,255,255,0.8); }
+.kpi-card.highlight .kpi-value { color: white; }
+
+.kpi-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.kpi-value { font-size: 1.4rem; font-weight: 800; }
+.text-blue { color: var(--primary-color); }
+
+/* Table Section */
+.table-section {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.section-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.section-header h2 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+
+.pro-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.pro-table th {
+    background: #f8fafc;
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.pro-table td {
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.95rem;
+}
+
+.font-medium { font-weight: 500; }
+.font-bold { font-weight: 700; }
+.badge-success {
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.empty-row {
+    text-align: center;
+    padding: 3rem !important;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+    
+</style>
+{% endblock %}

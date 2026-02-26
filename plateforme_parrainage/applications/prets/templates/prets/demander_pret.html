@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titre %}Demande de Financement | Inverted Pyramid{% endblock %}
+
+{% block contenu %}
+<div class="loan-wrapper">
+    <div class="container">
+        <div class="loan-container animate__animated animate__fadeIn">
+            <div class="loan-badge">
+                <i class="fas fa-file-invoice-dollar"></i>
+                PROTOCOLE DE CRÉDIT SÉCURISÉ
+            </div>
+
+            <header class="loan-header">
+                <h1 class="loan-title">Demander un <span>Prêt</span></h1>
+                <p class="loan-subtitle">Configurez les paramètres de votre allocation de capital.</p>
+                <div class="divider-gold"></div>
+            </header>
+
+            <form method="post" class="loan-form">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="alert-error">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="{{ form.montant.id_for_label }}">
+                            <i class="fas fa-wallet"></i> Montant Souhaité ($)
+                        </label>
+                        {{ form.montant }}
+                        {% if form.montant.errors %}
+                            <span class="field-error">{{ form.montant.errors }}</span>
+                        {% endif %}
+                        <small class="helper-text">Indiquez la somme totale du principal.</small>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="{{ form.taux_annuel.id_for_label }}">
+                            <i class="fas fa-percentage"></i> Taux Annuel (%)
+                        </label>
+                        {{ form.taux_annuel }}
+                        {% if form.taux_annuel.errors %}
+                            <span class="field-error">{{ form.taux_annuel.errors }}</span>
+                        {% endif %}
+                        <small class="helper-text">Taux d'intérêt fixe pour la durée du prêt.</small>
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label for="{{ form.duree_mois.id_for_label }}">
+                            <i class="fas fa-calendar-alt"></i> Durée du Contrat (Mois)
+                        </label>
+                        {{ form.duree_mois }}
+                        {% if form.duree_mois.errors %}
+                            <span class="field-error">{{ form.duree_mois.errors }}</span>
+                        {% endif %}
+                        <small class="helper-text">Période de remboursement échelonnée.</small>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn-submit-loan">
+                        Soumettre la Demande d'Allocation
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <p class="terms-notice">
+                        * En soumettant cette demande, vous acceptez l'analyse de risque automatisée par nos algorithmes de conformité.
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --loan-navy: #0f172a;
+        --loan-blue: #0066ff;
+        --loan-text: #334155;
+        --loan-bg: #f8fafc;
+        --loan-border: #e2e8f0;
+    }
+
+    .loan-wrapper {
+        background: var(--loan-bg);
+        min-height: 100vh;
+        padding: 60px 20px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .loan-container {
+        max-width: 650px;
+        margin: 0 auto;
+        background: white;
+        padding: 50px;
+        border-radius: 12px;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+        border: 1px solid var(--loan-border);
+        position: relative;
+    }
+
+    .loan-badge {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        font-size: 10px;
+        font-weight: 800;
+        color: #64748b;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .loan-header { margin-bottom: 40px; }
+    .loan-title { font-size: 30px; font-weight: 800; color: var(--loan-navy); margin: 0; }
+    .loan-title span { color: var(--loan-blue); }
+    .loan-subtitle { color: #64748b; margin-top: 8px; font-size: 15px; }
+    .divider-gold { width: 50px; height: 4px; background: var(--loan-blue); margin-top: 15px; border-radius: 2px; }
+
+    /* Form Styles */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+    .full-width { grid-column: span 2; }
+
+    .input-group { display: flex; flex-direction: column; gap: 8px; }
+    .input-group label { font-size: 13px; font-weight: 700; color: var(--loan-navy); text-transform: uppercase; letter-spacing: 0.5px; }
+    .input-group label i { color: var(--loan-blue); margin-right: 5px; }
+
+    /* Style des inputs Django */
+    .loan-form input {
+        padding: 14px 16px;
+        border: 1px solid var(--loan-border);
+        border-radius: 8px;
+        font-size: 15px;
+        color: var(--loan-navy);
+        background: #fdfdfd;
+        transition: 0.3s;
+    }
+
+    .loan-form input:focus {
+        outline: none;
+        border-color: var(--loan-blue);
+        box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1);
+        background: white;
+    }
+
+    .helper-text { font-size: 11px; color: #94a3b8; }
+    .field-error { color: #ef4444; font-size: 12px; font-weight: 600; }
+
+    .alert-error {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 15px;
+        color: #991b1b;
+        margin-bottom: 25px;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .form-footer { margin-top: 40px; text-align: center; }
+    
+    .btn-submit-loan {
+        width: 100%;
+        background: var(--loan-navy);
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .btn-submit-loan:hover {
+        background: var(--loan-blue);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 102, 255, 0.2);
+    }
+
+    .terms-notice { margin-top: 20px; font-size: 11px; color: #94a3b8; line-height: 1.4; }
+
+    @media (max-width: 600px) {
+        .form-grid { grid-template-columns: 1fr; }
+        .full-width { grid-column: span 1; }
+        .loan-container { padding: 30px 20px; }
+    }
+</style>
+{% endblock %}

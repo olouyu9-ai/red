@@ -1,0 +1,82 @@
+{% extends "admin/change_list.html" %}
+{% load humanize %}
+
+{% block content_title %}
+    <h1> Gestion des Bonus de Parrainage </h1>
+{% endblock %}
+
+{% block result_list %}
+    {{ block.super }}
+    
+    <div class="results" style="margin-top: 30px; padding: 20px; background: #f8f8f8; border-radius: 5px;">
+        <h2 style="color: #417690; border-bottom: 2px solid #417690; padding-bottom: 10px;"> 📊 Statistiques des Bonus </h2>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr style="background: #417690; color: white;">
+                    <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Type</th>
+                    <th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Montant (FC)</th>
+                    <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background: #e7f1ff;">
+                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">🤝 Total Bonus</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; font-weight: bold; color: #2c5aa0;">
+                        {{ totaux.total_montant|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold; color: #2c5aa0;">
+                        {{ totaux.total_bonus|default:0 }}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">👑 Parrains Uniques</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #28a745;">-</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #28a745;">
+                        {{ totaux.bonus_par_parrain|default:0 }}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">👥 Filleuls Uniques</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #17a2b8;">-</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #17a2b8;">
+                        {{ totaux.bonus_par_filleul|default:0 }}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">📊 Bonus Moyen</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #6f42c1;">
+                        {{ totaux.montant_moyen|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #6f42c1;">-</td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">⬆️ Bonus Max</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #28a745;">
+                        {{ totaux.montant_max|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #28a745;">-</td>
+                </tr>
+                
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd;">⬇️ Bonus Min</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #dc3545;">
+                        {{ totaux.montant_min|default:0|floatformat:2 }} FC
+                    </td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #dc3545;">-</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 5px; border-left: 4px solid #417690;">
+            <strong>ℹ️ Information:</strong> 
+            Ces statistiques montrent l'impact du programme de parrainage sur votre plateforme.
+        </div>
+    </div>
+{% endblock %}
+
+{% block pagination %}{% endblock %}

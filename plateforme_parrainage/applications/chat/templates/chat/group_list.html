@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenu %}
+<div class="container">
+    <h1>Mes groupes</h1>
+    <p><a href="{% url 'chat:group_create' %}" class="btn">Créer un groupe</a></p>
+    <ul>
+        {% for g in groups %}
+            <li><a href="{% url 'chat:group_detail' pk=g.pk %}">{{ g.name }}</a> — créé par {{ g.created_by }}</li>
+        {% empty %}
+            <li>Aucun groupe pour l'instant.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titre %}Actifs Infrastructurels | Inverted Pyramid{% endblock %}
+
+{% block contenu %}
+<div class="bank-wrapper">
+    <header class="investment-header animate__animated animate__fadeIn">
+        <div class="container">
+            <div class="header-flex">
+                <div>
+                    <span class="badge-status">Réseau Opérationnel</span>
+                    <h1 class="main-title">Actifs <span>Numériques</span></h1>
+                    <p class="sub-title">Déployez votre capital dans des infrastructures technologiques de pointe.</p>
+                </div>
+                <div class="user-status-card">
+                    <span class="label">Puissance Allouée</span>
+                    <span class="value">$ {{ capital_actifs|default:"0.00" }}</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="investment-grid">
+            {% for produit in produits %}
+            <div class="investment-card animate-card">
+                <div class="card-inner">
+                    {% if produit.taux_quotidien > 5 %}
+                    <div class="premium-tag">Haute Disponibilité</div>
+                    {% endif %}
+
+                    <div class="asset-info">
+                        <div class="asset-icon">
+                            {% if produit.image %}
+                                <img src="{{ produit.image }}" alt="{{ produit.nom }}">
+                            {% else %}
+                                <i class="fas fa-microchip"></i>
+                            {% endif %}
+                        </div>
+                        <div class="asset-meta">
+                            <h3 class="asset-name">{{ produit.nom }}</h3>
+                            <span class="asset-category">Infrastructure Cloud</span>
+                        </div>
+                    </div>
+
+                    <div class="asset-description">
+                        <p>{{ produit.description }}</p>
+                    </div>
+
+                    <div class="financial-metrics">
+                        <div class="metric">
+                            <span class="m-label">Coût d'Activation</span>
+                            <span class="m-value">$ {{ produit.prix }}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="m-label">Rendement / Cycle</span>
+                            <span class="m-value text-highlight">+{{ produit.taux_quotidien|floatformat:1 }}%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="m-label">Temps d'Exploitation</span>
+                            <span class="m-value">{{ produit.duree_jours }} Jours</span>
+                        </div>
+                    </div>
+
+                    <div class="profit-projection">
+                        <div class="projection-label">DIVIDENDES TECHNOLOGIQUES ESTIMÉS</div>
+                        <div class="projection-value">+ $ {{ produit.benefice }}</div>
+                    </div>
+
+                    <div class="card-action">
+                        {% if capital_actifs == 0 %}
+                            <a href="{% url 'achat' produit.id %}" class="btn-invest">
+                                Déployer l'Infrastructure
+                                <i class="fas fa-server"></i>
+                            </a>
+                        {% else %}
+                            <button class="btn-disabled" disabled title="Un déploiement est déjà en cours">
+                                Unité en Opération
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Les styles restent inchangés car ils ne contiennent pas de texte visible */
+    :root {
+        --b-navy: #0f172a;
+        --b-sky: #0ea5e9;
+        --b-border: #e2e8f0;
+        --b-bg: #f8fafc;
+        --b-success: #10b981;
+    }
+
+    .bank-wrapper { background: var(--b-bg); min-height: 100vh; padding-bottom: 80px; font-family: 'Inter', sans-serif; }
+    .investment-header { background: white; padding: 40px 0; border-bottom: 1px solid var(--b-border); margin-bottom: 40px; }
+    .header-flex { display: flex; justify-content: space-between; align-items: flex-end; }
+    .badge-status { background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
+    .main-title { font-size: 32px; font-weight: 900; color: var(--b-navy); letter-spacing: -1px; }
+    .main-title span { color: var(--b-sky); }
+    .sub-title { color: #64748b; font-size: 16px; margin: 0; }
+    .user-status-card { background: var(--b-navy); color: white; padding: 15px 25px; border-radius: 16px; text-align: right; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1); }
+    .user-status-card .label { display: block; font-size: 11px; opacity: 0.7; font-weight: 600; text-transform: uppercase; }
+    .user-status-card .value { font-size: 20px; font-weight: 800; color: var(--b-sky); }
+    .investment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+    .investment-card { background: white; border-radius: 24px; position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid var(--b-border); }
+    .investment-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: var(--b-sky); }
+    .card-inner { padding: 30px; }
+    .premium-tag { position: absolute; top: 15px; right: 15px; background: #f0fdf4; color: #166534; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; }
+    .asset-info { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+    .asset-icon { width: 56px; height: 56px; background: #f1f5f9; border-radius: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .asset-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .asset-icon i { font-size: 24px; color: var(--b-sky); }
+    .asset-name { font-size: 19px; font-weight: 800; color: var(--b-navy); margin: 0; }
+    .asset-category { font-size: 12px; color: var(--b-sky); font-weight: 700; text-transform: uppercase; }
+    .asset-description { font-size: 13px; color: #64748b; line-height: 1.6; height: 40px; overflow: hidden; margin-bottom: 25px; }
+    .financial-metrics { display: flex; justify-content: space-between; background: #f8fafc; border-radius: 16px; padding: 15px; margin-bottom: 25px; }
+    .metric { display: flex; flex-direction: column; }
+    .m-label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px; }
+    .m-value { font-size: 14px; font-weight: 800; color: var(--b-navy); }
+    .text-highlight { color: var(--b-success); }
+    .profit-projection { background: var(--b-bg); border: 2px dashed var(--b-border); border-radius: 16px; padding: 15px; text-align: center; margin-bottom: 25px; }
+    .projection-label { font-size: 10px; font-weight: 800; color: #64748b; letter-spacing: 1px; margin-bottom: 8px; }
+    .projection-value { font-size: 22px; font-weight: 900; color: var(--b-navy); }
+    .btn-invest { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; background: var(--b-navy); color: white; border-radius: 14px; font-weight: 700; text-decoration: none; transition: 0.3s; border: none; cursor: pointer; }
+    .btn-invest:hover { background: var(--b-sky); transform: scale(1.02); }
+    .btn-disabled { width: 100%; padding: 16px; background: #e2e8f0; color: #94a3b8; border: none; border-radius: 14px; font-weight: 700; cursor: not-allowed; }
+    .animate-card { opacity: 0; transform: translateY(20px); transition: 0.6s ease-out forwards; }
+    .animate-card.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+        .header-flex { flex-direction: column; align-items: flex-start; gap: 20px; }
+        .user-status-card { width: 100%; text-align: left; }
+    }
+</style>
+
+<script>
+    /* Le script reste le même */
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.animate-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.1 });
+        cards.forEach(card => observer.observe(card));
+    });
+</script>
+{% endblock %}
