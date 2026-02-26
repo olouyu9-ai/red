@@ -31,7 +31,10 @@ ALLOWED_HOSTS = ["red-pv76.onrender.com"]
 
 
 # Application definition
-
+# Autoriser ton domaine Render pour CSRF
+CSRF_TRUSTED_ORIGINS = [
+    "https://red-pv76.onrender.com",
+]
 INSTALLED_APPS = [
 
       #'colorfield',
