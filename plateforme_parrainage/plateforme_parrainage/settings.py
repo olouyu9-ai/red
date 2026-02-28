@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-b*!2isvhm#d!^-0x8=d-#g(!0yprh%uutl-6l*5gjz91q_s31q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["red-pv76.onrender.com"]
+ALLOWED_HOSTS = ["red-pv76.onrender.com", "127.0.0.1"]
 
 
 # Application definition
@@ -175,8 +175,10 @@ TIME_ZONE = 'Africa/Kinshasa'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
@@ -203,4 +205,15 @@ LOGOUT_REDIRECT_URL = '/connexion/'
 
 
 HANDLER404 = "noyau.views.custom_404"
+
+# configuration minimale pour les modèles de langage (LLM)
+# activez ces variables et fournissez des clés si vous souhaitez
+# que le chat réponde automatiquement via OpenAI ou HuggingFace.
+ASSISTANT_USE_OPENAI = False
+ASSISTANT_OPENAI_MODEL = 'gpt-3.5-turbo'
+ASSISTANT_USE_HF = False
+HF_INFERENCE_MODEL = 'google/flan-t5-small'
+# chemin vers un fichier texte contenant la base de connaissances que l'IA
+# pourra inclure automatiquement dans ses prompts si présent.
+KNOWLEDGE_BASE_PATH = BASE_DIR / 'knowledge_base.txt'
 
