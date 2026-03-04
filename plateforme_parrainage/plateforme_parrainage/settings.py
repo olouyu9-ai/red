@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ["red-pv76.onrender.com", "127.0.0.1", "www.inverted.sbs", "inve
 # Application definition
 # Autoriser ton domaine Render pour CSRF
 CSRF_TRUSTED_ORIGINS = [
-    "https://red-pv76.onrender.com",
+    "https://red-pv76.onrender.com", "https://inverted.sbs"
 ]
 INSTALLED_APPS = [
 
