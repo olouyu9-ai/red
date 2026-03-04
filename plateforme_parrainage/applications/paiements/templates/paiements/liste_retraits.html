@@ -7,7 +7,7 @@
   <div class="summary-cards">
     <div class="card total">
       <h3>Total Retiré</h3>
-      <p>{{ total_retire|default:"0" }} FC</p>
+      <p>{{ total_retire|default:"0" }} $</p>
     </div>
     <div class="card pending">
       <h3>En Attente</h3>
@@ -43,7 +43,7 @@
       <tbody>
         {% for retrait in retraits %}
         <tr data-status="{{ retrait.statut }}">
-          <td>{{ retrait.montant }} FC</td>
+          <td>{{ retrait.montant }} $</td>
           <td>{{ retrait.methode }}</td>
           <td>{{ retrait.destination }}</td>
           <td>
@@ -52,7 +52,7 @@
             </span>
           </td>
           <td>{{ retrait.cree_le|date:"d/m/Y H:i" }}</td>
-          <td>{{ retrait.frais }} FC</td>
+          <td>{{ retrait.frais }} $</td>
         </tr>
         {% endfor %}
       </tbody>

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load prets_tags %}
 
 {% block titre %}Tableau de bord | Inverted Pyramid Bank{% endblock %}
 
@@ -10,19 +11,142 @@
     <div class="bank-card-main animate-in delay-1">
         <div class="card-inner">
             <div class="card-brand">
-                <span class="brand-name">INVERTED PYRAMID</span>
+                <span class="brand-name">INVERTED</span>
                 <i class="fas fa-wifi-slash rotate-90" style="opacity: 0.5;"></i>
             </div>
             
             <div class="balance-display">
-                <span class="balance-label">Solde Total Disponible</span>
-                <div class="balance-value">{{ solde }} <span class="currency">CDF</span></div>
+                <span class="balance-label">Solde</span>
+                <div class="balance-value">{{ solde }} $</div>
             </div>
+
+
+
+           <div class="balanc">
+    <span class="balance-la">Credit</span>
+
+    <div class="balance-va">
+        {{ bp_user.montant_emprunt_actuel }} $
+    </div>
+
+    {% with retrait=user|retrait_actif %}
+        {% if user.is_authenticated %}
+            {% if retrait %}
+                <!-- utilisateur a déjà un retrait en cours -->
+                <a href="{% url 'prets:voir_retraits' %}"
+                   class="btn-retrait"
+                   id="btn-retrait"
+                   data-message="Vous avez un retrait en cours. Restant : {{ retrait.montant_restant }}$ ({{ retrait|progression_retrait }}% remboursé)"
+                >Retrait crédit</a>
+            {% elif user|can_withdraw_credit %}
+                <a href="{% url 'prets:demander_retrait_credit' %}"
+                   class="btn-retrait" id="btn-retrait"
+                   data-message=""
+                >Retrait crédit</a>
+            {% else %}
+                <button class="btn-retrait" id="btn-retrait"
+                        data-message="Pour être éligible, parrainer {{ user|filleuls_manquants }} filleul(s) ayant alloué un serveur.\nMontant possible : {{ user|montant_max_retrait }}">
+                    Retrait crédit 🔒
+                </button>
+                <small class="text-muted">
+                    Filleuls validés : {{ user|filleuls_info }}
+                </small>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'login' %}" class="btn-retrait" id="btn-retrait"
+               data-message="Connectez-vous pour demander un retrait crédit."
+            >Retrait crédit</a>
+        {% endif %}
+    {% endwith %}
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('btn-retrait');
+        if (!btn) return;
+        btn.addEventListener('click', function(e) {
+            var msg = btn.getAttribute('data-message');
+            if (msg) {
+                e.preventDefault();
+                alert(msg);
+            }
+        });
+    });
+    </script>
+</div>
+
+<style>
+/* ===== CONTAINER ===== */
+.balanc {
+    width: 340px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 20px;
+    background: #e0e5ec;
+    box-shadow: 
+        inset 8px 8px 15px #b8bec7,
+        inset -8px -8px 15px #ffffff;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== LABEL ===== */
+.balance-la {
+    display: block;
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+/* ===== VALUE ===== */
+.balance-va {
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.currency {
+    font-size: 18px;
+    color: #4CAF50;
+}
+
+/* ===== BUTTON RETRAIT ===== */
+.btn-retrait {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #e0e5ec;
+    color: #d32f2f;
+    box-shadow: 
+        6px 6px 12px #b8bec7,
+        -6px -6px 12px #ffffff;
+    transition: all 0.2s ease;
+}
+
+/* Effet pression */
+.btn-retrait:active {
+    box-shadow: 
+        inset 4px 4px 8px #b8bec7,
+        inset -4px -4px 8px #ffffff;
+}
+
+/* Hover léger */
+.btn-retrait:hover {
+    color: #b71c1c;
+}
+</style>
+
+
 
             <div class="card-footer-info">
                 <div class="info-block">
                     <span class="info-label">Gains (24h)</span>
-                    <span class="info-data positive">+ {{ gains_aujourdhui }} CDF</span>
+                    <span class="info-data positive">+ {{ gains_aujourdhui }} $</span>
                 </div>
                 <div class="info-block" style="text-align: right;">
                     <span class="info-label">Statut du compte</span>
@@ -40,7 +164,7 @@
                 <div class="icon-circle"><i class="fas fa-paper-plane"></i></div>
                 <span>Transférer</span>
             </a>
-            <a href="{% url 'comment_faire_un_depot' %}" class="action-item">
+            <a href="{% url 'prets:list'%}" class="action-item">
                 <div class="icon-circle"><i class="fas fa-university"></i></div>
                 <span>Aide</span>
             </a>
@@ -50,7 +174,7 @@
     <div class="bank-stats-row grid-3 animate-in delay-2">
         <div class="stat-tile">
             <span class="stat-title">Total des Dépôts</span>
-            <span class="stat-num">{{ total_depots }} CDF</span>
+            <span class="stat-num">{{ total_depots }} $</span>
         </div>
         <div class="stat-tile">
             <span class="stat-title">Portefeuille Filleuls</span>
@@ -103,11 +227,11 @@
             <a href="{% url 'liste_produits' %}" class="shortcut-btn">
                 <i class="fas fa-chart-line"></i> Investir
             </a>
-            <a href="{% url 'mon_code_parrainage' %}" class="shortcut-btn">
+            <a href="{% url 'profile' %}" class="shortcut-btn">
                 <i class="fas fa-user-plus"></i> Parrainer
             </a>
-            <a href="{% url 'mes_investissements' %}" class="shortcut-btn">
-                <i class="fas fa-file-invoice-dollar"></i> Contrats
+            <a href="#" class="shortcut-btn">
+                <i class="fas fa-file-invoice-dollar"></i> Faq
             </a>
         </div>
     </div>

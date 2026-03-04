@@ -5,7 +5,7 @@ from .models import Pret
 
 # Montants proposés en USD (chaînes converties en Decimal dans clean_montant)
 MONTANT_CHOICES = [
-    ('50.00', '50'),
+    ('20.00', '20'),
     ('100.00', '100'),
     
 ]
@@ -33,3 +33,10 @@ class DemandePretForm(forms.ModelForm):
         if duree is None or duree <= 0:
             raise forms.ValidationError('La durée doit être un nombre de mois positif.')
         return duree
+
+
+class DemandeRetraitForm(forms.Form):
+    """Formulaire simple pour demander un retrait crédit."""
+    montant = forms.DecimalField(min_value=1, label='Montant demandé ($)')
+    duree_mois = forms.IntegerField(min_value=1, initial=12, label='Durée (mois)')
+    taux_annuel = forms.DecimalField(min_value=0, initial=0, label='Taux annuel (%)')

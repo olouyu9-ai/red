@@ -16,7 +16,7 @@
         {% for transaction in transactions %}
         <tr>
             <td>{{ transaction.get_type_display }}</td>
-            <td>{{ transaction.montant }} FC</td>
+            <td>{{ transaction.montant }} $</td>
             <td>{{ transaction.reference|default:"-" }}</td>
             <td>{{ transaction.cree_le|date:"d/m/Y H:i" }}</td>
         </tr>

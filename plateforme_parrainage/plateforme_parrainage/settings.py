@@ -27,13 +27,13 @@ SECRET_KEY = 'django-insecure-b*!2isvhm#d!^-0x8=d-#g(!0yprh%uutl-6l*5gjz91q_s31q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["red-pv76.onrender.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["red-pv76.onrender.com", "127.0.0.1", "www.inverted.sbs", "inverted.sbs"]
 
 
 # Application definition
 # Autoriser ton domaine Render pour CSRF
 CSRF_TRUSTED_ORIGINS = [
-    "https://red-pv76.onrender.com",
+    "https://red-pv76.onrender.com", "https://inverted.sbs"
 ]
 INSTALLED_APPS = [
 
@@ -77,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'applications.noyau.middleware.AdminAccessMiddleware',
 ]
 
 ROOT_URLCONF = 'plateforme_parrainage.urls'

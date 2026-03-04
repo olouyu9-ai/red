@@ -1,313 +1,276 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block titre %}Gestion des Crédits | Inverted Pyramid{% endblock %}
+{% block titre %}Gestion des Crédits | Inverted {% endblock %}
 
 {% block contenu %}
+
 <div class="pro-dashboard">
 
-    
-        <div class="pro-header">
-            <div class="title-stack">
-                <div class="pro-badge">Système de Financement v2.4</div>
-                <h1 class="pro-title">Portefeuille de <span>Crédits</span></h1>
-                <p class="pro-subtitle">Consultez et gérez vos engagements financiers actifs.</p>
-            </div>
-            <div class="action-stack">
-                <a href="{% url 'prets:demander' %}" class="btn-primary-pro">
-                    <i class="fas fa-plus-circle"></i> Nouveau Financement
-                </a>
-            </div>
+
+    <div class="stats-summary">
+        <div class="stat-item">
+            <span>Total Engagements</span>
+            <strong>{{ prets|length }}</strong>
         </div>
-
-        <div class="stats-summary">
-            <div class="stat-item">
-                <span class="stat-label">Total Engagements</span>
-                <span class="stat-value">{{ prets|length }}</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <span class="stat-label">Disponibilité Système</span>
-                <span class="stat-value text-green">99.9%</span>
-            </div>
-        </div>
-    <div class="container mobile-fluid">
-        
-
-        <div class="loans-pro-grid">
-            {% for pret in prets %}
-            <div class="loan-pro-card">
-                <div class="card-top">
-                    <div class="loan-type">
-                        <div class="type-icon"><i class="fas fa-vault"></i></div>
-                        <div>
-                            <span class="type-name">Allocation Directe</span>
-                            <span class="type-ref">REF-{{ pret.pk|stringformat:"04d" }}</span>
-                        </div>
-                    </div>
-                    <div class="pro-status {% if pret.est_approuve %}active{% else %}pending{% endif %}">
-                        {% if pret.est_approuve %}Approuvé{% else %}Analyse{% endif %}
-                    </div>
-                </div>
-
-                <div class="card-mid">
-                    <div class="amount-display">
-                        <span class="currency">$</span>
-                        <span class="value">{{ pret.montant }}</span>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-bar" style="width: {% if pret.est_approuve %}100{% else %}25{% endif %}%"></div>
-                    </div>
-                </div>
-
-                <div class="card-bottom">
-                    <div class="detail-row">
-                        <div class="detail-item">
-                            <span class="d-label">Intérêt</span>
-                            <span class="d-val">{{ pret.taux_annuel }}%</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="d-label">Terme</span>
-                            <span class="d-val">{{ pret.duree_mois }} Mois</span>
-                        </div>
-                    </div>
-                    <a href="{% url 'prets:detail' pret.pk %}" class="btn-pro-outline">
-                        Gérer le contrat <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-            {% empty %}
-            <div class="pro-empty-state">
-                <div class="empty-graphic">
-                    <i class="fas fa-layer-group"></i>
-                </div>
-                <h3>Aucun historique détecté</h3>
-                <p>Votre compte n'affiche aucune demande de financement pour le moment.</p>
-                <a href="{% url 'prets:demander' %}" class="btn-primary-pro">Initialiser une demande</a>
-            </div>
-            {% endfor %}
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span>Disponibilité</span>
+            <strong class="green">99.9%</strong>
         </div>
     </div>
+
+    <div class="loans-pro-grid">
+
+        {% for pret in prets %}
+        <div class="loan-pro-card">
+
+            <div class="card-top">
+                <div class="loan-type">
+                    <i class="fas fa-university"></i>
+                    <div>
+                        <span class="type-name">Allocation Directe</span>
+                        <span class="type-ref">REF-{{ pret.pk|stringformat:"04d" }}</span>
+                    </div>
+                </div>
+
+                <div class="status {% if pret.est_approuve %}approved{% else %}pending{% endif %}">
+                    {% if pret.est_approuve %}Approuvé{% else %}Analyse{% endif %}
+                </div>
+            </div>
+
+            <div class="amount-display">
+                <span class="currency">$</span>
+                <span class="value counter" data-value="{{ pret.montant }}">0</span>
+            </div>
+
+            <div class="card-bottom">
+                <div class="detail-row">
+                    <div>
+                        <span class="d-label">Intérêt</span>
+                        <span class="d-val">{{ pret.taux_annuel }}%</span>
+                    </div>
+                    <div>
+                        <span class="d-label">Durée</span>
+                        <span class="d-val">{{ pret.duree_mois }} Mois</span>
+                    </div>
+                </div>
+
+                <!--  <a href="{% url 'prets:detail' pret.pk %}" class="btn-outline">
+                    Gérer <i class="fas fa-arrow-right"></i>
+                </a>-->
+            </div>
+
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-layer-group"></i>
+            <h3>Aucun crédit actif</h3>
+            <p>Démarrez une demande pour voir apparaître vos contrats ici.</p>
+            <a href="{% url 'prets:demander' %}" class="btn-primary-pro">
+                Initialiser une demande
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+
 </div>
-
-
 
 <style>
 :root {
-    --primary-color: #2563eb;
-    --primary-hover: #1d4ed8;
-    --bg-main: #f8fafc;
-    --card-bg: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --border-radius: 12px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+    --bg:#f8fafc;
+    --card:#ffffff;
+    --primary:#0ea5e9;
+    --gold:#d4af37;
+    --green:#10b981;
+    --text:#1e293b;
+    --gray:#64748b;
 }
 
+/* GENERAL */
 .pro-dashboard {
-    background-color: var(--bg-main);
-    min-height: 100vh;
-    padding: 2rem 1rem;
-    font-family: 'Inter', system-ui, sans-serif;
-    color: var(--text-main);
+    padding:40px 20px;
+    background:var(--bg);
+    min-height:100vh;
+    color:var(--text);
+    font-family:'Segoe UI',sans-serif;
 }
 
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-/* Header & Titre */
 .pro-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 2.5rem;
-}
-
-.pro-badge {
-    display: inline-block;
-    background: #e0e7ff;
-    color: #4338ca;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+    flex-wrap:wrap;
 }
 
 .pro-title {
-    font-size: 2.25rem;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    margin: 0;
+    font-size:28px;
+    font-weight:800;
+}
+.pro-title span { color:var(--gold); }
+
+.pro-badge {
+    font-size:12px;
+    letter-spacing:2px;
+    color:var(--gold);
+    margin-bottom:6px;
 }
 
-.pro-title span { color: var(--primary-color); }
-.pro-subtitle { color: var(--text-muted); margin-top: 0.5rem; }
+.pro-subtitle {
+    font-size:14px;
+    color:var(--gray);
+}
 
-/* Boutons */
 .btn-primary-pro {
-    background: var(--primary-color);
-    color: white;
-    padding: 12px 24px;
-    border-radius: var(--border-radius);
-    text-decoration: none;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
+    background:var(--primary);
+    color:#fff;
+    padding:12px 18px;
+    border-radius:12px;
+    font-weight:700;
+    text-decoration:none;
+    transition:.3s;
 }
-
 .btn-primary-pro:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
+    transform:translateY(-3px);
+    box-shadow:0 8px 20px rgba(14,165,233,.4);
 }
 
-/* Stats */
+/* STATS */
 .stats-summary {
-    display: flex;
-    gap: 2rem;
-    background: white;
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid #e2e8f0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+    background:#ffffff;
+    padding:20px;
+    border-radius:16px;
+    margin-bottom:40px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+.stat-item span { color:var(--gray); font-size:13px; }
+.stat-item strong { display:block; font-size:18px; margin-top:5px; }
+.green { color:var(--green); }
+.stat-divider {
+    width:1px;
+    height:40px;
+    background:#e5e7eb;
 }
 
-.stat-item { display: flex; flex-direction: column; }
-.stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
-.stat-value { font-size: 1.5rem; font-weight: 700; }
-.stat-divider { width: 1px; background: #e2e8f0; }
-.text-green { color: var(--success); }
-
-/* Grille de Cartes */
+/* GRID */
 .loans-pro-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 1.5rem;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
 }
 
+/* CARD */
 .loan-pro-card {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    border: 1px solid #e2e8f0;
-    padding: 1.5rem;
-    transition: transform 0.2s, box-shadow 0.2s;
-    position: relative;
-    overflow: hidden;
+    background:var(--card);
+    padding:25px;
+    border-radius:20px;
+    transition:.3s;
+    box-shadow:0 4px 20px rgba(0,0,0,.05);
 }
-
 .loan-pro-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+    transform:translateY(-4px);
 }
 
 .card-top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
 }
 
-.loan-type { display: flex; gap: 12px; align-items: center; }
-.type-icon {
-    width: 40px; height: 40px;
-    background: #f1f5f9;
-    border-radius: 10px;
-    display: grid; place-items: center;
-    color: var(--primary-color);
+.loan-type {
+    display:flex;
+    gap:10px;
+    align-items:center;
 }
 
-.type-name { display: block; font-weight: 700; font-size: 0.95rem; }
-.type-ref { font-size: 0.75rem; color: var(--text-muted); }
-
-/* Statut Badge */
-.pro-status {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 6px;
-    height: fit-content;
+.status {
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
 }
-.pro-status.active { background: #dcfce7; color: #166534; }
-.pro-status.pending { background: #fef9c3; color: #854d0e; }
-
-/* Montant et Barre */
-.card-mid { margin-bottom: 1.5rem; }
-.amount-display { margin-bottom: 10px; }
-.currency { font-size: 1.2rem; font-weight: 600; color: var(--text-muted); }
-.value { font-size: 2rem; font-weight: 800; }
-
-.progress-container {
-    height: 6px;
-    background: #f1f5f9;
-    border-radius: 10px;
-    overflow: hidden;
+.approved {
+    background:rgba(16,185,129,.2);
+    color:var(--green);
 }
-.progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary-color), #60a5fa);
-    transition: width 1s ease-in-out;
+.pending {
+    background:rgba(234,179,8,.2);
+    color:#facc15;
 }
 
-/* Détails et Actions */
+/* AMOUNT */
+.amount-display {
+    font-size:28px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+.currency { color:var(--primary); }
+
+/* DETAILS */
 .detail-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid #f1f5f9;
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+.d-label {
+    display:block;
+    font-size:12px;
+    color:var(--gray);
+}
+.d-val {
+    font-weight:700;
 }
 
-.d-label { display: block; font-size: 0.75rem; color: var(--text-muted); }
-.d-val { font-weight: 600; }
-
-.btn-pro-outline {
-    display: block;
-    text-align: center;
-    padding: 10px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    text-decoration: none;
-    color: var(--text-main);
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.2s;
+.btn-outline {
+    display:block;
+    text-align:center;
+    padding:10px;
+    border:1px solid var(--primary);
+    border-radius:10px;
+    text-decoration:none;
+    color:var(--primary);
+    transition:.3s;
+}
+.btn-outline:hover {
+    background:var(--primary);
+    color:#fff;
 }
 
-.btn-pro-outline:hover {
-    background: #f8fafc;
-    border-color: var(--primary-color);
-    color: var(--primary-color);
+/* EMPTY */
+.empty-state {
+    text-align:center;
+    background:var(--card);
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 4px 20px rgba(0,0,0,.05);
 }
-
-/* État Vide */
-.pro-empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 4rem 2rem;
-    background: white;
-    border-radius: var(--border-radius);
-    border: 2px dashed #e2e8f0;
+.empty-state i {
+    font-size:40px;
+    margin-bottom:15px;
+    color:var(--primary);
 }
-
-.empty-graphic { font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem; }
-
-@media (max-width: 768px) {
-    .pro-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-    .action-stack { width: 100%; }
-    .btn-primary-pro { justify-content: center; }
-}
-
-
 </style>
+
+<script>
+/* Compteur animé */
+document.querySelectorAll(".counter").forEach(el=>{
+    let target=parseFloat(el.dataset.value);
+    let count=0;
+    let step=target/40;
+
+    let interval=setInterval(()=>{
+        count+=step;
+        if(count>=target){count=target; clearInterval(interval);}
+        el.textContent=count.toFixed(0);
+    },20);
+});
+</script>
 
 {% endblock %}

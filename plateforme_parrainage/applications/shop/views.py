@@ -139,7 +139,7 @@ def create_order(request):
 
         # 1. Validation de base
         if not amount_raw or not refc:
-            messages.error(request, "montant et référence sont obligatoires.")
+            messages.error(request, "Le montant et la référence sont obligatoires.")
             return render(request, "deposit_form.html")
 
         if True:
@@ -147,12 +147,12 @@ def create_order(request):
             
             # Vérifier si cette référence est déjà utilisée dans une commande payée
             if Order.objects.filter(reference_code=ref, is_paid=True).exists():
-                messages.error(request, "référence déjà été validée.")
+                messages.error(request, "Cette référence a déjà été traitée.")
                 return render(request, "deposit_form.html")
             
             # Vérifier si cette référence est déjà utilisée dans une commande non payé
             if Order.objects.filter(reference_code=ref, is_paid=False).exists():
-                messages.error(request, " référence est déjà utilisée .")
+                messages.error(request, "Cette référence est déjà enregistrée.")
                 return render(request, "deposit_form.html")
             try:
                     with transaction.atomic():
@@ -207,7 +207,7 @@ def create_order(request):
                             
                             else:
                                 # Montant incorrect
-                                messages.error(request, f"Le montant  ({msg.amount}) ne correspond pas à votre saisie ({order.amount}).")
+                                messages.error(request, f"Le montant fourni ({msg.amount}) ne correspond pas à celui saisi ({order.amount}).")
                                 return render(request, "deposit_form.html")
                         
                         else:
@@ -216,7 +216,7 @@ def create_order(request):
                             request.session['last_order_id'] = order.id
                             return render(request, "waiting.html", {"order": order})
             except IntegrityError:
-                messages.error(request, "Veuillez réessayer.")
+                messages.error(request, "Veuillez tenter à nouveau.")
         
 
     return render(request, "deposit_form.html")

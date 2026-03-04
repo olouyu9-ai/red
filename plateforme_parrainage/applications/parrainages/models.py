@@ -21,4 +21,4 @@ class BonusParrainage(models.Model):
         unique_together = ['parrain', 'filleul']  # Un seul bonus par paire
 
     def __str__(self):
-        return f"Bonus unique - {self.montant} FC"
+        return f"Bonus unique - {self.montant} $"

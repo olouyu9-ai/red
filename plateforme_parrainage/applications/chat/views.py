@@ -5,8 +5,12 @@ from django.views.generic import ListView, DetailView
 from .models import ChatGroup, Message, GroupMembership
 from .forms import MessageForm, CreateGroupForm
 from django.contrib import messages
+from applications.comptes.models import Utilisateur
 
 
+#from django.contrib.auth.mixins import LoginRequiredMixin
+
+#class GroupListView(LoginRequiredMixin, ListView):
 class GroupListView(ListView):
     model = ChatGroup
     template_name = 'chat/group_list.html'
@@ -31,6 +35,9 @@ class GroupDetailView(DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['messages'] = self.object.messages.select_related('sender')[:200]
         ctx['form'] = MessageForm()
+        #ctx['members_count'] = self.object.members.count()
+        ctx['members_normal'] = Utilisateur.objects.count()  # Affiche le nombre total d'utilisateurs inscrits
+        ctx['members_count'] = 3200 + ctx["members_normal"]
         return ctx
 
 
@@ -43,7 +50,7 @@ def create_group(request):
             group.created_by = request.user
             group.save()
             GroupMembership.objects.create(user=request.user, group=group, is_admin=True)
-            messages.success(request, 'Groupe créé.')
+            messages.success(request, 'Groupe créé avec succès.')
             return redirect('chat:group_detail', pk=group.pk)
     else:
         form = CreateGroupForm()

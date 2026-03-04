@@ -17,13 +17,13 @@
                 {% csrf_token %}
                 
                 <div class="bank-form-group">
-                    <label for="montant">Montant à retirer (FC)</label>
+                    <label for="montant">Montant à retirer ($)</label>
                     <div class="bank-input-wrapper">
-                        <span class="currency-prefix">FC</span>
+                        <span class="currency-prefix">$</span>
                         <input type="number" id="montant" name="montant" step="100" min="5000" placeholder="Min. 5 000" required>
                     </div>
                     <div class="balance-helper">
-                        <i class="fas fa-wallet"></i> Solde disponible: <strong>{{ solde }} FC</strong>
+                        <i class="fas fa-wallet"></i> Solde disponible: <strong>{{ solde }} $</strong>
                     </div>
                 </div>
 
@@ -85,7 +85,7 @@
                 </div>
                 <div class="detail-line">
                     <span>Montant min.</span>
-                    <strong>5 000 FC</strong>
+                    <strong>5 000 $</strong>
                 </div>
             </div>
         </div>

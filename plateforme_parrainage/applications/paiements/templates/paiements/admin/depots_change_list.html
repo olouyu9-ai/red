@@ -18,15 +18,15 @@
             <tbody>
                 <tr class="row-total">
                     <td> Total des dépôts </td>
-                    <td> {{ total_depots|default:"0" }} CDF </td>
+                    <td> {{ total_depots|default:"0" }} $ </td>
                 </tr>
                 <tr class="row-confirmed">
                     <td> Dépôts confirmés </td>
-                    <td> {{ total_confirme|default:"0" }} CDF </td>
+                    <td> {{ total_confirme|default:"0" }} $ </td>
                 </tr>
                 <tr class="row-pending">
                     <td> Dépôts en attente </td>
-                    <td> {{ total_en_attente|default:"0" }} CDF </td>
+                    <td> {{ total_en_attente|default:"0" }} $ </td>
                 </tr>
             </tbody>
         </table>
@@ -45,7 +45,7 @@
                 {% for stat in methodes_stats %}
                 <tr>
                     <td> {{ stat.methode }} </td>
-                    <td> {{ stat.total|default:"0" }} CDF </td>
+                    <td> {{ stat.total|default:"0" }} $ </td>
                     <td> {{ stat.count }} </td>
                 </tr>
                 {% endfor %}

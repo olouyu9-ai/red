@@ -2,15 +2,202 @@
 {% load static %}
 
 {% block contenu %}
-<div class="container">
-    <h1>Mes groupes</h1>
-    <p><a href="{% url 'chat:group_create' %}" class="btn">Créer un groupe</a></p>
-    <ul>
+
+<style>
+/* ===== CONTAINER ===== */
+.groups-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== HEADER ===== */
+.groups-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.groups-header h1 {
+    font-size: 28px;
+    color: #333;
+}
+
+/* ===== BUTTON ===== */
+.btn-create {
+    background: linear-gradient(135deg, #4CAF50, #2e7d32);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s ease;
+    font-weight: 500;
+}
+
+.btn-create:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* ===== SEARCH ===== */
+.search-box {
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+    transition: 0.3s;
+}
+
+.search-box input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76,175,80,0.5);
+}
+
+/* ===== GRID ===== */
+.groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* ===== CARD ===== */
+.group-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+}
+
+.group-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* ===== AVATAR ===== */
+.group-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2196F3, #0d47a1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* ===== INFO ===== */
+.group-info h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.group-info h3 a {
+    text-decoration: none;
+    color: #333;
+}
+
+.group-info p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #777;
+}
+
+/* ===== EMPTY ===== */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    background: #f5f5f5;
+    border-radius: 10px;
+    grid-column: 1 / -1;
+}
+
+/* ===== ANIMATION ===== */
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+</style>
+
+
+<div class="groups-container">
+    
+    <div class="groups-header">
+        <h1>👥 Mes groupes</h1>
+        <a href="{% url 'chat:group_create' %}" class="btn-create">
+            + Créer un groupe
+        </a>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Rechercher un groupe...">
+    </div>
+
+    <div class="groups-grid" id="groupsList">
         {% for g in groups %}
-            <li><a href="{% url 'chat:group_detail' pk=g.pk %}">{{ g.name }}</a> — créé par {{ g.created_by }}</li>
+        <div class="group-card fade-in">
+            <div class="group-avatar">
+                {{ g.name|first|upper }}
+            </div>
+            <div class="group-info">
+                <h3>
+                    <a href="{% url 'chat:group_detail' pk=g.pk %}">
+                        {{ g.name }}
+                    </a>
+                </h3>
+                <p>Créé par <strong>{{ g.created_by }}</strong></p>
+            </div>
+        </div>
         {% empty %}
-            <li>Aucun groupe pour l'instant.</li>
+        <div class="empty-state">
+            <p>Aucun groupe pour l'instant.</p>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
+
 </div>
+
+
+<script>
+// ===== RECHERCHE DYNAMIQUE =====
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let cards = document.querySelectorAll(".group-card");
+
+    cards.forEach(function(card) {
+        let text = card.innerText.toLowerCase();
+        card.style.display = text.includes(filter) ? "flex" : "none";
+    });
+});
+
+// ===== ANIMATION AU CHARGEMENT =====
+window.addEventListener("load", function() {
+    const cards = document.querySelectorAll(".fade-in");
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.style.opacity = "1";
+        }, index * 100);
+    });
+});
+</script>
+
 {% endblock %}

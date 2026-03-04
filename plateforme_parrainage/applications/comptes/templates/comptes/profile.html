@@ -222,30 +222,14 @@
                 </div>
             </div>
 
-            <div class="sidebar">
-                <div class="card finance-card">
-                    <div class="score-badge">SCORE CRÉDIT : {{ profil.score|default:"850" }}</div>
-                    <div class="label" style="color: rgba(255,255,255,0.6)">Limite d'emprunt</div>
-                    <div class="amount-large"><span style="font-size: 1.2rem; vertical-align: super;">$</span>{{ utilisateur.limite_emprunt|default:"0" }}</div>
-                    
-                    <div class="progress-container">
-                        <div class="progress-labels">
-                            <span>Utilisé: {{ utilisateur.montant_emprunt_actuel|default:"0" }} $</span>
-                            <span id="percentText">0%</span>
-                        </div>
-                        <div class="progress-bg">
-                            <div class="progress-fill" id="progressBar"></div>
-                        </div>
-                    </div>
-                </div>
+            
 
                 <div class="card">
-                    <h2 class="card-title">🎁 Parrainage</h2>
+                    <h2 class="card-title">Parrainage</h2>
                     <p style="font-size: 0.85rem; color: var(--text-light); text-align: center;">Partagez votre lien et gagnez des récompenses</p>
                     
                     <div class="ref-container">
-                        <span class="label">VOTRE CODE</span>
-                        <span class="code-text" onclick="copyTextOnly('{{ profil.code_parrainage }}')">{{ profil.code_parrainage|default:"AUCUN" }}</span>
+                       
                         
                         <div class="link-box">
                             <input type="text" id="refLink" value="{{ request.scheme }}://{{ request.get_host }}/pyramid0001/?ref={{ profil.code_parrainage }}" readonly>

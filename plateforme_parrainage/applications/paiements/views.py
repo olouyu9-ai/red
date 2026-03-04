@@ -17,9 +17,12 @@ import uuid
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from applications.noyau.decorators import can_withdraw_required
+
 
 
 @login_required
+@can_withdraw_required
 def vue_retrait(request):
     """Vue pour créer une demande de retrait."""
     from django.db.utils import OperationalError
@@ -43,27 +46,27 @@ def vue_retrait(request):
 
             # Vérifications de base
             if montant <= 0:
-                messages.error(request, f"Le montant doit être supérieur à zéro.\nSolde: {solde} CDF")
+                messages.error(request, f"La somme doit être positive.\nSolde: {solde} CDF")
                 return redirect('retrait')
 
             try:
 
                 if montant < 5000 and int(solde_capital) != 0:
-                    messages.error(request, f"Le montant minimum pour un retrait est de 5000 FC.\nSolde: {solde} CDF \n les {solde_capital} CDF est votre capital")
+                    messages.error(request, f"Le montant minimum requis pour un retrait est de 5000 FC.\nSolde: {solde} CDF \n les {solde_capital} CDF est votre capital")
                     return redirect('retrait')
 
                 if solde < montant and int(solde_capital) != 0:
-                    messages.error(request, f"Solde insuffisant pour effectuer ce retrait.\nSolde: {solde} CDF . \n les {solde_capital} CDF est votre capital")
+                    messages.error(request, f"Vos ressources sont insuffisantes pour effectuer ce retrait.\nSolde: {solde} CDF . \n les {solde_capital} CDF est votre capital")
                     return redirect('retrait')
             except:
                 pass
 
             if montant < 5000 :
-                    messages.error(request, f"Le montant minimum pour un retrait est de 5000 FC.\nSolde: {solde} CDF ")
+                    messages.error(request, f"La somme requise minimale pour un retrait est de 5000 FC.\nSolde: {solde} CDF ")
                     return redirect('retrait')
 
             if solde < montant :
-                    messages.error(request, f"Solde insuffisant pour effectuer ce retrait.\nSolde: {solde} CDF .")
+                    messages.error(request, f"Le solde n'est pas suffisant pour effectuer ce retrait.\nSolde: {solde} CDF .")
                     return redirect('retrait')
 
             # Création du retrait
@@ -87,7 +90,7 @@ def vue_retrait(request):
             return redirect('liste_retraits')
 
         except ValueError:
-            messages.error(request, "Montant invalide. Veuillez entrer un montant valide.")
+            messages.error(request, "Montant non valide. Merci de saisir un montant valide.")
             return redirect('retrait')
 
     return render(request, 'paiements/retrait.html', {'solde': solde})

@@ -22,7 +22,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 import json
-from applications.comptes.models import ProfilUtilisateur
+from applications.comptes.models import ProfilUtilisateur, Utilisateur
 
 
 
@@ -31,9 +31,6 @@ from applications.comptes.models import ProfilUtilisateur
 # ####################################################################
 # #####################################################################"
 
-def vue_accueil(request):
-    """Vue pour la page d'accueil."""
-    return render(request, 'noyau/accueil.html')
 
 @login_required(login_url='accueil')
 def vue_tableau_de_bord(request):
@@ -91,6 +88,8 @@ def vue_tableau_de_bord(request):
                     # Récupérer les achats actifs
                     achats_actifs = Achat.objects.filter(utilisateur=request.user, statut='actif')
 
+                    bp_user = Utilisateur.objects.get(username = request.user)
+                    
                     return render(request, 'noyau/tableau_de_bord.html', {
                         'transactions': transactions,
                         'solde': solde,
@@ -101,7 +100,8 @@ def vue_tableau_de_bord(request):
                         'capital_actifs':capital_actifs,
                         'achats' : achats,
                         'total_trader_inactif':  total_trader_inactif,
-                        'totaux_gen': totaux_gen # gerant tous
+                        'totaux_gen': totaux_gen, # gerant tous
+                        'bp_user':bp_user,
 
 
                     })
@@ -109,7 +109,7 @@ def vue_tableau_de_bord(request):
 
 
             except ProfilUtilisateur.DoesNotExist:
-                messages.error(request, "Votre profil n'existe pas. Il va être créé.")
+                messages.error(request, "Votre profil est manquant. Il sera créé automatiquement.")
                 ProfilUtilisateur.objects.create(utilisateur=request.user)
                 solde = 0
 
@@ -130,7 +130,7 @@ def vue_connexion(request):
             login(request, utilisateur)
             return redirect('tableau_de_bord')
         else:
-            messages.error(request, "Nom ou mot de passe incorrect.")
+            messages.error(request, "Identifiant ou mot de passe invalide.")
     return render(request, 'noyau/connexion.html')
 
 def vue_deconnexion(request):
@@ -217,17 +217,8 @@ def get_achats_expirés_non_reinvestis(request):
 
 
 
-def faq(request):
-     return render(request, 'noyau/faq.html')
 
-def condition_utilisation(request):
-     return render(request, 'noyau/condition.html')
 
-def politique_confid(request):
-     return render(request, 'noyau/politique_con.html')
-
-def comment_faire_un_depot(request):
-     return render(request, 'noyau/comment_faire_depot.html')
 
 
 # dans views.py
@@ -235,6 +226,10 @@ from django.shortcuts import render
 
 def custom_404(request, exception):
     return render(request, "404.html", status=404)
+
+
+def cache_admin(request):
+    return render(request, "404.html")
 
 
 @login_required
@@ -255,11 +250,7 @@ def withdraw_status(request):
     return JsonResponse(payload)
 
 
-def admin_fonction(request):
-     return redirect('admin')
 
-def resilier_contrat(request):
-    return render(request, 'resilier.html')
 
 
 
