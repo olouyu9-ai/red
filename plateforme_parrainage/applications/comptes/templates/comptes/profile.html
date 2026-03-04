@@ -188,13 +188,32 @@
             
             <div class="main-content">
                 <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                        <div>
-                            <h1 style="margin:0; font-size: 1.8rem; font-weight: 800;">Mon Profil</h1>
-                            <p style="color: var(--text-light); margin: 5px 0 0 0;">Vérification Niveau {{ profil.niveau_kyc|default:"0" }}</p>
-                        </div>
-                        <a href="{% url 'profile_edit' %}" style="text-decoration:none; color: var(--dark); font-weight: 700; border: 1.5px solid #e2e8f0; padding: 8px 15px; border-radius: 10px;">Modifier</a>
+                    
+
+
+
+
+
+
+
+
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <div>
+                        <h1 style="margin:0; font-size: 1.8rem; font-weight: 800;">Mon Profil</h1>
+                        <p style="color: var(--text-light); margin: 5px 0 0 0;">Vérification Niveau {{ profil.niveau_kyc|default:"0" }}</p>
                     </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <a href="{% url 'profile_edit' %}" style="text-decoration:none; color: var(--dark); font-weight: 700; border: 1.5px solid #e2e8f0; padding: 8px 15px; border-radius: 10px;">Modifier</a>
+                        <a href="{% url 'deconnexion' %}" style="text-decoration:none; color: var(--white); font-weight: 700; background: var(--danger); padding: 8px 15px; border-radius: 10px;">Déconnexion</a>
+                    </div>
+                </div>
+
+
+
+
+
 
                     <h2 class="card-title">👤 Infos Personnelles</h2>
                     <div class="info-list">
