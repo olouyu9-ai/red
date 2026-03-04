@@ -136,7 +136,7 @@ def vue_connexion(request):
 def vue_deconnexion(request):
     """Vue pour la déconnexion."""
     logout(request)
-    return redirect('accueil')
+    return redirect('connexion')
 
 
 
