@@ -123,8 +123,8 @@ def vue_tableau_de_bord(request):
 def vue_connexion(request):
     """Vue pour la connexion des utilisateurs."""
     if request.method == 'POST':
-        email = request.POST.get('email')
-        mot_de_passe = request.POST.get('mot_de_passe')
+        email = request.POST.get('username')
+        mot_de_passe = request.POST.get('password')
         utilisateur = authenticate(request, username=email, password=mot_de_passe)
         if utilisateur is not None:
             login(request, utilisateur)
