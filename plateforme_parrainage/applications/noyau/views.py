@@ -115,7 +115,7 @@ def vue_tableau_de_bord(request):
 
             return render(request, 'noyau/tableau_de_bord.html', {'solde': solde})
         else:
-             return redirect('accueil')
+             return redirect('connexion')
 
 
 
