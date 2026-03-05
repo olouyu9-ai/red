@@ -4,9 +4,6 @@ from . import views
 app_name = 'prets'
 
 urlpatterns = [
-    path('pyramid100', views.pret_list, name='list'),
-    path('demander/', views.demander_pret, name='demander'),
-    path('<int:pk>/', views.pret_detail, name='detail'),
 
     # pages pour retraits crédit
     path('retraits/', views.voir_retraits, name='voir_retraits'),

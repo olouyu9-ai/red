@@ -24,7 +24,7 @@ def vue_inscription(request):
             return redirect('inscription')
 
         if Utilisateur.objects.filter(telephone=telephone).exists():
-            messages.error(request, "Ce numéro de téléphone est déjà enregistré.")
+            messages.error(request, "Ce numéro de téléphone occupé.")
             return redirect('inscription')
         try:
                 # Création de l'utilisateur
@@ -53,8 +53,8 @@ def vue_inscription(request):
                 utilisateur = authenticate(request, username=email, password=mot_de_passe)
                 if utilisateur is not None:
                     login(request, utilisateur)
-                    bonus_inscription = 500
-                      # Créditer 500FC le portefeuille de l'utilisateur a l'inscription
+                    bonus_inscription = 500 # Bonus de 5$ à l'inscription
+                      # Créditer 5$ le portefeuille de l'utilisateur a l'inscription
                     nouveau_solde = request.user.profil.get_solde() + bonus_inscription
                     TransactionPortefeuille.objects.create(
                             utilisateur=request.user,

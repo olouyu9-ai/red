@@ -32,7 +32,7 @@ from applications.comptes.models import ProfilUtilisateur, Utilisateur
 # #####################################################################"
 
 
-@login_required(login_url='accueil')
+@login_required(login_url='connexion')
 def vue_tableau_de_bord(request):
         #capital, created = CapitalClient.objects.get_or_create(utilisateur=request.user )
 
@@ -128,7 +128,7 @@ def vue_connexion(request):
         utilisateur = authenticate(request, username=email, password=mot_de_passe)
         if utilisateur is not None:
             login(request, utilisateur)
-            return redirect('tableau_de_bord')
+            return redirect('liste_produits')
         else:
             messages.error(request, "Identifiant ou mot de passe invalide.")
     return render(request, 'noyau/connexion.html')

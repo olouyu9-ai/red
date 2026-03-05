@@ -61,7 +61,7 @@ def vue_liste_produits(request):
             "id": produit.id,
             "nom": produit.nom,
             "description": produit.description,
-            "prix": produit.prix,
+            "prix": produit.prix,  # Affiche le prix en dollars
             "duree_jours": produit.duree_jours,
             "taux_quotidien": gains_conv,
             "benefice": benefice,

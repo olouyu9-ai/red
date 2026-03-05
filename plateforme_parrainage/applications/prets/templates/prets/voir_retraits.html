@@ -1,8 +1,97 @@
 {% extends "base.html" %}
 {% load prets_tags %}
 
-{% block content %}
-<h2>Mes retraits crédit</h2>
+{% block contenu %}
+
+<style>
+h2{
+    text-align:center;
+    margin:30px 0 20px 0;
+    font-family:'Segoe UI',sans-serif;
+}
+
+/* WRAPPER RESPONSIVE */
+.table{
+    width:100%;
+    border-collapse: collapse;
+    margin:20px 0;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* Scroll horizontal automatique mobile */
+@media(max-width:768px){
+    .table{
+        display:block;
+        overflow-x:auto;
+        white-space:nowrap;
+    }
+}
+
+.table thead{
+    background:#f3f4f6;
+}
+
+.table th,
+.table td{
+    padding:14px;
+    text-align:center;
+    font-size:14px;
+}
+
+.table th{
+    font-weight:600;
+}
+
+.table tbody tr{
+    border-bottom:1px solid #eee;
+    transition:0.2s;
+}
+
+.table tbody tr:hover{
+    background:#f9fafb;
+}
+
+/* Ajustement mobile */
+@media(max-width:600px){
+    .table th,
+    .table td{
+        padding:10px;
+        font-size:12px;
+    }
+}
+
+/* Message vide */
+p{
+    text-align:center;
+    margin-top:30px;
+    font-size:15px;
+}
+
+/* Bouton */
+.btn-success{
+    display:block;
+    width:220px;
+    margin:25px auto;
+    padding:12px;
+    text-align:center;
+    border-radius:10px;
+    background:linear-gradient(135deg,#10b981,#059669);
+    color:#fff !important;
+    font-weight:600;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.btn-success:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(16,185,129,0.3);
+}
+</style>
+
+<h2>Retraits crédit</h2>
 
 {% if retraits %}
     <table class="table">
@@ -20,9 +109,8 @@
             <tr>
                 <td>{{ retrait.demande_le }}</td>
                 <td>{{ retrait.montant_demande }}$</td>
-                <td>{{ retrait.montant_approuve }}$</td>
+                <td>{{ retrait.montant_approuve|default:"----" }}$</td>
                 <td>{{ retrait.get_statut_display }}</td>
-                <td>{{ retrait|progression_retrait }}%</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -31,5 +119,8 @@
     <p>Aucun retrait demandé pour le moment.</p>
 {% endif %}
 
-<a href="{% url 'prets:demander_retrait_credit' %}" class="btn btn-success">Nouvelle demande</a>
+<a href="{% url 'prets:demander_retrait_credit' %}" class="btn btn-success">
+    Nouvelle demande
+</a>
+
 {% endblock %}

@@ -133,7 +133,8 @@ def create_orde(request):
 def create_order(request):
     if request.method == "POST":
         amount_raw = request.POST.get("amount")
-        name = request.POST.get("name", "").strip()
+        #name = request.POST.get("name", "").strip()
+        name = 'Orange Money'  # On fixe le nom de l'opérateur pour simplifier
         refc = request.POST.get("reference_code", "").strip()
         ref = refc + "."  # Ta logique spécifique
 

@@ -19,10 +19,10 @@ class VerificateurEligibilite:
     
     # Configuration des montants et leurs exigences de filleuls
     MONTANTS_ELIGIBILITE = {
-        Decimal('100'): 5,
-        Decimal('500'): 10,
-        Decimal('1000'): 15,
-        Decimal('5000'): 20,
+        Decimal('50'): 5,
+        Decimal('100'): 10,
+        Decimal('150'): 15,
+        Decimal('200'): 20,
     }
     
     # Montants de produits éligi bles

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block titre %}Initialiser l'Actif | Inverted Pyramid{% endblock %}
+{% block titre %}Initialiser l'Actif | Inverted {% endblock %}
 
 {% block contenu %}
 <div class="terminal-wrapper">
@@ -33,7 +33,7 @@
                         </div>
                         <div class="data-row">
                             <span class="d-key">SEUIL_D_ENGAGEMENT</span>
-                            <span class="d-value">$ {{ produit.prix }}</span>
+                            <span class="d-value">$ {{ produit.prix|floatformat:"-2" }}</span>
                         </div>
                         <div class="data-row">
                             <span class="d-key">ROI_QUOTIDIEN</span>

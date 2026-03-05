@@ -17,13 +17,19 @@ class GroupListView(ListView):
     context_object_name = 'groups'
 
     def get_queryset(self):
-        # Affiche les groupes auxquels l'utilisateur est membre, ou tous si staff
-        user = self.request.user
-        if  user.is_authenticated:
-            return ChatGroup.objects.all()
-        if user.is_staff:
-            return ChatGroup.objects.all()
-        return ChatGroup.objects.filter(members=user)
+
+        try:
+            # Affiche les groupes auxquels l'utilisateur est membre, ou tous si staff
+            user = self.request.user
+            if  user.is_authenticated:
+                return ChatGroup.objects.all()
+            if user.is_staff:
+                return ChatGroup.objects.all()
+            return ChatGroup.objects.filter(members=user)
+        except Exception as e:
+            # En cas d'erreur, retourne une queryset vide et affiche un message d'erreur
+            messages.error(self.request, " connectez-vous pour voir les groupes disponibles.")
+            return ChatGroup.objects.none()
 
 
 class GroupDetailView(DetailView):

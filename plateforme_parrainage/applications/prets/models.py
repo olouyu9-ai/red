@@ -87,14 +87,14 @@ class EligibiliteRetrait(models.Model):
     Contrôle que l'utilisateur a suffisamment de filleuls avec achats validés.
     """
     MONTANTS_ELIGIBILITE = [
-        (100, '5 filleuls minimum'),
-        (500, '10 filleuls minimum'),
-        (1000, '15 filleuls minimum'),
-        (5000, '20 filleuls minimum'),
+        (50, '5 filleuls minimum'),
+        (100, '10 filleuls minimum'),
+        (150, '15 filleuls minimum'),
+        (200, '20 filleuls minimum'),
     ]
     
     utilisateur = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='eligibilite_retrait')
-    montant_max_autorise = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('100.00'))
+    montant_max_autorise = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('50.00'))
     nombre_filleuls_requis = models.PositiveIntegerField(default=5)
     nombre_filleuls_valides = models.PositiveIntegerField(default=0, help_text="Nombre de filleuls avec achats validés")
     est_eligible = models.BooleanField(default=False)
