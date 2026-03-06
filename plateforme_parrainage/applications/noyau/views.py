@@ -88,8 +88,11 @@ def vue_tableau_de_bord(request):
                     # Récupérer les achats actifs
                     achats_actifs = Achat.objects.filter(utilisateur=request.user, statut='actif')
 
-                    bp_user = Utilisateur.objects.get(username = request.user)
-                    
+                    try:
+                         bp_user = Utilisateur.objects.get(username = request.user)
+                    except Utilisateur.DoesNotExist:
+                         bp_user = None
+
                     return render(request, 'noyau/tableau_de_bord.html', {
                         'transactions': transactions,
                         'solde': solde,
