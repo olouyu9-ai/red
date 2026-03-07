@@ -53,8 +53,8 @@ def vue_inscription(request):
                 utilisateur = authenticate(request, username=email, password=mot_de_passe)
                 if utilisateur is not None:
                     login(request, utilisateur)
-                    bonus_inscription = 500 # Bonus de 5$ à l'inscription
-                      # Créditer 5$ le portefeuille de l'utilisateur a l'inscription
+                    bonus_inscription = 1 # Bonus de 5$ à l'inscription
+                      # Créditer 1$ le portefeuille de l'utilisateur a l'inscription
                     nouveau_solde = request.user.profil.get_solde() + bonus_inscription
                     TransactionPortefeuille.objects.create(
                             utilisateur=request.user,

@@ -12,11 +12,11 @@ from django.conf.urls.static import static
 urlpatterns = [
     
   
-    path('tableau_de_bord', views.vue_tableau_de_bord, name='tableau_de_bord'),
+    path('pyramid20000', views.vue_tableau_de_bord, name='tableau_de_bord'),
     path('connexion/', views.vue_connexion, name='connexion'),
     path('deconnexion/', views.vue_deconnexion, name='deconnexion'),
-    path('tableau_capital', views.tableau_capital, name='tableau_capital'),
-    path('retirer_capital', views.get_achats_expirés_non_reinvestis, name='retirer_capital'),
+    path('pyramid2300', views.tableau_capital, name='tableau_capital'),
+    path('pyramid2020', views.get_achats_expirés_non_reinvestis, name='retirer_capital'),
     # partie de renseignement
    
     path("download/", views.download_app, name="download_app"),

@@ -68,10 +68,13 @@ class VerificateurEligibilite:
         """
         nombre_filleuls = cls.compter_filleuls_valides(utilisateur)
         
-        montant_max = Decimal('0.00')
+        montant_max = Decimal('50')
         for montant, requis in sorted(cls.MONTANTS_ELIGIBILITE.items()):
             if nombre_filleuls >= requis:
-                montant_max = montant
+                if montant <= Decimal('0.00'):
+                    montant_max = montant_max
+                elif montant >= montant_max:
+                    montant_max = montant          
         
         return montant_max
     

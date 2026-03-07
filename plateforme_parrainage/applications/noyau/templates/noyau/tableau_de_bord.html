@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load prets_tags %}
+{% load prets_tags %}
 
 {% block titre %}Tableau de bord | Inverted Pyramid{% endblock %}
 
@@ -20,13 +21,18 @@
 
         <!-- Section Crédit -->
         <div class="credit-section">
-            <div class="credit-info">
-                <span class="credit-label">CRÉDIT</span>
-                <span class="credit-value">{{ bp_user.montant_emprunt_actuel|floatformat:"-2" }} USD</span>
-            </div>
-            
+            <span class="credit-label">CRÉDIT</span>
             {% with retrait=user|retrait_actif %}
                 {% if user.is_authenticated %}
+            <div class="credit-info">
+                
+                
+               
+               <span class="credit-value"> <strong>{{ user|montant_max_retrait }}</strong></span>
+               
+            </div>
+            
+            
                     {% if retrait %}
                         <a href="{% url 'prets:voir_retraits' %}" 
                            class="btn-credit"

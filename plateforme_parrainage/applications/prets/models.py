@@ -109,8 +109,8 @@ class EligibiliteRetrait(models.Model):
         Vérifie l'éligibilité de l'utilisateur basée sur le nombre de filleuls.
         Compte les filleuls qui ont des achats de produits à 20 ou 100.
         """
-        from parrainages.models import BonusParrainage
-        from produits.models import Achat, Produit
+        from applications.parrainages.models import BonusParrainage
+        from applications.produits.models import Achat, Produit
         
         # Récupérer les produits éligibles (prix 20 ou 100)
         produits_eligibles = Produit.objects.filter(prix__in=[Decimal('20'), Decimal('100')])

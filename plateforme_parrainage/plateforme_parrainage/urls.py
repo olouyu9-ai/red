@@ -34,6 +34,6 @@ urlpatterns += [
 from django.contrib import admin
 
 # Changer les textes affichés
-admin.site.site_header = "Admin Genius"
-admin.site.site_title = "Admin Genius"
+admin.site.site_header = "Admin INVERTED"
+admin.site.site_title = "Admin INVERTED - Tableau de bord   "
 admin.site.index_title = "Bienvenue sur l’espace de gestion"
