@@ -188,13 +188,32 @@
             
             <div class="main-content">
                 <div class="card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                        <div>
-                            <h1 style="margin:0; font-size: 1.8rem; font-weight: 800;">Mon Profil</h1>
-                            <p style="color: var(--text-light); margin: 5px 0 0 0;">Vérification Niveau {{ profil.niveau_kyc|default:"0" }}</p>
-                        </div>
-                        <a href="{% url 'profile_edit' %}" style="text-decoration:none; color: var(--dark); font-weight: 700; border: 1.5px solid #e2e8f0; padding: 8px 15px; border-radius: 10px;">Modifier</a>
+                    
+
+
+
+
+
+
+
+
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <div>
+                        <h1 style="margin:0; font-size: 1.8rem; font-weight: 800;">Mon Profil</h1>
+                        <p style="color: var(--text-light); margin: 5px 0 0 0;">Vérification Niveau {{ profil.niveau_kyc|default:"0" }}</p>
                     </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <a href="{% url 'profile_edit' %}" style="text-decoration:none; color: var(--dark); font-weight: 700; border: 1.5px solid #e2e8f0; padding: 8px 15px; border-radius: 10px;">Modifier</a>
+                        <a href="{% url 'deconnexion' %}" style="text-decoration:none; color: var(--white); font-weight: 700; background: var(--danger); padding: 8px 15px; border-radius: 10px;">Déconnexion</a>
+                    </div>
+                </div>
+
+
+
+
+
 
                     <h2 class="card-title">👤 Infos Personnelles</h2>
                     <div class="info-list">
@@ -222,30 +241,14 @@
                 </div>
             </div>
 
-            <div class="sidebar">
-                <div class="card finance-card">
-                    <div class="score-badge">SCORE CRÉDIT : {{ profil.score|default:"850" }}</div>
-                    <div class="label" style="color: rgba(255,255,255,0.6)">Limite d'emprunt</div>
-                    <div class="amount-large"><span style="font-size: 1.2rem; vertical-align: super;">$</span>{{ utilisateur.limite_emprunt|default:"0" }}</div>
-                    
-                    <div class="progress-container">
-                        <div class="progress-labels">
-                            <span>Utilisé: {{ utilisateur.montant_emprunt_actuel|default:"0" }} $</span>
-                            <span id="percentText">0%</span>
-                        </div>
-                        <div class="progress-bg">
-                            <div class="progress-fill" id="progressBar"></div>
-                        </div>
-                    </div>
-                </div>
+            
 
                 <div class="card">
-                    <h2 class="card-title">🎁 Parrainage</h2>
+                    <h2 class="card-title">Parrainage</h2>
                     <p style="font-size: 0.85rem; color: var(--text-light); text-align: center;">Partagez votre lien et gagnez des récompenses</p>
                     
                     <div class="ref-container">
-                        <span class="label">VOTRE CODE</span>
-                        <span class="code-text" onclick="copyTextOnly('{{ profil.code_parrainage }}')">{{ profil.code_parrainage|default:"AUCUN" }}</span>
+                       
                         
                         <div class="link-box">
                             <input type="text" id="refLink" value="{{ request.scheme }}://{{ request.get_host }}/pyramid0001/?ref={{ profil.code_parrainage }}" readonly>

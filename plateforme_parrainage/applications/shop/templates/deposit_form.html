@@ -128,7 +128,7 @@
         <form method="POST" action="{% url 'create_order' %}" class="modern-form">
             {% csrf_token %}
             
-            <div class="field-group">
+            <!--  <div class="field-group">
                 <label>Opérateur utilisé</label>
                 <div class="input-wrapper">
                     <i class="fas fa-mobile-alt"></i>
@@ -137,15 +137,15 @@
                         <option value="Orange_money">Orange Money</option>
                     </select>
                 </div>
-            </div>
+            </div> -->
 
            
 
             <div class="field-group">
-                <label>Montant envoyé (CDF)</label>
+                <label>Montant envoyé ($)</label>
                 <div class="input-wrapper">
                     <i class="fas fa-money-bill-wave"></i>
-                    <input type="number" name="amount" step="0.01" placeholder="Ex: 5000" required>
+                    <input type="number" name="amount" step="0.01" placeholder="Ex: 1" required>
                 </div>
             </div>
 

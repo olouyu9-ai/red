@@ -1,10 +1,11 @@
 {% load static %}
+{% load prets_tags %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Inverted Pyramid | Sky Trading</title>
+    <title>Inverted  | Sky Trading</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -163,12 +164,21 @@
            
         }
 
+
+
+
+
         /* --- RESPONSIVE --- */
         @media (max-width: 992px) {
            
             .nav-desktop, .user-name { display: none; }
             .mobile-nav { display: flex; }
+            .block{ font-size: 8px; }
         }
+
+        
+
+        
     </style>
 </head>
 <body>
@@ -177,14 +187,13 @@
         <div class="container">
             <a href="/" class="logo-group">
                 <div class="logo-icon"></div>
-                <span class="logo-name">Inverted Pyramid</span>
+                <span class="logo-name">Inverted </span>
             </a>
 
             <div class="nav-desktop">
                 {% if user.is_authenticated %}
                     <a href="{% url 'tableau_de_bord' %}" class="nav-link active">Dashboard</a>
                     <a href="{% url 'liste_produits' %}" class="nav-link">Numerique</a>
-                    <a href="{% url 'prets:demander' %}" class="nav-link">Emprunter</a>
 
 
                     {# Render a single withdraw button with data attributes for JS control #}
@@ -247,11 +256,15 @@
             <i class="fas fa-wallet"></i>
             <span class="block">SOLDE</span>
         </a>
-        <a href="{% url 'prets:demander' %}" class="tab-item">
-          <i class="fas fa-hand-holding-usd"></i>
+        
 
-            <span class="block">EMPRUNTER</span>
-        </a>
+
+
+
+
+
+
+
  
         <a href="{% url 'profile' %}" class="tab-item">
             <i class="fas fa-user-circle"></i>

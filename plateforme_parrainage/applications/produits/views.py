@@ -61,7 +61,7 @@ def vue_liste_produits(request):
             "id": produit.id,
             "nom": produit.nom,
             "description": produit.description,
-            "prix": produit.prix,
+            "prix": produit.prix,  # Affiche le prix en dollars
             "duree_jours": produit.duree_jours,
             "taux_quotidien": gains_conv,
             "benefice": benefice,
@@ -117,20 +117,20 @@ def vue_achat(request, produit_id):
 
                 # Vérifier que
                 if produit.prix < int(solde_capital):
-                    messages.error(request, "Vous ne pouvez pas signer un contrat plus bas que votre capital de base.")
+                    messages.error(request, "L'allocation de serveur ne peut pas être inférieure à votre capital de base.")
                     #return redirect('liste_produits')
                     return render(request, 'produits/achat.html', {'produit': produit, 'solde': solde_et_solde_capital, 'gain':gain, 'gain_total':gain_total})
 
 
                 # Vérifier que le solde est suffisant
                 if solde_et_solde_capital < produit.prix:
-                    messages.error(request, f"Solde insuffisant pour signer ce contrat. {solde_et_solde_capital} FC")
+                    messages.error(request, f"Vos ressources sont insuffisantes pour obtenir cette allocation de serveur. {solde_et_solde_capital} FC")
                     #return redirect('liste_produits')
                     return render(request, 'produits/achat.html', {'produit': produit, 'solde': solde_et_solde_capital, 'gain':gain, 'gain_total':gain_total})
 
                 # Vérifier que le prix est supérieur à 0
                 if produit.prix <= 0:
-                    messages.error(request, "Le prix du contrat est invalide.")
+                    messages.error(request, "Le tarif de l'allocation de serveur n'est pas valide.")
                     #return redirect('liste_produits')
                     return render(request, 'produits/achat.html', {'produit': produit, 'solde': solde_et_solde_capital, 'gain':gain, 'gain_total':gain_total})
 
@@ -182,7 +182,7 @@ def vue_achat(request, produit_id):
                     control.jours_payes = 1
                     control.save()"""
                 # permet de visualiser le fond que l'utilisateur a investit
-                messages.success(request, f"le contrat de {produit.nom} effectué avec succès !")
+                messages.success(request, f"L'allocation de serveur {produit.nom} a été activée avec succès !")
                 return redirect('mes_investissements')
 
             return render(request, 'produits/achat.html', {'produit': produit, 'solde': solde_et_solde_capital, 'gain':gain, 'gain_total':gain_total})

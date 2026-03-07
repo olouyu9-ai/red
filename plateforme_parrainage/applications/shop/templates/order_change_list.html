@@ -15,7 +15,7 @@
             <thead>
                 <tr style="background: #417690; color: white;">
                     <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Type</th>
-                    <th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Montant (CDF)</th>
+                    <th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Montant ($)</th>
                     <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Nombre</th>
                 </tr>
             </thead>
@@ -23,7 +23,7 @@
                 <tr style="background: #e7f1ff;">
                     <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">💰 Total Général</td>
                     <td style="padding: 10px; border: 1px solid #ddd; text-align: right; font-weight: bold; color: #2c5aa0;">
-                        {{ totaux.total_montant|default:0|floatformat:2 }} CDF
+                        {{ totaux.total_montant|default:0|floatformat:2 }} $
                     </td>
                     <td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold; color: #2c5aa0;">
                         {{ totaux.total_commandes|default:0 }}
@@ -33,7 +33,7 @@
                 <tr>
                     <td style="padding: 10px; border: 1px solid #ddd;">✅ Commandes Payées</td>
                     <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #28a745;">
-                        {{ totaux.total_paye|default:0|floatformat:2 }} CDF
+                        {{ totaux.total_paye|default:0|floatformat:2 }} $
                     </td>
                     <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #28a745;">
                         {{ totaux.commandes_payees|default:0 }}
@@ -43,7 +43,7 @@
                 <tr>
                     <td style="padding: 10px; border: 1px solid #ddd;">⏳ Commandes en Attente</td>
                     <td style="padding: 10px; border: 1px solid #ddd; text-align: right; color: #dc3545;">
-                        {{ totaux.total_non_paye|default:0|floatformat:2 }} CDF
+                        {{ totaux.total_non_paye|default:0|floatformat:2 }} $
                     </td>
                     <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: #dc3545;">
                         {{ totaux.commandes_en_attente|default:0 }}

@@ -195,7 +195,19 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
         try:
             if not text_data:
                 return
-            data = json.loads(text_data)
+            data = json.loads(text_data)            
+            # Gérer les événements de typing utilisateur
+            if data.get('type') == 'typing':
+                user = self.scope.get('user')
+                if user and user.is_authenticated:
+                    typing_payload = {
+                        'type': 'chat.user_typing',
+                        'sender': user.email,
+                        'is_typing': data.get('is_typing', True),
+                    }
+                    await self.channel_layer.group_send(self.room_group_name, typing_payload)
+                return
+            
             message = data.get('message')
             user = self.scope.get('user')
 
@@ -274,6 +286,15 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
         }
         await self.send(text_data=json.dumps(out))
 
+    async def chat_user_typing(self, event):
+        """Transmet les événements de typing des utilisateurs normaux."""
+        out = {
+            'user_typing': True,
+            'sender': event.get('sender'),
+            'is_typing': event.get('is_typing', True),
+        }
+        await self.send(text_data=json.dumps(out))
+
     def create_message(self, user, message_text):
         try:
             group = ChatGroup.objects.get(id=self.group_id)
@@ -286,6 +307,12 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
     def _generate_assistant_payload(self, msg_id, message_text):
         """Sync helper: simulate typing, call LLM / KB, create assistant Message and return payload."""
         try:
+            # Vérifier que le groupe a été créé par un admin/staff
+            group = ChatGroup.objects.get(id=self.group_id)
+            if not group.created_by or not group.created_by.is_staff:
+                logger.info(f'Assistant désactivé pour le groupe {self.group_id} (créateur non-staff)')
+                return None
+
             # simulate typing / thinking time
             try:
                 time.sleep(8)
@@ -297,7 +324,6 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
                 reply_text = "Merci, votre message a bien été reçu. Je vous réponds dès que possible."
 
             # create assistant message in DB
-            group = ChatGroup.objects.get(id=self.group_id)
             assistant_msg = Message.objects.create(
                 group=group,
                 sender=None,

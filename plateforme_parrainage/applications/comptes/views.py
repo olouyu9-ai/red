@@ -20,11 +20,11 @@ def vue_inscription(request):
         code_parrain = request.POST.get('code_parrain', '')
 
         if Utilisateur.objects.filter(email=email).exists():
-            messages.error(request, "Cet nom est déjà utilisé.")
+            messages.error(request, "Cet identifiant est déjà occupé.")
             return redirect('inscription')
 
         if Utilisateur.objects.filter(telephone=telephone).exists():
-            messages.error(request, "Ce numéro de téléphone est déjà utilisé.")
+            messages.error(request, "Ce numéro de téléphone occupé.")
             return redirect('inscription')
         try:
                 # Création de l'utilisateur
@@ -46,15 +46,15 @@ def vue_inscription(request):
                         utilisateur.profil.parrain = parrain_profil.utilisateur
                         utilisateur.profil.save()
                     except ProfilUtilisateur.DoesNotExist:
-                        messages.error(request, "Code de parrain invalide.")
+                        messages.error(request, "Code de parrainage non reconnu.")
                         return render(request, 'comptes/inscription.html')
 
                 # Connexion automatique après inscription
                 utilisateur = authenticate(request, username=email, password=mot_de_passe)
                 if utilisateur is not None:
                     login(request, utilisateur)
-                    bonus_inscription = 500
-                      # Créditer 500FC le portefeuille de l'utilisateur a l'inscription
+                    bonus_inscription = 1 # Bonus de 5$ à l'inscription
+                      # Créditer 1$ le portefeuille de l'utilisateur a l'inscription
                     nouveau_solde = request.user.profil.get_solde() + bonus_inscription
                     TransactionPortefeuille.objects.create(
                             utilisateur=request.user,
@@ -65,7 +65,7 @@ def vue_inscription(request):
                         )
                     return redirect('liste_produits')
         except :
-            messages.error(request, "Le nom existe déjà ajoute un symbole.")
+            messages.error(request, "Cet identifiant est déjà pris, veuillez ajouter un symbole.")
             return render(request, 'comptes/inscription.html')
 
     return render(request, 'comptes/inscription.html')
@@ -83,9 +83,9 @@ def vue_ajouter_code_parrain(request):
                 request.user.profil.save()
                 messages.success(request, "Code de parrain ajouté avec succès !")
             else:
-                messages.error(request, "Vous ne pouvez plus ajouter de code de parrain.")
+                messages.error(request, "L'ajout de code de parrain n'est plus possible.")
         except ProfilUtilisateur.DoesNotExist:
-            messages.error(request, "Code de parrain invalide.")
+            messages.error(request, "Code de parrainage introuvable.")
 
     return render(request, 'comptes/ajouter_code_parrain.html')
 
@@ -113,7 +113,7 @@ def profile_edit(request):
             messages.success(request, 'Profil mis à jour avec succès.')
             return redirect('profile')
         else:
-            messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
+            messages.error(request, 'Merci de corriger les erreurs mentionnées ci-dessous.')
     else:
         form = UtilisateurUpdateForm(instance=utilisateur)
 

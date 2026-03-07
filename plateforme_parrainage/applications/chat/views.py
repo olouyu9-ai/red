@@ -5,21 +5,31 @@ from django.views.generic import ListView, DetailView
 from .models import ChatGroup, Message, GroupMembership
 from .forms import MessageForm, CreateGroupForm
 from django.contrib import messages
+from applications.comptes.models import Utilisateur
 
 
+#from django.contrib.auth.mixins import LoginRequiredMixin
+
+#class GroupListView(LoginRequiredMixin, ListView):
 class GroupListView(ListView):
     model = ChatGroup
     template_name = 'chat/group_list.html'
     context_object_name = 'groups'
 
     def get_queryset(self):
-        # Affiche les groupes auxquels l'utilisateur est membre, ou tous si staff
-        user = self.request.user
-        if  user.is_authenticated:
-            return ChatGroup.objects.all()
-        if user.is_staff:
-            return ChatGroup.objects.all()
-        return ChatGroup.objects.filter(members=user)
+
+        try:
+            # Affiche les groupes auxquels l'utilisateur est membre, ou tous si staff
+            user = self.request.user
+            if  user.is_authenticated:
+                return ChatGroup.objects.all()
+            if user.is_staff:
+                return ChatGroup.objects.all()
+            return ChatGroup.objects.filter(members=user)
+        except Exception as e:
+            # En cas d'erreur, retourne une queryset vide et affiche un message d'erreur
+            messages.error(self.request, " connectez-vous pour voir les groupes disponibles.")
+            return ChatGroup.objects.none()
 
 
 class GroupDetailView(DetailView):
@@ -31,6 +41,9 @@ class GroupDetailView(DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['messages'] = self.object.messages.select_related('sender')[:200]
         ctx['form'] = MessageForm()
+        #ctx['members_count'] = self.object.members.count()
+        ctx['members_normal'] = Utilisateur.objects.count()  # Affiche le nombre total d'utilisateurs inscrits
+        ctx['members_count'] = 3200 + ctx["members_normal"]
         return ctx
 
 
@@ -43,7 +56,7 @@ def create_group(request):
             group.created_by = request.user
             group.save()
             GroupMembership.objects.create(user=request.user, group=group, is_admin=True)
-            messages.success(request, 'Groupe créé.')
+            messages.success(request, 'Groupe créé avec succès.')
             return redirect('chat:group_detail', pk=group.pk)
     else:
         form = CreateGroupForm()

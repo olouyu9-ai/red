@@ -1,35 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Page introuvable</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Page non trouvée</title>
     <style>
+        /* ===== FOND ET TYPO ===== */
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* ===== CONTAINER ===== */
+        p{
+            font-size: 30cm;
+        }
+        .error-container {
             text-align: center;
-            background: #f4f4f9;
-            padding: 50px;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            max-width: 400px;
         }
-        h1 {
-            font-size: 50px;
-            color: #e74c3c;
+
+        /* ===== TITRE 404 ===== */
+        .error-container h1 {
+            font-size: 6rem;
+            margin: 0;
+            color: #b1afaa;
         }
-        p {
-            font-size: 20px;
-            color: #555;
+
+        /* ===== MESSAGE ===== */
+        .error-container p {
+            font-size: 1.2rem;
+            margin: 10px 0 20px;
+            color: #64748b;
         }
-        a {
-            text-decoration: none;
-            background: #3498db;
+
+        /* ===== BOUTON ===== */
+        .error-container a {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 12px;
+            background: #3e4649;
             color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .error-container a:hover {
+            background: #b4570a;
         }
     </style>
 </head>
 <body>
-    <h1>404</h1>
-    <p>Oups 😢 La page que vous cherchez n’existe pas.</p>
-    <p><a href="{% url 'accueil' %}">Retourner à l’accueil</a></p>
+    <div class="error-container">
+        <h1>404</h1>
+        <p>Oups 😢 La page que vous recherchez n'existe pas.</p>
+        <p><a href="{% url 'tableau_de_bord' %}">Retour à la page d'accueil</a></p>
+    </div>
 </body>
 </html>

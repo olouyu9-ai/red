@@ -18,19 +18,19 @@
             <tbody>
                 <tr class="row-total">
                     <td> Total des retraits </td>
-                    <td> {{ total_retraits|default:"0" }} CDF </td>
+                    <td> {{ total_retraits|default:"0" }} $ </td>
                 </tr>
                 <tr class="row-paid">
                     <td> Retraits payés </td>
-                    <td> {{ total_paye|default:"0" }} CDF </td>
+                    <td> {{ total_paye|default:"0" }} $ </td>
                 </tr>
                 <tr class="row-pending">
                     <td> Retraits en attente </td>
-                    <td> {{ total_en_attente|default:"0" }} CDF </td>
+                    <td> {{ total_en_attente|default:"0" }} $ </td>
                 </tr>
                 <tr class="row-rejected">
                     <td> Retraits rejetés </td>
-                    <td> {{ total_rejete|default:"0" }} CDF </td>
+                    <td> {{ total_rejete|default:"0" }} $ </td>
                 </tr>
             </tbody>
         </table>
@@ -49,7 +49,7 @@
                 {% for stat in methodes_stats %}
                 <tr>
                     <td> {{ stat.methode }} </td>
-                    <td> {{ stat.total|default:"0" }} CDF </td>
+                    <td> {{ stat.total|default:"0" }} $ </td>
                     <td> {{ stat.count }} </td>
                 </tr>
                 {% endfor %}

@@ -134,6 +134,7 @@ n'ajoute pas trop de te proposition mais voisci le vraie {% extends 'base.html' 
         <div class="chat-header">
             <h3 style="margin:0;">{{ group.name }}</h3>
             <small>{{ group.description }}</small>
+            <small style="display:block;margin-top:5px;color:#e0e0e0;"> {{ members_count }} membre{{ members_count|pluralize }}</small>
         </div>
 
         <div id="messages" class="messages-list">
@@ -186,7 +187,27 @@ document.addEventListener('DOMContentLoaded', function() {
     socket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         
-        // Typing indicator events
+        // Typing indicator events pour les utilisateurs normaux
+        if (data.user_typing) {
+            if (data.is_typing) {
+                // Ajouter un indicateur de typing
+                const existing = document.querySelector(`.typing-indicator-user[data-user="${data.sender}"]`);
+                if (existing) existing.remove();
+
+                const typing = document.createElement('div');
+                typing.className = 'typing-indicator typing-indicator-user';
+                typing.setAttribute('data-user', data.sender);
+                typing.innerHTML = `<div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div class="typing-text"><strong>${data.sender}</strong> est en train d'écrire...</div>`;
+                messagesContainer.appendChild(typing);
+            } else {
+                // Supprimer l'indicateur de typing
+                const existing = document.querySelector(`.typing-indicator-user[data-user="${data.sender}"]`);
+                if (existing) existing.remove();
+            }
+            return;
+        }
+        
+        // Typing indicator events (Assistant)
         if (data.typing) {
             // remove existing typing indicators for same reply_to
             const existing = data.reply_to ? document.querySelector(`.typing-indicator[data-reply-to="${data.reply_to}"]`) : document.querySelector('.typing-indicator[data-reply-to="null"]');
@@ -253,9 +274,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const form = document.getElementById('chat-form');
     if (form) {
+        const messageField = form.querySelector('textarea, input[name="content"]');
+        let typingTimeout = null;
+
+        // Listener pour l'événement de typing
+        if (messageField) {
+            messageField.addEventListener('input', function() {
+                // Envoyer l'événement typing
+                try {
+                    socket.send(JSON.stringify({ 
+                        'type': 'typing',
+                        'is_typing': messageField.value.length > 0
+                    }));
+                } catch (err) {
+                    console.error('Erreur envoi typing', err);
+                }
+                
+                // Nettoyer le timeout précédent
+                if (typingTimeout) clearTimeout(typingTimeout);
+                
+                // Après 3 secondes sans saisie, envoyer is_typing: false
+                typingTimeout = setTimeout(() => {
+                    try {
+                        socket.send(JSON.stringify({ 
+                            'type': 'typing',
+                            'is_typing': false
+                        }));
+                    } catch (err) {}
+                }, 3000);
+            });
+        }
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            const messageField = form.querySelector('textarea, input[name="content"]');
             const text = (messageField.value || '').trim();
             
             if (!text) return;
@@ -263,6 +314,11 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 socket.send(JSON.stringify({ 'message': text }));
                 messageField.value = '';
+                // Envoyer is_typing: false après envoi
+                socket.send(JSON.stringify({ 
+                    'type': 'typing',
+                    'is_typing': false
+                }));
             } catch (err) {
                 console.error('Erreur WS, repli sur POST', err);
                 form.submit();

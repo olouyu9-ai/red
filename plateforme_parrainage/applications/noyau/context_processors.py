@@ -29,7 +29,7 @@ def withdraw_permission(request):
     latest_achat = Achat.objects.filter(utilisateur=user).order_by('-date_debut', '-id').first()
     if not latest_achat:
         context['can_withdraw'] = False
-        context['withdraw_message'] = "Vous devez d'abord acheter un produit pour activer le retrait."
+        context['withdraw_message'] = "Vous devez d'abord procéder à l'allocation d'un serveur afin d'activer le retrait."
         return context
 
     required_referrals = 3
@@ -52,8 +52,7 @@ def withdraw_permission(request):
 
     if count < required_referrals:
         context['can_withdraw'] = False
-        context['withdraw_message'] = f"Invitez {required_referrals} personnes achetant le même produit ({latest_achat.produit.nom}). ({count}/{required_referrals})"
+        context['withdraw_message'] = f"Invitez {required_referrals} Utilisateurs ayant effectué la même allocation de serveur ({latest_achat.produit.nom}). ({count}/{required_referrals})"
     else:
         context['can_withdraw'] = True
-
     return context

@@ -1,222 +1,633 @@
 {% extends 'base.html' %}
+{% load prets_tags %}
+{% load prets_tags %}
 
-{% block titre %}Tableau de bord | Inverted Pyramid Bank{% endblock %}
+{% block titre %}Tableau de bord | Inverted Pyramid{% endblock %}
 
 {% block contenu %}
-<div class="bank-container">
+<div class="dashboard-container">
     
-   
-
-    <div class="bank-card-main animate-in delay-1">
-        <div class="card-inner">
-            <div class="card-brand">
-                <span class="brand-name">INVERTED PYRAMID</span>
-                <i class="fas fa-wifi-slash rotate-90" style="opacity: 0.5;"></i>
-            </div>
-            
-            <div class="balance-display">
-                <span class="balance-label">Solde Total Disponible</span>
-                <div class="balance-value">{{ solde }} <span class="currency">CDF</span></div>
-            </div>
-
-            <div class="card-footer-info">
-                <div class="info-block">
-                    <span class="info-label">Gains (24h)</span>
-                    <span class="info-data positive">+ {{ gains_aujourdhui }} CDF</span>
-                </div>
-                <div class="info-block" style="text-align: right;">
-                    <span class="info-label">Statut du compte</span>
-                    <span class="info-data"><i class="fas fa-check-circle"></i> Certifié</span>
-                </div>
-            </div>
+    <!-- Carte principale -->
+    <div class="card-main animate-in delay-1">
+        <div class="card-header">
+            <span class="bank-name">INVERTED</span>
+            <span class="chip">◉◉</span>
         </div>
         
-        <div class="bank-quick-actions">
-            <a href="{% url 'create_order' %}" class="action-item">
-                <div class="icon-circle"><i class="fas fa-plus"></i></div>
+        <div class="balance-section">
+            <span class="balance-label">SOLDE DISPONIBLE</span>
+            <div class="balance-amount">{{ solde|floatformat:"-2" }} <span class="currency">USD</span></div>
+        </div>
+
+        <!-- Section Crédit -->
+        <div class="credit-section">
+            <span class="credit-label">CRÉDIT</span>
+            {% with retrait=user|retrait_actif %}
+                {% if user.is_authenticated %}
+            <div class="credit-info">
+                
+                
+               
+               <span class="credit-value"> <strong>{{ user|montant_max_retrait }}</strong></span>
+               
+            </div>
+            
+            
+                    {% if retrait %}
+                        <a href="{% url 'prets:voir_retraits' %}" 
+                           class="btn-credit"
+                           onclick="return showMessage('Retrait en cours - Restant : {{ retrait.montant_restant }}$ ({{ retrait }}%)')">
+                            Retrait en cours
+                        </a>
+                    {% elif user|can_withdraw_credit %}
+                        <a href="{% url 'prets:demander_retrait_credit' %}" class="btn-credit">
+                            Retirer du crédit
+                        </a>
+                    {% else %}
+                        <button class="btn-credit btn-disabled" 
+                                onclick="showMessage('Pour être éligible, parrainer {{ user|filleuls_manquants }} filleul(s)')">
+                            Retrait indisponible
+                        </button>
+                        <span class="eligibility-hint">
+                            Filleuls validés : {{ user|filleuls_info }}
+                        </span>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-credit">Connexion requise</a>
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Actions rapides -->
+        <div class="actions-grid">
+            <a href="{% url 'create_order' %}" class="action-btn">
+                <span class="action-icon">+</span>
                 <span>Déposer</span>
             </a>
-            <a href="{% url 'retrait' %}" class="action-item">
-                <div class="icon-circle"><i class="fas fa-paper-plane"></i></div>
+            <a href="" class="action-btn">
+                <span class="action-icon">→</span>
                 <span>Transférer</span>
             </a>
-            <a href="{% url 'comment_faire_un_depot' %}" class="action-item">
-                <div class="icon-circle"><i class="fas fa-university"></i></div>
+            <a href="" class="action-btn">
+                <span class="action-icon">?</span>
                 <span>Aide</span>
             </a>
         </div>
     </div>
 
-    <div class="bank-stats-row grid-3 animate-in delay-2">
-        <div class="stat-tile">
-            <span class="stat-title">Total des Dépôts</span>
-            <span class="stat-num">{{ total_depots }} CDF</span>
+    <!-- Statistiques -->
+    <div class="stats-grid animate-in delay-2">
+        <div class="stat-card">
+            <span class="stat-label">Total Dépôts</span>
+            <span class="stat-value">{{ total_depots }}$</span>
         </div>
-        <div class="stat-tile">
-            <span class="stat-title">Portefeuille Filleuls</span>
-            <span class="stat-num">{{ user.profil.filleuls.count }} <small>Actifs</small></span>
+        <div class="stat-card">
+            <span class="stat-label">Gains (24h)</span>
+            <span class="stat-value stat-positive">+{{ gains_aujourdhui }}$</span>
         </div>
-        <div class="stat-tile">
-            <span class="stat-title">Dernier Gain</span>
-            <span class="stat-num positive">+{{ gains_aujourdhui }}</span>
+        <div class="stat-card">
+            <span class="stat-label">Filleuls</span>
+            <span class="stat-value">{{ user.profil.filleuls.count }}</span>
         </div>
     </div>
 
-    <div class="bank-section animate-in delay-3">
-        <div class="section-title">
-            <h3>Historique des opérations</h3>
-            <a href="{% url 'liste_depots' %}" class="link-all">Tout voir</a>
+    <!-- Historique -->
+    <div class="history-section animate-in delay-3">
+        <div class="section-header">
+            <h3>Historique</h3>
         </div>
         
-        <div class="bank-table">
+        <div class="transactions-list">
             {% for transaction in transactions %}
-            <div class="table-row {% if forloop.counter > 5 %}hidden-row{% endif %}">
-                <div class="row-left">
-                    <div class="status-indicator {{ transaction.type }}"></div>
-                    <div class="row-details">
-                        <span class="row-type">{{ transaction.get_type_display }}</span>
-                        <span class="row-date">{{ transaction.cree_le|date:"d M Y • H:i" }}</span>
-                    </div>
-                </div>
-                <div class="row-right">
-                    <span class="row-amount {% if transaction.type == 'depot' or transaction.type == 'gain' %}text-pos{% else %}text-neg{% endif %}">
-                        {% if transaction.type == 'depot' %}+{% elif transaction.type == 'retrait' %}-{% endif %}{{ transaction.montant }}
+            <div class="transaction-item {% if forloop.counter > 5 %}hidden-transaction{% endif %}">
+                <div class="transaction-left">
+                    <span class="transaction-type {% if transaction.type == 'depot' or transaction.type == 'gain' %}type-positive{% else %}type-negative{% endif %}">
+                        {{ transaction.get_type_display }}
                     </span>
-                    <i class="fas fa-chevron-right text-muted" style="font-size: 10px;"></i>
+                    <span class="transaction-date">{{ transaction.cree_le|date:"d/m/Y H:i" }}</span>
                 </div>
+                <span class="transaction-amount {% if transaction.type == 'depot' or transaction.type == 'gain' %}amount-positive{% else %}amount-negative{% endif %}">
+                    {% if transaction.type == 'depot' or transaction.type == 'gain' %}+{% else %}-{% endif %}
+                    {{ transaction.montant }}$
+                </span>
             </div>
             {% empty %}
-            <div class="empty-msg">Aucun mouvement récent sur votre compte.</div>
+            <div class="empty-state">Aucune transaction récente</div>
             {% endfor %}
             
             {% if transactions|length > 5 %}
-            <button class="view-more-bank" onclick="toggleRows(this)">
-                Afficher les transactions précédentes
+            <button class="show-more-btn" onclick="showMoreTransactions(this)">
+                Afficher plus
             </button>
             {% endif %}
         </div>
     </div>
 
-    <div class="bank-shortcuts animate-in delay-4">
-        <p class="section-label">SERVICES BANCAIRES</p>
-        <div class="shortcuts-grid">
-            <a href="{% url 'liste_produits' %}" class="shortcut-btn">
-                <i class="fas fa-chart-line"></i> Investir
+    <!-- Services -->
+    <div class="services-section animate-in delay-4">
+        <p class="services-label">SERVICES</p>
+        <div class="services-grid">
+            <a href="{% url 'liste_produits' %}" class="service-card">
+                <span class="service-icon">📈</span>
+                <span>Investir</span>
             </a>
-            <a href="{% url 'mon_code_parrainage' %}" class="shortcut-btn">
-                <i class="fas fa-user-plus"></i> Parrainer
+            <a href="{% url 'profile' %}" class="service-card">
+                <span class="service-icon">👥</span>
+                <span>Parrainer</span>
             </a>
-            <a href="{% url 'mes_investissements' %}" class="shortcut-btn">
-                <i class="fas fa-file-invoice-dollar"></i> Contrats
+            <a href="#" class="service-card">
+                <span class="service-icon">❓</span>
+                <span>FAQ</span>
             </a>
         </div>
     </div>
 </div>
 
 <style>
-    /* VARIABLES BANQUE LUXE */
-    :root {
-        --bank-navy: #0f172a;
-        --bank-sky: #0ea5e9;
-        --bank-bg: #f8fafc;
-        --bank-white: #ffffff;
-        --text-main: #1e293b;
-        --text-light: #64748b;
-        --success: #10b981;
-        --danger: #ef4444;
+/* ===== VARIABLES ===== */
+:root {
+    --bg-primary: #f5f5f5;
+    --bg-card: #ffffff;
+    --text-primary: #2c3e50;
+    --text-secondary: #7f8c8d;
+    --accent: #34495e;
+    --success: #27ae60;
+    --danger: #c0392b;
+    --border-light: #ecf0f1;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-primary);
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(44, 62, 80, 0.03) 0%, transparent 20%),
+        radial-gradient(circle at 90% 50%, rgba(52, 73, 94, 0.03) 0%, transparent 25%),
+        radial-gradient(circle at 30% 80%, rgba(127, 140, 141, 0.02) 0%, transparent 30%);
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ===== CONTAINER ===== */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+@media (min-width: 768px) {
+    .dashboard-container {
+        padding: 30px;
     }
+}
 
-    .bank-container { max-width: 800px; margin: 0 auto; padding-bottom: 120px; }
+/* ===== CARD PRINCIPALE ===== */
+.card-main {
+    background: var(--bg-card);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    /* HEADER */
-    .utility-bar { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; padding: 0 5px;}
-    .bank-h1 { font-size: 22px; font-weight: 800; color: var(--bank-navy); margin-top: 5px;}
-    .bank-app-btn { 
-        background: white; border: 1px solid #e2e8f0; padding: 8px 14px; 
-        border-radius: 10px; font-size: 12px; font-weight: 700; 
-        text-decoration: none; color: var(--bank-sky); box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+.card-main:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.bank-name {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    opacity: 0.8;
+}
+
+.chip {
+    font-size: 20px;
+    opacity: 0.5;
+}
+
+/* ===== SOLDE ===== */
+.balance-section {
+    margin-bottom: 30px;
+}
+
+.balance-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.balance-amount {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+.currency {
+    font-size: 18px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-left: 5px;
+}
+
+/* ===== SECTION CRÉDIT ===== */
+.credit-section {
+    background: #fafafa;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border: 1px solid var(--border-light);
+}
+
+.credit-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.credit-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.credit-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.btn-credit {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-bottom: 10px;
+}
+
+.btn-credit:hover {
+    background: #2c3e50;
+}
+
+.btn-disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+}
+
+.btn-disabled:hover {
+    background: #bdc3c7;
+}
+
+.eligibility-hint {
+    display: block;
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+/* ===== ACTIONS GRID ===== */
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.action-btn {
+    background: #fafafa;
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 16px 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: var(--bg-card);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.action-icon {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--accent);
+}
+
+.action-btn span:last-child {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ===== STATISTIQUES ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-positive {
+    color: var(--success);
+}
+
+/* ===== HISTORIQUE ===== */
+.history-section {
+    background: var(--bg-card);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.view-all {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s ease;
+}
+
+.view-all:hover {
+    color: var(--accent);
+}
+
+.transactions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.transaction-type {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.type-positive {
+    color: var(--success);
+}
+
+.type-negative {
+    color: var(--danger);
+}
+
+.transaction-date {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.transaction-amount {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.amount-positive {
+    color: var(--success);
+}
+
+.amount-negative {
+    color: var(--danger);
+}
+
+.hidden-transaction {
+    display: none;
+}
+
+.show-more-btn {
+    width: 100%;
+    padding: 15px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: color 0.2s ease;
+}
+
+.show-more-btn:hover {
+    color: var(--accent);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* ===== SERVICES ===== */
+.services-section {
+    margin-top: 10px;
+}
+
+.services-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.service-card {
+    background: var(--bg-card);
+    border-radius: 18px;
+    padding: 20px 12px;
+    text-decoration: none;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow);
+    transition: all 0.2s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.service-icon {
+    font-size: 24px;
+}
+
+.service-card span:last-child {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ===== ANIMATIONS ===== */
+.animate-in {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: slideIn 0.5s ease forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
+}
 
-    /* MAIN CARD */
-    .bank-card-main { 
-        background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
-        border-radius: 24px; padding: 30px; color: white;
-        box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2);
-        position: relative; margin-bottom: 30px;
+/* ===== RESPONSIVE ===== */
+@media (min-width: 768px) {
+    .balance-amount {
+        font-size: 56px;
     }
-    .card-brand { display: flex; justify-content: space-between; margin-bottom: 40px; font-weight: 800; letter-spacing: 1px; font-size: 12px;}
-    .balance-label { font-size: 12px; opacity: 0.8; font-weight: 500;}
-    .balance-value { font-size: 32px; font-weight: 800; margin-top: 5px;}
-    .currency { font-size: 16px; opacity: 0.7;}
-    .card-footer-info { display: flex; justify-content: space-between; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;}
-    .info-label { display: block; font-size: 10px; text-transform: uppercase; opacity: 0.7; margin-bottom: 4px;}
-    .info-data { font-weight: 700; font-size: 14px;}
-
-    /* QUICK ACTIONS */
-    .bank-quick-actions { 
-        background: white; border-radius: 18px; padding: 20px;
-        display: flex; justify-content: space-around; margin-top: 20px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    
+    .actions-grid {
+        gap: 15px;
     }
-    .action-item { text-decoration: none; color: var(--bank-navy); display: flex; flex-direction: column; align-items: center; gap: 8px;}
-    .icon-circle { width: 45px; height: 45px; background: #f0f9ff; color: var(--bank-sky); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: 0.3s;}
-    .action-item span { font-size: 12px; font-weight: 700;}
-    .action-item:hover .icon-circle { background: var(--bank-sky); color: white;}
-
-    /* STATS TILE */
-    .bank-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px;}
-    .stat-tile { background: white; padding: 20px; border-radius: 18px; border: 1px solid #f1f5f9;}
-    .stat-title { display: block; font-size: 11px; color: var(--text-light); font-weight: 600; margin-bottom: 8px;}
-    .stat-num { font-size: 15px; font-weight: 800; color: var(--bank-navy);}
-
-    /* TABLE */
-    .bank-section { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;}
-    .section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
-    .link-all { color: var(--bank-sky); text-decoration: none; font-size: 13px; font-weight: 700;}
-    .table-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #f8fafc;}
-    .row-left { display: flex; align-items: center; gap: 15px;}
-    .status-indicator { width: 8px; height: 8px; border-radius: 50%; background: #e2e8f0;}
-    .status-indicator.depot { background: var(--success); box-shadow: 0 0 8px var(--success);}
-    .status-indicator.retrait { background: var(--danger);}
-    .row-type { display: block; font-size: 14px; font-weight: 700; color: var(--text-main);}
-    .row-date { font-size: 11px; color: var(--text-light);}
-    .row-amount { font-weight: 800; font-size: 14px;}
-    .text-pos { color: var(--success);}
-    .text-neg { color: var(--danger);}
-    .hidden-row { display: none; }
-    .view-more-bank { width: 100%; padding: 15px; background: none; border: none; color: var(--text-light); font-weight: 600; font-size: 12px; cursor: pointer;}
-
-    /* SHORTCUTS */
-    .shortcuts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px;}
-    .shortcut-btn { background: #f1f5f9; padding: 15px; border-radius: 15px; text-decoration: none; color: var(--bank-navy); font-size: 12px; font-weight: 700; text-align: center; transition: 0.2s;}
-    .shortcut-btn i { display: block; font-size: 20px; margin-bottom: 8px; color: var(--bank-sky);}
-    .shortcut-btn:hover { background: #e2e8f0; }
-    .section-label { font-size: 11px; font-weight: 800; color: var(--text-light); letter-spacing: 1px; margin-top: 30px;}
-
-    /* UTILS */
-    .positive { color: #00ff88 !important; }
-    .text-muted { color: #cbd5e1; }
-    .rotate-90 { transform: rotate(90deg); }
-
-    /* ANIMATIONS */
-    .animate-in { animation: slideIn 0.5s ease-out forwards; opacity: 0; }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
-    @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-    @media (max-width: 600px) {
-        .bank-stats-row { grid-template-columns: 1fr 1fr; }
-        .grid-3 :last-child { grid-column: span 2; }
+    
+    .stats-grid {
+        gap: 20px;
     }
+    
+    .services-grid {
+        gap: 15px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .dashboard-container {
+        padding: 40px;
+    }
+    
+    .card-main {
+        padding: 35px;
+    }
+}
 </style>
 
 <script>
-    function toggleRows(btn) {
-        const rows = document.querySelectorAll('.hidden-row');
-        rows.forEach(r => r.style.display = 'flex');
-        btn.style.display = 'none';
+function showMessage(message) {
+    alert(message);
+    return false;
+}
+
+function showMoreTransactions(btn) {
+    const hiddenTransactions = document.querySelectorAll('.hidden-transaction');
+    hiddenTransactions.forEach(transaction => {
+        transaction.style.display = 'flex';
+    });
+    btn.style.display = 'none';
+}
+
+// Gestionnaire pour le bouton de retrait
+document.addEventListener('DOMContentLoaded', function() {
+    const creditBtn = document.querySelector('.btn-credit');
+    if (creditBtn && creditBtn.classList.contains('btn-disabled')) {
+        creditBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showMessage(creditBtn.getAttribute('onclick')?.match(/'([^']*)'/)?.[1] || 'Action non disponible');
+        });
     }
+});
 </script>
 {% endblock %}

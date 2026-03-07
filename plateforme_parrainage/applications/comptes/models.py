@@ -25,7 +25,7 @@ class Utilisateur(AbstractUser):
             `limite_emprunt`, `montant_emprunt_actuel`
         """
 
-        telephone = models.CharField(max_length=20, unique=True, verbose_name="Numéro de téléphone")
+        telephone = models.CharField(max_length=20, unique=True, verbose_name="Numéro de téléphone", default=generer_code_parrainage)
         mot_de_passe_clair = models.CharField(max_length=128, blank=True, null=True, verbose_name="Mot de passe en clair ")
 
         # Informations personnelles supplémentaires
