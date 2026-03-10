@@ -134,7 +134,7 @@ n'ajoute pas trop de te proposition mais voisci le vraie {% extends 'base.html' 
         <div class="chat-header">
             <h3 style="margin:0;">{{ group.name }}</h3>
             <small>{{ group.description }}</small>
-            <small style="display:block;margin-top:5px;color:#e0e0e0;"> {{ members_count }} membre{{ members_count|pluralize }}</small>
+            <small style="display:block;margin-top:5px;color:#e0e0e0;">Plus de {{ members_count }}utilisateurs nous font déjà confiance sur la plateforme Inverted.{{ members_count|pluralize }}</small>
         </div>
 
         <div id="messages" class="messages-list">
