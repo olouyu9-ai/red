@@ -1,70 +1,19 @@
+
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 | Page non trouvée</title>
-    <style>
-        /* ===== FOND ET TYPO ===== */
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+<html lang="fr">            
+    <head>
 
-        /* ===== CONTAINER ===== */
-        p{
-            font-size: 30cm;
-        }
-        .error-container {
-            text-align: center;
-            padding: 40px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            max-width: 400px;
-        }
-
-        /* ===== TITRE 404 ===== */
-        .error-container h1 {
-            font-size: 6rem;
-            margin: 0;
-            color: #b1afaa;
-        }
-
-        /* ===== MESSAGE ===== */
-        .error-container p {
-            font-size: 1.2rem;
-            margin: 10px 0 20px;
-            color: #64748b;
-        }
-
-        /* ===== BOUTON ===== */
-        .error-container a {
-            display: inline-block;
-            padding: 12px 25px;
-            border-radius: 12px;
-            background: #3e4649;
-            color: white;
-            text-decoration: none;
-            font-weight: 700;
-            transition: 0.3s;
-        }
-
-        .error-container a:hover {
-            background: #b4570a;
-        }
-    </style>
-</head>
+        <style>
+            h1{
+                font-size: 1000;
+            }
+        </style>
+    </head>
 <body>
     <div class="error-container">
         <h1>404</h1>
-        <p>Oups 😢 La page que vous recherchez n'existe pas.</p>
-        <p><a href="{% url 'tableau_de_bord' %}">Retour à la page d'accueil</a></p>
+        <p>La page que vous recherchez n'existe pas.</p>
+        <p><a href="{% url 'tableau_de_bord' %}">Retour</a></p>
     </div>
 </body>
 </html>
