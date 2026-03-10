@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-b*!2isvhm#d!^-0x8=d-#g(!0yprh%uutl-6l*5gjz91q_s31q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["red-pv76.onrender.com", "127.0.0.1", "www.inverted.sbs", "inverted.sbs"]
 
