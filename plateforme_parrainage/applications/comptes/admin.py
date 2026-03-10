@@ -292,7 +292,7 @@ class ProfilUtilisateurAdmin(admin.ModelAdmin):
                 str(obj.parrain) if obj.parrain else "-",
                 str(obj.niveau_kyc),
                 "ACTIVE" if obj.double_authentification_active else "INACTIVE",
-                f"{solde:.2f} FC"
+                f"{solde:.2f} $"
             ])
 
         # Créer le tableau

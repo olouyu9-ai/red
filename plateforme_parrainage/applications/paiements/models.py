@@ -36,7 +36,7 @@ class Depot(models.Model):
      
 
     def __str__(self):
-        return f"Dépôt de {self.montant} FC par {self.utilisateur.email} ({self.get_statut_display()})"
+        return f"Dépôt de {self.montant} $ par {self.utilisateur.email} ({self.get_statut_display()})"
 
 
 
@@ -100,7 +100,7 @@ class Retrait(models.Model):
         super().save(*args, **kwargs)   
 
     def __str__(self):
-        return f"Retrait de {self.montant} FC par {self.utilisateur.email} ({self.get_statut_display()})"
+        return f"Retrait de {self.montant} $ par {self.utilisateur.email} ({self.get_statut_display()})"
 
 class FraisRetrait(models.Model):
     """Modèle pour gérer les frais de retrait progressifs."""

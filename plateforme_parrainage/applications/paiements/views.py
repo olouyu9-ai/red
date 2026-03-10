@@ -51,22 +51,22 @@ def vue_retrait(request):
 
             try:
 
-                if montant < 5000 and int(solde_capital) != 0:
-                    messages.error(request, f"Le montant minimum requis pour un retrait est de 5000 FC.\nSolde: {solde} CDF \n les {solde_capital} CDF est votre capital")
+                if montant < 5 and int(solde_capital) != 0:
+                    messages.error(request, f"Le montant minimum requis pour un retrait est de 5 $.\nSolde: {solde} CDF \n ")
                     return redirect('retrait')
 
                 if solde < montant and int(solde_capital) != 0:
-                    messages.error(request, f"Vos ressources sont insuffisantes pour effectuer ce retrait.\nSolde: {solde} CDF . \n les {solde_capital} CDF est votre capital")
+                    messages.error(request, f"Vos ressources sont insuffisantes pour effectuer ce retrait.\nSolde: {solde} CDF .")
                     return redirect('retrait')
             except:
                 pass
 
-            if montant < 5000 :
-                    messages.error(request, f"La somme requise minimale pour un retrait est de 5000 FC.\nSolde: {solde} CDF ")
+            if montant < 5 :
+                    messages.error(request, f"La somme requise minimale pour un retrait est de 5 $.\nSolde: {solde} $ ")
                     return redirect('retrait')
 
             if solde < montant :
-                    messages.error(request, f"Le solde n'est pas suffisant pour effectuer ce retrait.\nSolde: {solde} CDF .")
+                    messages.error(request, f"Le solde n'est pas suffisant pour effectuer ce retrait.\nSolde: {solde} $ .")
                     return redirect('retrait')
 
             # Création du retrait
