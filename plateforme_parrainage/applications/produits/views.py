@@ -124,7 +124,7 @@ def vue_achat(request, produit_id):
 
                 # Vérifier que le solde est suffisant
                 if solde_et_solde_capital < produit.prix:
-                    messages.error(request, f"Vos ressources sont insuffisantes pour obtenir cette allocation de serveur. {solde_et_solde_capital} FC")
+                    messages.error(request, f"Vos ressources sont insuffisantes pour obtenir cette allocation de serveur. {solde_et_solde_capital} $")
                     #return redirect('liste_produits')
                     return render(request, 'produits/achat.html', {'produit': produit, 'solde': solde_et_solde_capital, 'gain':gain, 'gain_total':gain_total})
 

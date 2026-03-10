@@ -22,6 +22,8 @@ urlpatterns = [
     path("download/", views.download_app, name="download_app"),
     path('api/withdraw_status/', views.withdraw_status, name='api_withdraw_status'),
     path('admin./', views.cache_admin, name='admin.'),  # Cache l'admin derrière une fausse page 404
+    path('aide_page', views.aide_page, name='aide_page'),
+    path('faq', views.faq_page, name='faq'),
 
       # annonce plateforme
 

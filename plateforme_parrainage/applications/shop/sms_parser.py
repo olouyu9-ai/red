@@ -1,38 +1,4 @@
 
-
-
-"""import re
-from decimal import Decimal, InvalidOperation
-
-# Regex : gère "Vous avez recu ..." et "Le retrait de ... est effectue ..."
-SMS_REGEX = re.compile(
-    r"(?:vous avez re[çc]u|le retrait de)\s+([\d\.,]+)\s*CDF.*?Ref[:\s]+([A-Z0-9\.]+)",
-    flags=re.IGNORECASE | re.DOTALL
-)
-
-def parse_payment_sms(sms_text: str):
-   
-    #Retourne (amount_decimal, reference) ou (None, None) si non trouvé.
-   
-    m = SMS_REGEX.search(sms_text or "")
-    if not m:
-        return None, None
-
-    raw_amount = m.group(1).strip()
-    reference = m.group(2).strip()
-
-    # Normaliser le montant
-    normalized = raw_amount.replace(" ", "").replace(",", ".")
-    try:
-        amount = Decimal(normalized)
-    except InvalidOperation:
-        return None, None
-
-    return amount, reference
-
-"""
-
-
 import re
 from decimal import Decimal, InvalidOperation
 

@@ -262,6 +262,9 @@ def download_app(request):
     return FileResponse(open(filepath, "rb"), as_attachment=True, filename="Genius_africa.apk")
 
 
+def aide_page(request):
+     return render(request, 'noyau/aide.html')
+
 
 
 
@@ -271,5 +274,6 @@ def download_app(request):
 ##################################################################################
 ##################################################################################
 
-
+def faq_page(request):
+     return render(request, 'noyau/faq.html')   
 

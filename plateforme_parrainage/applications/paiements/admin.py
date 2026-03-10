@@ -72,7 +72,7 @@ def export_depots_pdf(modeladmin, request, queryset):
     for depot in queryset:
         data.append([
             str(depot.utilisateur.email),
-            f"{depot.montant} FC",
+            f"{depot.montant} $",
             depot.methode,
             depot.get_statut_display(),
             depot.reference,
@@ -176,9 +176,9 @@ def export_retraits_pdf(modeladmin, request, queryset):
     for retrait in queryset:
         data.append([
             str(retrait.utilisateur.email),
-            f"{retrait.montant:.2f} FC",
-            f"{retrait.frais:.2f} FC",
-            f"{retrait.montant_net:.2f} FC",
+            f"{retrait.montant:.2f} $",
+            f"{retrait.frais:.2f} $",
+            f"{retrait.montant_net:.2f} $",
             retrait.methode,
             retrait.destination,
             retrait.get_statut_display(),

@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block contenu %}
+
+<style>
+
+.faq-container{
+max-width:900px;
+margin:auto;
+padding:50px 20px;
+}
+
+.faq-title{
+text-align:center;
+font-size:36px;
+margin-bottom:40px;
+color:#38bdf8;
+font-weight:bold;
+}
+
+.faq-item{
+background:#1e293b;
+margin-bottom:15px;
+border-radius:10px;
+overflow:hidden;
+border:1px solid #334155;
+transition:0.3s;
+}
+
+.faq-question{
+padding:20px;
+font-size:18px;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
+align-items:center;
+color:white;
+}
+
+.faq-question:hover{
+background:#0f172a;
+}
+
+.faq-icon{
+font-size:22px;
+color:#38bdf8;
+}
+
+.faq-answer{
+max-height:0;
+overflow:hidden;
+transition:max-height 0.4s ease;
+background:#020617;
+padding:0 20px;
+}
+
+.faq-answer p{
+padding:20px 0;
+color:#cbd5f5;
+line-height:1.6;
+}
+
+.faq-item.active .faq-answer{
+max-height:300px;
+}
+
+</style>
+
+<div class="faq-container">
+
+<div class="faq-title">FAQ </div>
+
+
+<div class="faq-item">
+<div class="faq-question">
+Qu'est-ce que la plateforme Inverted ?
+<span class="faq-icon">+</span>
+</div>
+<div class="faq-answer">
+<p>
+Inverted est une plateforme d'allocation de serveurs numériques qui permet aux utilisateurs
+de participer au développement de l'infrastructure technologique tout en générant
+des revenus grâce à leurs allocations.
+</p>
+</div>
+</div>
+
+
+<div class="faq-item">
+<div class="faq-question">
+Comment fonctionne l'allocation de serveurs ?
+<span class="faq-icon">+</span>
+</div>
+<div class="faq-answer">
+<p>
+Les utilisateurs peuvent choisir entre deux options d'allocation : 20$ ou 100$.
+Chaque allocation dure 10 jours pendant lesquels les serveurs fonctionnent
+et génèrent des revenus. À la fin de la période, les gains sont crédités
+sur le compte de l'utilisateur.
+</p>
+</div>
+</div>
+
+
+<div class="faq-item">
+<div class="faq-question">
+Quels sont les gains possibles ?
+<span class="faq-icon">+</span>
+</div>
+<div class="faq-answer">
+<p>
+Une allocation de 20$ permet d'obtenir 50$ après 10 jours,
+tandis qu'une allocation de 100$ permet d'obtenir 250$ après la même période.
+</p>
+</div>
+</div>
+
+
+<div class="faq-item">
+<div class="faq-question">
+Qu'est-ce que le crédit de 50$ offert ?
+<span class="faq-icon">+</span>
+</div>
+<div class="faq-answer">
+<p>
+Chaque nouvel utilisateur reçoit un crédit de 50$ dans son compte crédit
+lors de son inscription. Ce crédit peut être retiré après avoir invité
+5 personnes qui effectueront également une allocation de serveur.
+</p>
+</div>
+</div>
+
+
+<div class="faq-item">
+<div class="faq-question">
+Pourquoi dois-je inviter des utilisateurs ?
+<span class="faq-icon">+</span>
+</div>
+<div class="faq-answer">
+<p>
+Le système de parrainage permet de développer la communauté Inverted
+et d'augmenter la puissance de notre infrastructure de serveurs.
+Il permet également aux utilisateurs de débloquer certaines fonctionnalités
+comme le retrait du crédit.
+</p>
+</div>
+</div>
+
+
+<div class="faq-item">
+<div class="faq-question">
+Quand puis-je retirer mes gains ?
+<span class="faq-icon">+</span>
+</div>
+<div class="faq-answer">
+<p>
+Les gains deviennent retirables après la période d'allocation de 10 jours
+et après avoir parrainé au moins 3 personnes qui ont également fait une allocation.
+Une fois ces conditions remplies, le bouton de retrait devient actif.
+</p>
+</div>
+</div>
+
+
+<div class="faq-item">
+<div class="faq-question">
+Comment inviter des personnes ?
+<span class="faq-icon">+</span>
+</div>
+<div class="faq-answer">
+<p>
+Chaque utilisateur possède un lien de parrainage unique qu'il peut partager
+avec ses amis, sa famille ou sur les réseaux sociaux afin d'inviter
+de nouvelles personnes à rejoindre la plateforme Inverted.
+</p>
+</div>
+</div>
+
+
+<div class="faq-item">
+<div class="faq-question">
+Comment contacter le support ?
+<span class="faq-icon">+</span>
+</div>
+<div class="faq-answer">
+<p>
+Si vous avez des questions ou rencontrez des difficultés,
+vous pouvez contacter notre équipe de support directement
+via la section contact de la plateforme.
+</p>
+</div>
+</div>
+
+
+</div>
+
+
+<script>
+
+document.querySelectorAll(".faq-question").forEach(question=>{
+question.addEventListener("click",()=>{
+
+const item = question.parentElement
+item.classList.toggle("active")
+
+})
+})
+
+</script>
+
+{% endblock %}
