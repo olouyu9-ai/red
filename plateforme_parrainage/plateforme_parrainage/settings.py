@@ -223,4 +223,5 @@ HF_INFERENCE_MODEL = 'google/flan-t5-small'
 # chemin vers un fichier texte contenant la base de connaissances que l'IA
 # pourra inclure automatiquement dans ses prompts si présent.
 KNOWLEDGE_BASE_PATH = BASE_DIR / 'knowledge_base.txt'
-
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
