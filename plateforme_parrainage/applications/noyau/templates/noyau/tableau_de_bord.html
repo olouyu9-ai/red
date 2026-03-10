@@ -5,22 +5,22 @@
 {% block titre %}Tableau de bord | Inverted Pyramid{% endblock %}
 
 {% block contenu %}
-<div class="dashboard-container">
+<div id="conso" class="dashboard-container">
     
     <!-- Carte principale -->
-    <div class="card-main animate-in delay-1">
+    <div id="conso" class="card-main animate-in delay-1">
         <div class="card-header">
             <span class="bank-name">INVERTED</span>
             <span class="chip">◉◉</span>
         </div>
         
-        <div class="balance-section">
+        <div id="conso" class="balance-section">
             <span class="balance-label">SOLDE DISPONIBLE</span>
             <div class="balance-amount">{{ solde|floatformat:"-2" }} <span class="currency">USD</span></div>
         </div>
 
         <!-- Section Crédit -->
-        <div class="credit-section">
+        <div id="conso" class="credit-section">
             <span class="credit-label">CRÉDIT</span>
             {% with retrait=user|retrait_actif %}
                 {% if user.is_authenticated %}
@@ -59,7 +59,7 @@
         </div>
 
         <!-- Actions rapides -->
-        <div class="actions-grid">
+        <div id="conso" class="actions-grid">
             <a href="{% url 'create_order' %}" class="action-btn">
                 <span class="action-icon">+</span>
                 <span>Déposer</span>
@@ -76,7 +76,7 @@
     </div>
 
     <!-- Statistiques -->
-    <div class="stats-grid animate-in delay-2">
+    <div   id="conso" class="stats-grid animate-in delay-2">
         <div class="stat-card">
             <span class="stat-label">Total Dépôts</span>
             <span class="stat-value">{{ total_depots }}$</span>
@@ -92,7 +92,7 @@
     </div>
 
     <!-- Historique -->
-    <div class="history-section animate-in delay-3">
+    <div id="conso" class="history-section animate-in delay-3">
         <div class="section-header">
             <h3>Historique</h3>
         </div>
@@ -124,7 +124,7 @@
     </div>
 
     <!-- Services -->
-    <div class="services-section animate-in delay-4">
+    <div id="conso" class="services-section animate-in delay-4">
         <p class="services-label">SERVICES</p>
         <div class="services-grid">
             <a href="{% url 'liste_produits' %}" class="service-card">
@@ -163,6 +163,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+#conso{
+
+    border: 3px solid rgb(34, 138, 60);
+    border-radius: 10px;
 }
 
 body {

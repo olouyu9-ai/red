@@ -1,0 +1,14 @@
+# Base de données
+plateforme_parrainage/db.sqlite3
+db.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+
+# Environnement
+.env
+
+# logs
+*.log
+

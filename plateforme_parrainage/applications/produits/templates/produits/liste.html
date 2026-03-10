@@ -58,17 +58,17 @@
 
                     <div class="financial-metrics">
                         <div class="metric">
-                            <span class="m-label">Activation</span>
+                            <span class="m-label">Activation</span> <br>
                             <span class="m-value"> {{ produit.prix|floatformat:"-2" }} $</span>
                         </div>
                         <div class="metric">
-                            <span class="m-label">Rendement</span>
+                            <span class="m-label">Rendement</span> <br>
                             <span class="m-value text-highlight">
                                 +{{ produit.taux_quotidien|floatformat:1 }}%
                             </span>
                         </div>
                         <div class="metric">
-                            <span class="m-label">Durée</span>
+                            <span class="m-label">Durée</span> <br>
                             <span class="m-value">{{ produit.duree_jours }} J</span>
                         </div>
                     </div>
