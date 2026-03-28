@@ -53,11 +53,10 @@ def vue_inscription(request):
                 utilisateur = authenticate(request, username=email, password=mot_de_passe)
                 if utilisateur is not None:
                     login(request, utilisateur) 
-                    if parrain_profil:
-                        
-                        bonus_inscription = 1 # Bonus de 5$ à l'inscription
+                    if code_parrain=="":
+                        bonus_inscription = 10 # Bonus de 5$ à l'inscription
                     else:
-                        bonus_inscription = 20
+                        bonus_inscription = 1
                       # Créditer 1$ le portefeuille de l'utilisateur a l'inscription
                     nouveau_solde = request.user.profil.get_solde() + bonus_inscription
                     TransactionPortefeuille.objects.create(
