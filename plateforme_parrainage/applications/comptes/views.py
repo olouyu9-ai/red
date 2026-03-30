@@ -66,7 +66,7 @@ def vue_inscription(request):
                             reference="bonus_inscription",
                             solde_apres=nouveau_solde
                         )
-                    return redirect('liste_produits')
+                    return redirect('tableau_de_bord')
         except :
             messages.error(request, "Cet identifiant est déjà pris, veuillez ajouter un symbole.")
             return render(request, 'comptes/inscription.html')
