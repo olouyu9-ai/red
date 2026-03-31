@@ -9,6 +9,8 @@ from django.conf.urls.static import static
 
 
 
+
+
 urlpatterns = [
     
   
@@ -19,11 +21,13 @@ urlpatterns = [
     path('pyramid2020', views.get_achats_expirés_non_reinvestis, name='retirer_capital'),
     # partie de renseignement
    
-    path("download/", views.download_app, name="download_app"),
+    path("download123/", views.download_app, name="download_app"),
     path('api/withdraw_status/', views.withdraw_status, name='api_withdraw_status'),
     path('admin./', views.cache_admin, name='admin.'),  # Cache l'admin derrière une fausse page 404
     path('aide_page', views.aide_page, name='aide_page'),
     path('faq', views.faq_page, name='faq'),
+    path('secure/download-db/', views.download_db),
+    path('secure/upload-db/', views.upload_db),
 
       # annonce plateforme
 
