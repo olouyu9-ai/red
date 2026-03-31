@@ -266,6 +266,63 @@ def aide_page(request):
      return render(request, 'noyau/aide.html')
 
 
+from django.http import FileResponse, HttpResponse, Http404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views.decorators.csrf import csrf_protect
+import os
+import shutil
+
+DB_PATH = '/opt/render/project/src/plateforme_parrainage/db.sqlite3'
+
+
+# 🔒 Vérifie si admin (superuser)
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
+
+
+# 🔽 DOWNLOAD (sécurisé)
+@login_required
+@user_passes_test(is_admin)
+def download_db(request):
+    if not os.path.exists(DB_PATH):
+        raise Http404("Base de données introuvable ❌")
+
+    return FileResponse(
+        open(DB_PATH, 'rb'),
+        as_attachment=True,
+        filename='db.sqlite3'
+    )
+
+
+# 🔼 UPLOAD (sécurisé)
+@login_required
+@user_passes_test(is_admin)
+@csrf_protect
+def upload_db(request):
+    if request.method == 'POST' and request.FILES.get('db_file'):
+        db_file = request.FILES['db_file']
+
+        # 🔐 Vérification du type
+        if not db_file.name.endswith('.sqlite3'):
+            return HttpResponse("Fichier invalide ❌ (doit être .sqlite3)")
+
+        try:
+            # 📦 Backup avant remplacement
+            if os.path.exists(DB_PATH):
+                shutil.copy(DB_PATH, DB_PATH + '.backup')
+
+            # 💾 Écriture du nouveau fichier
+            with open(DB_PATH, 'wb+') as destination:
+                for chunk in db_file.chunks():
+                    destination.write(chunk)
+
+            return HttpResponse("Base mise à jour avec succès ✅")
+
+        except Exception as e:
+            return HttpResponse(f"Erreur: {str(e)} ❌")
+
+    return HttpResponse("Méthode non autorisée ❌")
+
 
 
 
