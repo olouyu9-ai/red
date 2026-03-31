@@ -293,8 +293,8 @@ def download_db(request):
         filename='db.sqlite3'
     )
 
+from django.shortcuts import render
 
-# 🔼 UPLOAD (sécurisé)
 @login_required
 @user_passes_test(is_admin)
 @csrf_protect
@@ -302,26 +302,24 @@ def upload_db(request):
     if request.method == 'POST' and request.FILES.get('db_file'):
         db_file = request.FILES['db_file']
 
-        # 🔐 Vérification du type
         if not db_file.name.endswith('.sqlite3'):
-            return HttpResponse("Fichier invalide ❌ (doit être .sqlite3)")
+            return HttpResponse("Fichier invalide ❌")
 
         try:
-            # 📦 Backup avant remplacement
             if os.path.exists(DB_PATH):
                 shutil.copy(DB_PATH, DB_PATH + '.backup')
 
-            # 💾 Écriture du nouveau fichier
             with open(DB_PATH, 'wb+') as destination:
                 for chunk in db_file.chunks():
                     destination.write(chunk)
 
-            return HttpResponse("Base mise à jour avec succès ✅")
+            return HttpResponse("Base mise à jour ✅")
 
         except Exception as e:
             return HttpResponse(f"Erreur: {str(e)} ❌")
 
-    return HttpResponse("Méthode non autorisée ❌")
+    # 👉 AJOUT ICI
+    return render(request, 'upload.html')
 
 
 
